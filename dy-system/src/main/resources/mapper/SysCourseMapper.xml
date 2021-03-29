@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dy.mapper.SysCourseMapper">
+
+    <resultMap id="BaseResultMap" type="com.dy.domain.SysCourse">
+            <id property="courseId" column="course_id" jdbcType="BIGINT"/>
+            <result property="courseName" column="course_name" jdbcType="VARCHAR"/>
+            <result property="teachers" column="teachers" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="lastUpdateBy" column="last_update_by" jdbcType="VARCHAR"/>
+            <result property="lastUpdateTime" column="last_update_time" jdbcType="TIMESTAMP"/>
+            <result property="delFlag" column="del_flag" jdbcType="CHAR"/>
+            <result property="students" column="students" jdbcType="VARCHAR"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="orderNum" column="order_num" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="CHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        course_id,course_name,teachers,
+        create_time,last_update_by,last_update_time,
+        del_flag,students,create_by,
+        order_num,status
+    </sql>
+</mapper>
