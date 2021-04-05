@@ -33,14 +33,14 @@ public class SysDictType implements Serializable {
     private String dictType;
 
     /**
-     * 创建者
-     */
-    private String createBy;
-
-    /**
      * 状态（0正常 1停用）
      */
     private String status;
+
+    /**
+     * 创建者
+     */
+    private String createBy;
 
     /**
      * 创建时间

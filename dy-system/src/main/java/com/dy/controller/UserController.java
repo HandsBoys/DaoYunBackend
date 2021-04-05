@@ -5,10 +5,7 @@ import com.dy.core.utils.AjaxResult;
 import com.dy.domain.SysUser;
 import com.dy.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,7 +14,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/user")
-public class UserController {
+public class UserController extends BaseController{
     @Autowired
     private SysUserService userService;
 
@@ -34,12 +31,17 @@ public class UserController {
      * 修改用户手机号，邮箱
      * @param user:userName不变
      */
-    @PostMapping()
-    public AjaxResult edit(SysUser user){
+    @PutMapping
+    public AjaxResult editUser(SysUser user){
         // 添加：校验是否是管理员
 
-
-        if(user.getPhone() != null && UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user))){
+        if(user.getPhone() == null){
+            return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，手机号码不能为空");
+        }
+        else if(user.getEmail() == null){
+            return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，邮箱不能为空");
+        }
+        else if(user.getPhone() != null && UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user))){
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，手机号码已经存在");
         }
         else if (user.getEmail() != null && UserConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user))){
@@ -54,12 +56,29 @@ public class UserController {
     /**
      * 删除用户
      */
+    //TODO:批量删除用户
+    @DeleteMapping("{userId}")
+    public AjaxResult deleteUser(SysUser user){
+        return toAjax(userService.deleteUserById(user.getUserId()));
+    }
 
     /**
-     * 分配角色
+     * 新增用户
      */
+    @PostMapping
+    public AjaxResult addUser(SysUser user){
+        if(UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user))){
+            return AjaxResult.error("用户名已使用");
+        }
+        else if(UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user))){
+            return  AjaxResult.error("手机号已使用");
+        }
+        else if(UserConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user))){
+            return AjaxResult.error("邮箱已使用");
+        }
 
-    /**
-     * 添加用户
-     */
+        //TODO:设置创建者
+
+        return toAjax(userService.insertUser(user));
+    }
 }

@@ -70,6 +70,7 @@
         <if test="status != null and status != ''">#{status},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         <if test="remark != null and remark != ''">#{remark},</if>
+        sysdate()
         )
     </insert>
 

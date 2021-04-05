@@ -1,8 +1,9 @@
 package com.dy.service.impl;
 
 import com.dy.core.constant.UserConstants;
-import com.dy.core.login.LogonUser;
+import com.dy.domain.LoginUser;
 import com.dy.domain.SysUser;
+import com.dy.mapper.SysRoleMapper;
 import com.dy.service.SysUserService;
 import com.dy.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class SysUserServiceImpl implements SysUserService{
     @Autowired
     private SysUserMapper userMapper;
 
+    @Autowired
+    private SysRoleMapper roleMapper;
+
     /**
      * 查询用户列表
      * @param user 用于控制查询条件（待添加）
@@ -29,8 +33,8 @@ public class SysUserServiceImpl implements SysUserService{
     }
 
     @Override
-    public SysUser checkLoginUser(LogonUser logonUser) {
-        SysUser user = userMapper.checkLoginUser(logonUser.getUsername(),logonUser.getPassword());
+    public SysUser checkLoginUser(LoginUser loginUser) {
+        SysUser user = userMapper.checkLoginUser(loginUser.getUsername(), loginUser.getPassword());
         return user;
     }
 
@@ -104,6 +108,34 @@ public class SysUserServiceImpl implements SysUserService{
     @Override
     public int updateUser(SysUser user) {
         return userMapper.updateUser(user);
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param userId
+     */
+    @Override
+    public int deleteUserById(Long userId) {
+        // 删除用户与角色关联
+//        roleMapper.deleteByUserId(userId);
+
+        // 删除用户
+        return userMapper.deleteUserById(userId);
+    }
+
+    /**
+     * 新增用户信息
+     *
+     * @param user
+     */
+    @Override
+    public int insertUser(SysUser user) {
+        int rows = userMapper.insertUser(user);
+
+        //新增用户与角色关联
+
+        return rows;
     }
 }
 

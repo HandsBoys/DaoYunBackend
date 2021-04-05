@@ -1,6 +1,5 @@
 package com.dy.mapper;
 
-import com.dy.core.login.LogonUser;
 import com.dy.domain.SysUser;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -97,16 +96,6 @@ public interface SysUserMapper {
      */
     public SysUser checkLoginUser(String userName,String password);
 
-
-    /**
-     * 修改用户手机号
-     */
-    public SysUser updatePhone(String phone);
-
-    /**
-     * 修改用户邮箱
-     */
-    public SysUser updateEmail(String email);
 }
 
 

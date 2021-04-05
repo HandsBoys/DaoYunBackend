@@ -3,6 +3,8 @@ package com.dy.domain;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,6 +17,7 @@ import java.util.Date;
  */
 @TableName(value = "sys_user")
 @Data
+@ApiModel("用户类")
 public class SysUser implements Serializable {
 
     @TableField(exist = false)
@@ -23,39 +26,57 @@ public class SysUser implements Serializable {
      * 用户ID
      */
     @TableId
+    @ApiModelProperty("用户id，主键")
     private Long userId;
+
     /**
      * 用户账号
      */
+    @ApiModelProperty("用户名")
     private String userName;
+
     /**
      * 昵称
      */
+    @ApiModelProperty("昵称")
     private String nickName;
+
     /**
      * 头像
      */
+    @ApiModelProperty("头像")
     private String avatar;
+
     /**
      * 邮箱
      */
+    @ApiModelProperty("邮箱")
     private String email;
+
     /**
      * 密码
      */
+    @ApiModelProperty("密码")
     private String password;
+
     /**
      * 手机号码
      */
+    @ApiModelProperty("手机号")
     private String phone;
+
     /**
      * 性别（0男 1女 2未知）
      */
+    @ApiModelProperty("性别")
     private String sex;
+
     /**
      * 帐号状态（0正常 1停用）
      */
+    @ApiModelProperty("帐号状态")
     private String status;
+
     /**
      * 最后登录IP
      */
@@ -100,6 +121,10 @@ public class SysUser implements Serializable {
         this.password = password;
         this.userName = userName;
         this.nickName = userName;
+    }
+
+    public static boolean isAdmin(Long userId) {
+        return userId != null && 1L == userId;
     }
 
     public String getPassword() {

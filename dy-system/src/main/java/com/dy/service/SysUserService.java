@@ -1,6 +1,6 @@
 package com.dy.service;
 
-import com.dy.core.login.LogonUser;
+import com.dy.domain.LoginUser;
 import com.dy.domain.SysUser;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public interface SysUserService {
      */
     public List<SysUser> listUser(SysUser user);
 
-    SysUser checkLoginUser(LogonUser logonUser);
+    SysUser checkLoginUser(LoginUser loginUser);
 
     /**
      * 注册用户
@@ -42,5 +42,15 @@ public interface SysUserService {
      * 修改用户信息
      */
     public int updateUser(SysUser user);
+
+    /**
+     * 删除用户
+     */
+    public int deleteUserById(Long userId);
+
+    /**
+     * 新增用户信息
+     */
+    public int insertUser(SysUser user);
 
 }

@@ -1,6 +1,8 @@
 package com.dy.config;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -27,8 +29,10 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo())
                 // 设置展示的接口
                 .select()
-                // 扫描所有有注解的api
-                //.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+//              为有@Api注解的Controller生成API文档
+//                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                // 为有@ApiOperation注解的方法生成API文档
+//                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 // 扫描指定包中的swagger注解
 //                 .apis(RequestHandlerSelectors.basePackage("com.dy.system.controller"))
                 // 扫描所有

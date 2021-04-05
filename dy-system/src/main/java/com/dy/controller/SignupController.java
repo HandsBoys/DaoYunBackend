@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping()
-public class SignupController {
+public class SignupController extends BaseController{
     @Autowired
     private SysUserService sysUserService;
     /**

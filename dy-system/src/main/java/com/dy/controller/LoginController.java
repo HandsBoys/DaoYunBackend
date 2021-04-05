@@ -1,7 +1,7 @@
 package com.dy.controller;
 
 import com.dy.core.utils.AjaxResult;
-import com.dy.core.login.LogonUser;
+import com.dy.domain.LoginUser;
 import com.dy.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping()
-public class LoginController {
+public class LoginController extends BaseController{
     @Autowired
     private SysUserService sysUserService;
     /**
@@ -21,7 +21,7 @@ public class LoginController {
      */
     @RequestMapping("/login")
     public AjaxResult checkLoginUser(String username,String password){
-        LogonUser user = new LogonUser(username,password);
+        LoginUser user = new LoginUser(username,password);
         AjaxResult ajax;
         if(sysUserService.checkLoginUser(user) != null){
             ajax = AjaxResult.success();

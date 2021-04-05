@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dy.mapper.SysRoleMapper">
 
-    <resultMap id="BaseResultMap" type="com.dy.domain.SysRole">
+    <resultMap id="SysRoleResult" type="com.dy.domain.SysRole">
             <id property="roleId" column="role_id" jdbcType="BIGINT"/>
             <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
             <result property="roleKey" column="role_key" jdbcType="VARCHAR"/>
@@ -19,10 +19,15 @@
             <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        role_id,role_name,role_key,
-        role_sort,data_scope,status,
-        create_by,create_time,last_update_by,
-        last_update_time,del_flag,remark
+    <sql id="selectRoleVo">
+        select
+            role_id,role_name,role_key,role_sort,data_scope,status,create_by,create_time,
+            last_update_by,last_update_time,del_flag,remark
+        from sys_role
     </sql>
+
+    <!-- 查询所有角色 -->
+    <select id="listRoles" resultMap="SysRoleResult">
+        <include refid="selectRoleVo"/>
+    </select>
 </mapper>
