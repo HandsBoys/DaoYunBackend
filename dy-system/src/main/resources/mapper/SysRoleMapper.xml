@@ -30,4 +30,15 @@
     <select id="listRoles" resultMap="SysRoleResult">
         <include refid="selectRoleVo"/>
     </select>
+
+    <!--根据用户id查询角色-->
+    <select id="getRolesByUserId" resultType="com.dy.domain.SysRole">
+        SELECT
+            r.*
+        FROM
+            sys_role r
+                LEFT JOIN sys_user_role ur ON ur.role_id = r.role_id
+        WHERE
+            ur.user_id = #{userId}
+    </select>
 </mapper>

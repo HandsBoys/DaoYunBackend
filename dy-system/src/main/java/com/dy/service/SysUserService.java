@@ -53,4 +53,9 @@ public interface SysUserService {
      */
     public int insertUser(SysUser user);
 
+    /**
+     * 通过用户名查询用户
+     */
+    public SysUser getUserByUserName(String userName);
+
 }

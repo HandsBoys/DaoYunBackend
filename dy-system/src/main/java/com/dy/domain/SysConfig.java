@@ -8,34 +8,37 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * 字典类型表
-
-
- * @TableName sys_dict_type
+ * 参数配置表
+ * @TableName sys_config
  */
-@TableName(value ="sys_dict_type")
+@TableName(value ="sys_config")
 @Data
-public class SysDictType implements Serializable {
+public class SysConfig implements Serializable {
     /**
-     * 字典主键
+     * 参数主键
      */
     @TableId
-    private Long dictId;
+    private Integer configId;
 
     /**
-     * 字典名称
+     * 参数名称
      */
-    private String dictName;
+    private String configName;
 
     /**
-     * 字典类型
+     * 参数键名
      */
-    private String dictType;
+    private String configKey;
 
     /**
-     * 状态（0正常 1停用）
+     * 参数键值
      */
-    private String status;
+    private String configValue;
+
+    /**
+     * 系统内置（Y是 N否）
+     */
+    private String configType;
 
     /**
      * 创建者
@@ -50,12 +53,12 @@ public class SysDictType implements Serializable {
     /**
      * 更新者
      */
-    private String lastUpdateBy;
+    private String updateBy;
 
     /**
      * 更新时间
      */
-    private Date lastUpdateTime;
+    private Date updateTime;
 
     /**
      * 备注

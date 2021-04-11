@@ -17,6 +17,13 @@ public interface SysRoleMapper {
      * 获取角色列表
      */
     public List<SysRole> listRoles();
+
+    /**
+     * 根据用户id查询角色
+     *
+     * @return
+     */
+    List<SysRole> getRolesByUserId(@Param("userId") Long userId);
 }
 
 

@@ -22,7 +22,8 @@
         <result property="lastUpdateTime" column="last_update_time" jdbcType="TIMESTAMP"/>
         <result property="delFlag" column="del_flag" jdbcType="CHAR"/>
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
-        <association property="role" column="role_id" javaType="SysRole" resultMap="RoleResult"/>
+        <collection  property="roles" javaType="java.util.List" resultMap="RoleResult" />
+<!--        <association property="roles" column="role_id" javaType="SysRole" resultMap="RoleResult"/>-->
     </resultMap>
 
     <resultMap id="RoleResult" type="SysRole">
@@ -35,8 +36,8 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        u.user_id
-        ,u.user_name,u.nick_name,u.avatar,u.email,u.password,u.phone,u.sex,u.status
+        select
+        u.user_id,u.user_name,u.nick_name,u.avatar,u.email,u.password,u.phone,u.sex,u.status
         ,u.login_ip,u.login_date,u.create_by,u.create_time,u.last_update_by,u.last_update_time,u.del_flag,u.remark,
         r.role_id,r.role_name,r.role_key,r.role_sort,r.data_scope,r.status as role_status
         from sys_user u
@@ -120,7 +121,7 @@
 
     <select id="getUserByUserName" parameterType="String" resultType="SysUser">
         <include refid="Base_Column_List"/>
-        where user_name = #{userId}
+        where user_name = #{userName}
     </select>
 
     <select id="getUserByUserId" parameterType="Long" resultType="SysUser">

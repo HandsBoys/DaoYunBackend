@@ -7,6 +7,7 @@ import com.dy.mapper.SysRoleMapper;
 import com.dy.service.SysUserService;
 import com.dy.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,8 +35,7 @@ public class SysUserServiceImpl implements SysUserService{
 
     @Override
     public SysUser checkLoginUser(LoginUser loginUser) {
-        SysUser user = userMapper.checkLoginUser(loginUser.getUsername(), loginUser.getPassword());
-        return user;
+        return userMapper.checkLoginUser(loginUser.getUserName(), loginUser.getPassword());
     }
 
     /**
@@ -51,7 +51,10 @@ public class SysUserServiceImpl implements SysUserService{
             return false;
         }
         else{
-            SysUser user = new SysUser(password,userName);
+            // 密码加密再传入数据库
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+            String encodePassword = encoder.encode(password);
+            SysUser user = new SysUser(userName,encodePassword);
             userMapper.insertUser(user);
             return true;
         }
@@ -92,7 +95,7 @@ public class SysUserServiceImpl implements SysUserService{
      */
     @Override
     public String checkUserNameUnique(SysUser user) {
-        if(userMapper.checkUserNameUnique(user.getUserName()) == null){
+        if(userMapper.checkUserNameUnique(user.getUsername()) == null){
             return UserConstants.UNIQUE;
         }
         else{
@@ -133,9 +136,17 @@ public class SysUserServiceImpl implements SysUserService{
     public int insertUser(SysUser user) {
         int rows = userMapper.insertUser(user);
 
-        //新增用户与角色关联
+        //TODO:新增用户与角色关联
 
         return rows;
+    }
+
+    /**
+     * 通过用户名查询用户
+     */
+    @Override
+    public SysUser getUserByUserName(String userName){
+        return userMapper.getUserByUserName(userName);
     }
 }
 

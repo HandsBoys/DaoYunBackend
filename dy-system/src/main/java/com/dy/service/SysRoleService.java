@@ -15,4 +15,11 @@ public interface SysRoleService {
     //TODO:增加分页功能
     public List<SysRole> listRoles(Long userId);
 
+    /**
+     * 根据用户id查询角色
+     *
+     * @return
+     */
+    List<SysRole> getRolesByUserId(Long userId);
+
 }

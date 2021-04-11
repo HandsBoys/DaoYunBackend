@@ -19,9 +19,59 @@
     </resultMap>
 
     <sql id="Base_Column_List">
+        select
         dict_code,dict_sort,dict_label,
         dict_value,dict_type,status,
         create_by,create_time,last_update_by,
         last_update_time,remark
+        from sys_dict_data
     </sql>
+
+    <insert id="insertDictData" parameterType="SysDictData">
+        insert into sys_dict_data(
+        <if test="dictSort != null">dict_sort,</if>
+        <if test="dictLabel != null and dictLabel != ''">dict_label,</if>
+        <if test="dictValue != null and dictValue != ''">dict_value,</if>
+        <if test="dictType != null and dictType != ''">dict_type,</if>
+        <if test="status != null">status,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="dictSort != null">#{dictSort},</if>
+        <if test="dictLabel != null and dictLabel != ''">#{dictLabel},</if>
+        <if test="dictValue != null and dictValue != ''">#{dictValue},</if>
+        <if test="dictType != null and dictType != ''">#{dictType},</if>
+        <if test="status != null">#{status},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+    <update id="updateDictData">
+        update sys_dict_data
+        <set>
+            <if test="dictSort != null">dict_sort = #{dictSort},</if>
+            <if test="dictLabel != null and dictLabel != ''">dict_label = #{dictLabel},</if>
+            <if test="dictValue != null and dictValue != ''">dict_value = #{dictValue},</if>
+            <if test="dictType != null and dictType != ''">dict_type = #{dictType},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="lastUpdateBy != null and lastUpdateBy != ''">last_update_by = #{lastUpdateBy},</if>
+            last_update_time = sysdate()
+        </set>
+        where dict_code = #{dictCode}
+    </update>
+
+    <delete id="deleteDictDataById" parameterType="Long">
+        delete from sys_dict_data where dict_code = #{dictCode}
+    </delete>
+
+    <select id="listDictData" resultType="com.dy.domain.SysDictData">
+        <include refid="Base_Column_List"/>
+    </select>
+    <select id="countDictDataByType" resultType="java.lang.Integer">
+        select count(1) from sys_dict_data where dict_type=#{dictType}
+    </select>
 </mapper>

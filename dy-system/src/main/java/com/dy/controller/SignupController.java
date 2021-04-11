@@ -1,8 +1,10 @@
 package com.dy.controller;
 
 import com.dy.core.utils.AjaxResult;
+import com.dy.domain.LoginUser;
 import com.dy.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,12 +20,12 @@ public class SignupController extends BaseController{
      * 注册
      */
     @RequestMapping("/sign")
-    public AjaxResult signUp(String username, String password){
+    public AjaxResult signUp(@RequestBody LoginUser loginUser){
         AjaxResult  ajax;
-        if(username == null || password == null){
+        if(loginUser.getUserName() == null || loginUser.getPassword() == null){
             return ajax = AjaxResult.error("请输入用户名和密码");
         }
-        else if(sysUserService.Signup(username,password)){
+        else if(sysUserService.Signup(loginUser.getUserName(), loginUser.getPassword())){
             return ajax = AjaxResult.success("注册成功");
         }
         else{
