@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * 角色信息
  */
-@Api
+@Api(tags = "角色管理接口")
 @RestController
 @RequestMapping("system/role")
 public class RoleController extends BaseController{

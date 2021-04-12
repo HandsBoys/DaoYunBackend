@@ -5,12 +5,15 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
  * 参数配置表
  * @TableName sys_config
  */
+@ApiModel(value = "系统参数对象",description = "配置系统参数")
 @TableName(value ="sys_config")
 @Data
 public class SysConfig implements Serializable {

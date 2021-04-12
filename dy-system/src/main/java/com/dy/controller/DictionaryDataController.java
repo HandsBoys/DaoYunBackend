@@ -6,6 +6,7 @@ import com.dy.domain.SysDictData;
 import com.dy.domain.SysDictType;
 import com.dy.service.SysDictDataService;
 import com.dy.service.SysDictTypeService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * 数字字典信息
  */
+@Api(tags="数据字典DictionaryData管理接口")
 @RestController
 @RequestMapping("/system/dict/data")
 public class DictionaryDataController extends BaseController {

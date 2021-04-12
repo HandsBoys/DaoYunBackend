@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 数据字典类型信息
  */
-@Api(value = "")
+@Api(tags="数据字典类型DictionaryType管理接口")
 @RestController
 @RequestMapping("/system/dict/type")
 public class DictionaryTypeController extends BaseController{

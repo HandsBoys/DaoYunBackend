@@ -25,9 +25,9 @@ import java.security.Principal;
 
 
 /**
- * 登录和注册操作
+ * 登录操作
  */
-@Api(tags="LoginController")
+@Api(tags="登录操作接口")
 @RestController
 @RequestMapping()
 public class LoginController extends BaseController{

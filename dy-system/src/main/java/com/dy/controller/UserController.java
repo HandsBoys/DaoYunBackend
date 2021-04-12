@@ -5,6 +5,7 @@ import com.dy.core.utils.AjaxResult;
 import com.dy.domain.SysRole;
 import com.dy.domain.SysUser;
 import com.dy.service.SysUserService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.List;
 /**
  * 用户管理的操作
  */
+@Api(tags = "用户管理接口")
 @RestController
 @RequestMapping("/system/user")
 public class UserController extends BaseController{

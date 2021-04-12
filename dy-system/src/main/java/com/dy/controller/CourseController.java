@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Api
+@Api(tags = "班课管理接口")
 @RestController
 @RequestMapping("system/course")
 public class CourseController extends BaseController{

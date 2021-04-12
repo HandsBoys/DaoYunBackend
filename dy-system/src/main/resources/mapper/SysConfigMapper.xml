@@ -18,9 +18,14 @@
     </resultMap>
 
     <sql id="Base_Column_List">
+        select
         config_id,config_name,config_key,
         config_value,config_type,create_by,
         create_time,update_by,update_time,
         remark
+        from sys_config
     </sql>
+    <select id="listSysConfig" resultType="com.dy.domain.SysConfig">
+        <include refid="Base_Column_List"></include>
+    </select>
 </mapper>

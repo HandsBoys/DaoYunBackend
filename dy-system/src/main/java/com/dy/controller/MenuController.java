@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * 菜单操作
  */
-@Api()
+@Api(tags="菜单管理接口")
 @RestController
 @RequestMapping("system/menu")
 public class MenuController extends BaseController{
