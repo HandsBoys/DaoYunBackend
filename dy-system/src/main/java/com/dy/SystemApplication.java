@@ -10,7 +10,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @MapperScan("com.dy.mapper")
 public class SystemApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SystemApplication.class, args);
+            SpringApplication.run(SystemApplication.class, args);
     }
 
 }

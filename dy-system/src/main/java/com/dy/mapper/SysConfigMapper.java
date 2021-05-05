@@ -1,17 +1,13 @@
 package com.dy.mapper;
 
 import com.dy.domain.SysConfig;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * @Entity com.dy.domain.SysConfig
  */
-@Repository
-public interface SysConfigMapper {
+public interface SysConfigMapper extends BaseMapper<SysConfig> {
 
-    List<SysConfig> listSysConfig(SysConfig config);
 }
 
 

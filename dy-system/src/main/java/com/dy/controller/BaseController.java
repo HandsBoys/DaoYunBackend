@@ -1,7 +1,10 @@
 package com.dy.controller;
 
-import com.dy.core.utils.AjaxResult;
+import com.dy.common.utils.AjaxResult;
 
+/**
+ * @author cxj
+ */
 public class BaseController {
     /**
      * 响应返回结果

@@ -1,17 +1,21 @@
 package com.dy.service;
 
 import com.dy.domain.SysCourse;
-import org.springframework.stereotype.Repository;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.dy.dto.SysCourseDto;
 
 import java.util.List;
 
 /**
  *
  */
+public interface SysCourseService extends IService<SysCourse> {
 
-public interface SysCourseService {
-    /**
-     * 根据用户权限查询班课
-     */
-    public List<SysCourse> listCourses(Long userId);
+    List<SysCourse> listCoursesAll();
+
+    int deleteCourses(Long[] courseIds);
+
+    int insertCourse(SysCourseDto courseDto);
+
+    int updateCourse(SysCourseDto courseDto);
 }

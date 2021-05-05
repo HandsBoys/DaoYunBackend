@@ -1,152 +1,93 @@
 package com.dy.service.impl;
 
-import com.dy.core.constant.UserConstants;
-import com.dy.domain.LoginUser;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dy.domain.SysUser;
-import com.dy.mapper.SysRoleMapper;
+import com.dy.dto.SysUserDto;
 import com.dy.service.SysUserService;
 import com.dy.mapper.SysUserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  *
+ * @author cxj
  */
 @Service
-public class SysUserServiceImpl implements SysUserService{
-    @Autowired
-    private SysUserMapper userMapper;
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
+implements SysUserService{
 
-    @Autowired
-    private SysRoleMapper roleMapper;
-
-    /**
-     * 查询用户列表
-     * @param user 用于控制查询条件（待添加）
-     * @return
-     */
     @Override
-    public List<SysUser> listUser(SysUser user) {
-        return userMapper.listUser(user);
+    public SysUser getUserByUserName(String username) {
+        QueryWrapper param = new QueryWrapper();
+        param.eq("user_name",username);
+        SysUser user = baseMapper.selectOne(param);
+        SysUserDto ret = new SysUserDto();
+        return user;
     }
 
     @Override
-    public SysUser checkLoginUser(LoginUser loginUser) {
-        return userMapper.checkLoginUser(loginUser.getUserName(), loginUser.getPassword());
+    public SysUser getUserByPhone(String phone) {
+        QueryWrapper param = new QueryWrapper();
+        param.eq("phone",phone);
+        return baseMapper.selectOne(param);
     }
 
-    /**
-     * 注册用户
-     *
-     * @param userName
-     * @param password
-     * @return
-     */
     @Override
-    public boolean Signup(String userName, String password) {
-        if(userMapper.checkUserNameUnique(userName) != null){
-            return false;
-        }
-        else{
-            // 密码加密再传入数据库
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
-            String encodePassword = encoder.encode(password);
-            SysUser user = new SysUser(userName,encodePassword);
-            userMapper.insertUser(user);
-            return true;
-        }
+    public SysUser checkPhoneUnique(String phone) {
+        QueryWrapper param = new QueryWrapper();
+        param.eq("phone",phone);
+        return baseMapper.selectOne(param);
     }
 
-    /**
-     * 校验手机号是否唯一
-     *
-     * @param user
-     */
-    @Override
-    public String checkPhoneUnique(SysUser user) {
-        if(userMapper.checkPhoneUnique(user.getPhone()) == null){
-            return UserConstants.UNIQUE;
-        }
-        return UserConstants.NOT_UNIQUE;
-    }
-
-    /**
-     * 校验邮箱是否唯一
-     *
-     * @param user
-     */
     @Override
     public String checkEmailUnique(SysUser user) {
-        if(userMapper.checkEmailUnique(user.getEmail()) == null){
-            return UserConstants.UNIQUE;
-        }
-        else{
-            return UserConstants.NOT_UNIQUE;
-        }
+        return null;
     }
 
-    /**
-     * 校验用户名是否唯一
-     *
-     * @param user
-     */
+    @Override
+    public void updateUser(SysUser user) {
+
+
+    }
+
     @Override
     public String checkUserNameUnique(SysUser user) {
-        if(userMapper.checkUserNameUnique(user.getUsername()) == null){
-            return UserConstants.UNIQUE;
-        }
-        else{
-            return UserConstants.NOT_UNIQUE;
-        }
-    }
-
-    /**
-     * 修改用户信息
-     *
-     * @param user
-     */
-    @Override
-    public int updateUser(SysUser user) {
-        return userMapper.updateUser(user);
+        return null;
     }
 
     /**
      * 删除用户
      *
-     * @param userId
+     * @param userIds
      */
     @Override
-    public int deleteUserById(Long userId) {
-        // 删除用户与角色关联
-//        roleMapper.deleteByUserId(userId);
-
-        // 删除用户
-        return userMapper.deleteUserById(userId);
+    public int deleteUserByIds(Long[] userIds) {
+        return baseMapper.deleteUserByIds(userIds);
     }
 
-    /**
-     * 新增用户信息
-     *
-     * @param user
-     */
+    @Override
+    public List<SysUserDto> listUserAll() {
+        QueryWrapper param = new QueryWrapper();
+        param.isNotNull("id");
+        return baseMapper.selectList(param);
+    }
+
     @Override
     public int insertUser(SysUser user) {
-        int rows = userMapper.insertUser(user);
-
-        //TODO:新增用户与角色关联
-
-        return rows;
+        return baseMapper.insert(user);
     }
 
     /**
-     * 通过用户名查询用户
+     * 根据用户名获取用户id
+     *
+     * @param username
+     * @return
      */
     @Override
-    public SysUser getUserByUserName(String userName){
-        return userMapper.getUserByUserName(userName);
+    public Long getIdByUserName(String username) {
+        return baseMapper.getIdByUserName(username);
     }
 }
 

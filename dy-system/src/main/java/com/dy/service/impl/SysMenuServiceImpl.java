@@ -1,24 +1,24 @@
 package com.dy.service.impl;
 
-
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dy.domain.SysMenu;
+import com.dy.dto.SysMenuDto;
 import com.dy.service.SysMenuService;
 import com.dy.mapper.SysMenuMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 /**
  *
  */
 @Service
-public class SysMenuServiceImpl implements SysMenuService{
-    @Autowired
-    private SysMenuMapper menuMapper;
+public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
+implements SysMenuService{
 
     /**
      * 根据用户查询系统菜单列表
@@ -28,28 +28,12 @@ public class SysMenuServiceImpl implements SysMenuService{
      */
     @Override
     public List<SysMenu> listMenus(Long userId) {
-        return listMenus(new SysMenu(), userId);
-    }
-
-    /**
-     * 根据用户查询系统菜单列表
-     *
-     * @param menu   菜单信息
-     * @param userId 用户ID
-     * @return 菜单列表
-     */
-    @Override
-    public List<SysMenu> listMenus(SysMenu menu, Long userId) {
         List<SysMenu> menuList = null;
         //TODO:按照权限显示菜单
         // 管理员显示所有菜单信息
-//        if (SysUser.isAdmin(userId)) {
-//            menuList = menuMapper.listMenu(menu);
-//        }
-//        else {
-//            menuList = menuMapper.listMenuByUserId(menu,userId);
-//        }
-        menuList = menuMapper.listMenus(menu);
+        QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<>();
+        queryWrapper.isNotNull("id");
+        menuList = baseMapper.selectList(queryWrapper);
         return menuList;
     }
 
@@ -61,18 +45,15 @@ public class SysMenuServiceImpl implements SysMenuService{
      */
     @Override
     public List<SysMenu> buildMenuTree(List<SysMenu> menus) {
-        List<SysMenu> returnList = new ArrayList<SysMenu>();
-        List<Long> tempList = new ArrayList<Long>();
-        for (SysMenu dept : menus)
+        List<SysMenu> returnList = new ArrayList<>();
+        List<Long> tempList = new ArrayList<>();
+        for (SysMenu menu : menus)
         {
-            tempList.add(dept.getMenuId());
+            tempList.add(menu.getId());
         }
-        for (Iterator<SysMenu> iterator = menus.iterator(); iterator.hasNext();)
-        {
-            SysMenu menu = (SysMenu) iterator.next();
+        for (SysMenu menu : menus) {
             // 如果是顶级节点, 遍历该父节点的所有子节点
-            if (!tempList.contains(menu.getParentId()))
-            {
+            if (!tempList.contains(menu.getParentId())) {
                 recursionFn(menus, menu);
                 returnList.add(menu);
             }
@@ -82,6 +63,11 @@ public class SysMenuServiceImpl implements SysMenuService{
             returnList = menus;
         }
         return returnList;
+    }
+
+    @Override
+    public int insertMenu(SysMenuDto menuDto) {
+        return 0;
     }
 
     /**
@@ -112,7 +98,7 @@ public class SysMenuServiceImpl implements SysMenuService{
         Iterator<SysMenu> it = list.iterator();
         while(it.hasNext()){
             SysMenu n = (SysMenu) it.next();
-            if(n.getParentId().longValue() == root.getMenuId().longValue()){
+            if(n.getParentId().longValue() == root.getId().longValue()){
                 returnList.add(n);
             }
         }
@@ -127,6 +113,21 @@ public class SysMenuServiceImpl implements SysMenuService{
         return getChildList(list, t).size() > 0 ? true : false;
     }
 
+
+    /**
+     * TODO:修改菜单项信息
+     *
+     * @param menuDto
+     */
+    @Override
+    public int updateMenu(SysMenuDto menuDto) {
+        return 0;
+    }
+
+    @Override
+    public int deleteMenus(Long[] menuIds) {
+        return 0;
+    }
 }
 
 

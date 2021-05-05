@@ -1,37 +1,42 @@
 package com.dy.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dy.domain.SysRole;
-import com.dy.mapper.SysRoleMapper;
+import com.dy.dto.SysRoleDto;
 import com.dy.service.SysRoleService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dy.mapper.SysRoleMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ *
+ */
 @Service
-public class SysRoleServiceImpl implements SysRoleService {
-    @Autowired
-    private SysRoleMapper roleMapper;
-
-    /**
-     * 查询所有角色数据
-     *
-     * @param
-     * @return List<SysRole> 角色的列表
-     */
+public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole>
+implements SysRoleService{
+//TODO
     @Override
     public List<SysRole> listRoles(Long userId) {
-        return roleMapper.listRoles();
+        return null;
     }
 
-    /**
-     * 根据用户id查询角色
-     *
-     * @param userId
-     * @return
-     */
     @Override
-    public List<SysRole> getRolesByUserId(Long userId) {
-        return roleMapper.getRolesByUserId(userId);
+    public int updateRole(SysRoleDto roleDto) {
+        return 0;
+    }
+
+    @Override
+    public int deleteRoles(Long[] roleIds) {
+        return 0;
+    }
+
+    @Override
+    public int insertRole(SysRoleDto roleDto) {
+        return 0;
     }
 }
+
+
+
+

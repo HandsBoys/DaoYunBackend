@@ -1,29 +1,21 @@
 package com.dy.mapper;
 
 import com.dy.domain.SysDictType;
-import org.springframework.stereotype.Repository;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.dy.dto.SysDictTypeDto;
 
 import java.util.List;
 
 /**
- * @Entity com.dy.system.domain.SysDictType
+ * @Entity com.dy.domain.SysDictType
  */
-@Repository
-public interface SysDictTypeMapper {
+public interface SysDictTypeMapper extends BaseMapper<SysDictType> {
 
-    List<SysDictType> listDictTypes(SysDictType dictType);
-
-    int insertDictType(SysDictType dictType);
-
-    SysDictType checkDictTypeUnique(String dictType);
-
-    int deleteDictTypeById(Long dictId);
-
-    int updateDictType(SysDictType dictType);
-
-    int deleteDictTypeByIds(Long[] dictIds);
+    List<SysDictTypeDto> listAllDictTypes();
 
     SysDictType getDictTypeById(Long dictId);
+
+    int deleteDictTypeByIds(Long[] dictIds);
 }
 
 

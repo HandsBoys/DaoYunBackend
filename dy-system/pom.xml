@@ -58,6 +58,13 @@
             <version>2.1.4</version>
         </dependency>
 
+        <!-- redis配置 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-redis</artifactId>
+            <version>1.4.7.RELEASE</version>
+        </dependency>
+
         <!--Mybatis-plus-->
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -129,6 +136,15 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.75</version>
         </dependency>
+
+        <!--腾讯短信服务-->
+        <!-- https://mvnrepository.com/artifact/com.tencentcloudapi/tencentcloud-sdk-java -->
+        <dependency>
+            <groupId>com.tencentcloudapi</groupId>
+            <artifactId>tencentcloud-sdk-java</artifactId>
+            <version>3.1.247</version>
+        </dependency>
+
 
     </dependencies>
     <build>

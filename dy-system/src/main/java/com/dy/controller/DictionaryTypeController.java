@@ -1,11 +1,17 @@
 package com.dy.controller;
 
-import com.dy.core.constant.UserConstants;
-import com.dy.core.utils.AjaxResult;
+import com.dy.common.constant.UserConstants;
+import com.dy.common.utils.AjaxResult;
+import com.dy.common.utils.SecurityUtils;
 import com.dy.domain.SysDictType;
+import com.dy.dto.SysDictTypeDto;
 import com.dy.service.SysDictTypeService;
+import com.dy.service.SysUserService;
 import io.swagger.annotations.Api;
-import org.apache.catalina.security.SecurityUtil;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,66 +23,54 @@ import java.util.List;
  */
 @Api(tags="数据字典类型DictionaryType管理接口")
 @RestController
-@RequestMapping("/system/dict/type")
+@RequestMapping("/system/dicttype")
 public class DictionaryTypeController extends BaseController{
 
     @Autowired
     private SysDictTypeService dictTypeService;
+    @Autowired
+    private SysUserService userService;
 
-    @GetMapping("/list")
-    public List<SysDictType> list(SysDictType dictType){
-        List<SysDictType> list = dictTypeService.listDictTypes(dictType);
+    @ApiOperation(value = "获取所有数据字典类型")
+    @GetMapping
+    public List<SysDictTypeDto> list(){
+        List<SysDictTypeDto> list = dictTypeService.listAllDictTypes();
         return list;
     }
 
-    //TODO:封装对传入数据的检查SysDictType
-    @PostMapping("/add")
-    public AjaxResult add(@Validated @RequestBody SysDictType dictType){
-        if(!dictTypeService.checkDictTypeStatus(dictType)){
-            return AjaxResult.error("修改字典'" + dictType.getDictName() + "'失败，字典类型status字段设置错误");
-        }
-        if(UserConstants.NOT_UNIQUE.equals(dictTypeService.checkDictTypeUnique(dictType))){
-            return AjaxResult.error("新增字典'" + dictType.getDictName() + "'失败，字典类型已存在");
-        }
-        //TODO:设置创建者
-//        dict.setCreateBy();
-        return toAjax(dictTypeService.insertDictType(dictType));
-    }
-
-    /**
-     * 单个删除数据字典类型
-     * @param dictType
-     * @return
-     */
-    @PostMapping("/delete")
-    public AjaxResult delete(@RequestBody SysDictType dictType){
-        return toAjax(dictTypeService.deleteDictTypeById(dictType));
-    }
-
-    /**
-     * 批量删除数据字典类型
-     * @param dictIds
-     * @return
-     */
-    @PostMapping("/remove")
-    public AjaxResult remove(@RequestBody Long[] dictIds){
+    @ApiOperation(value = "批量删除数据字典类型")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "dictIds",paramType = "path")
+    })
+    @DeleteMapping("/{dictIds}")
+    public AjaxResult delete(@PathVariable Long[] dictIds){
         return toAjax(dictTypeService.deleteDictTypeByIds(dictIds));
     }
 
-    @PostMapping("/edit")
-    public AjaxResult edit(@Validated @RequestBody SysDictType dictType){
-        if(!dictTypeService.checkDictTypeStatus(dictType)){
-            return AjaxResult.error("修改字典'" + dictType.getDictName() + "'失败，字典类型status字段设置错误");
+    @PutMapping
+    public AjaxResult add(@Validated @RequestBody SysDictTypeDto dictTypeDto){
+        String msg = dictTypeService.checkValue(dictTypeDto);
+        if(msg != null){
+            return AjaxResult.error(msg);
         }
-        if (UserConstants.NOT_UNIQUE.equals(dictTypeService.checkDictTypeUnique(dictType)))
-        {
-            return AjaxResult.error("修改字典'" + dictType.getDictName() + "'失败，字典类型已存在");
-        }
+        SysDictType dictType = new SysDictType();
+        BeanUtils.copyProperties(dictTypeDto,dictType);
+        System.out.println(dictType);
+        //TODO:设置创建者
+        // dictType.setCreateBy(userService.getIdByUserName(SecurityUtils.getUsername()));
+        return toAjax(dictTypeService.insertDictType(dictType));
+    }
 
+    @PostMapping
+    public AjaxResult edit(@Validated @RequestBody SysDictTypeDto dictTypeDto){
+        String msg = dictTypeService.checkValue(dictTypeDto);
+        if(msg != null){
+            return AjaxResult.error(msg);
+        }
         //TODO:设置修改者
         //dict.setUpdateBy(SecurityUtils.getUsername());
 
-        return toAjax(dictTypeService.updateDictType(dictType));
+        return toAjax(dictTypeService.updateDictType(dictTypeDto));
     }
 
 }

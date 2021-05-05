@@ -1,94 +1,68 @@
 package com.dy.controller;
 
-import com.dy.core.constant.GlobalConstants;
-import com.dy.core.utils.AjaxResult;
-import com.dy.domain.LoginUser;
+import com.dy.common.utils.AjaxResult;
 import com.dy.domain.SysUser;
+import com.dy.dto.login.LoginBody;
+import com.dy.dto.login.TokenDto;
 import com.dy.service.LoginService;
 import com.dy.service.SysUserService;
-import com.google.code.kaptcha.Constants;
-import com.google.code.kaptcha.Producer;
 import io.swagger.annotations.Api;
+
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.security.Principal;
 
 
 /**
  * 登录操作
+ * @author cxj
  */
 @Api(tags="登录操作接口")
 @RestController
 @RequestMapping()
 public class LoginController extends BaseController{
     @Autowired
-    private LoginService loginService;
+    LoginService loginService;
     @Autowired
-    private SysUserService userService;
+    SysUserService userService;
 
-    /**
-     * 验证码
-     */
-    @Autowired
-    private Producer producer;
-
-    @GetMapping("/captcha.jpg")
-    public void captcha(HttpServletResponse response,HttpServletRequest request) throws ServletException, IOException{
-        response.setHeader("Cache-Control","no-store, no-cache");
-        response.setContentType("image/jpeg");
-        //生成文字验证码
-        String text = producer.createText();
-        //生成图片验证码
-        BufferedImage image = producer.createImage(text);
-        //保存验证码到session
-        request.getSession().setAttribute(Constants.KAPTCHA_SESSION_KEY,text);
-        ServletOutputStream out = response.getOutputStream();
-        ImageIO.write(image,"jpg",out);
-        IOUtils.closeQuietly(out);
-    }
-    /**
-     * 登录验证
-     */
-//    @RequestMapping("/login")
-//    public AjaxResult checkLoginUser(String username,String password){
-//        LoginUser user = new LoginUser(username,password);
-//        AjaxResult ajax;
-//        if(sysUserService.checkLoginUser(user) != null){
-//            ajax = AjaxResult.success();
-//        }
-//        else{
-//            ajax = AjaxResult.error();
-//        }
-//        return ajax;
-//    }
-
-    @ApiOperation(value = "登录后返回token")
+    @ApiOperation(value = "用户名密码登录，成功返回token")
+    @ApiImplicitParam(name = "loginBody",dataType = "LoginBody",value = "需要传输的字段:  userName(用户名),password(密码),code" +
+            "(图片验证码)", required = true,paramType = "body")
     @PostMapping("/login")
-    public AjaxResult login(@RequestBody LoginUser loginUser){
-        return loginService.login(loginUser.getUserName(),loginUser.getPassword());
+    public TokenDto loginByPassword(@RequestBody LoginBody loginBody, HttpServletRequest request){
+        return loginService.loginByPassword(loginBody,request);
     }
 
+    @ApiOperation(value = "手机号验证码登录，成功则返回token")
+    @ApiImplicitParam(name = "loginBody",dataType = "LoginBody",value = "需要传输的字段:  phone(手机号),code" +
+            "(短信验证码)", required = true,paramType = "body")
+    @PostMapping("/login2")
+    public TokenDto loginBySms(@RequestBody LoginBody loginBody, HttpServletRequest request){
+
+        System.out.println(request.getSession().getId());
+        System.out.println(request.getCookies().toString());
+        Cookie[] Cookies = request.getCookies();
+        for(int i =0;i<Cookies.length;i++){
+            Cookie c = Cookies[i];
+            System.out.println(c.getName() + "=" + c.getValue());
+        }
+
+        return loginService.loginBySms(loginBody,request);
+    }
 
     @ApiOperation(value = "获取登录用户的信息")
-    @GetMapping("getInfo")
+    @GetMapping("/getInfo")
     public SysUser getInfo(Principal principal){
         if(principal == null){
             return null;
         }
-        String username = principal.getName();
-        SysUser user = userService.getUserByUserName(username);
-        user.setPassword(null);
-        return user;
+        return loginService.getLoginUser(principal);
     }
 
     @ApiOperation(value = "退出登录")
@@ -96,4 +70,5 @@ public class LoginController extends BaseController{
     public AjaxResult logout(){
         return AjaxResult.success("退出成功！");
     }
+
 }

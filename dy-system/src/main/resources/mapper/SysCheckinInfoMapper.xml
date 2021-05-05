@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dy.mapper.SysCheckinInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.dy.domain.SysCheckinInfo">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="startCheckinId" column="start_checkin_id" jdbcType="BIGINT"/>
+            <result property="studentId" column="student_id" jdbcType="BIGINT"/>
+            <result property="lng" column="lng" jdbcType="DOUBLE"/>
+            <result property="lat" column="lat" jdbcType="DOUBLE"/>
+            <result property="checkinTime" column="checkin_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,start_checkin_id,student_id,
+        lng,lat,checkin_time
+    </sql>
+</mapper>

@@ -1,14 +1,16 @@
 package com.dy.controller;
 
-import com.dy.core.utils.AjaxResult;
-import com.dy.domain.LoginUser;
-import com.dy.service.SysUserService;
-import io.swagger.annotations.Api;
+import com.dy.common.utils.AjaxResult;
+import com.dy.dto.login.LoginBody;
+import com.dy.service.SignupService;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 注册操作
@@ -18,21 +20,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping()
 public class SignupController extends BaseController{
     @Autowired
-    private SysUserService sysUserService;
+    private SignupService signupService;
     /**
      * 注册
      */
+    @ApiOperation(value = "用户注册")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "loginBody",dataType = "LoginBody",value = "需要传输的字段:  phone(手机号),password(密码),code" +
+                "(验证码)", required = true,paramType = "body"),
+    })
+
     @PostMapping("/sign")
-    public AjaxResult signUp(@RequestBody LoginUser loginUser){
-        AjaxResult  ajax;
-        if(loginUser.getUserName() == null || loginUser.getPassword() == null){
-            return ajax = AjaxResult.error("请输入用户名和密码");
+    public AjaxResult signUp(@RequestBody LoginBody loginBody, HttpServletRequest request){
+        if(signupService.signUp(loginBody,request)){
+            return AjaxResult.success("注册成功！");
         }
-        else if(sysUserService.Signup(loginUser.getUserName(), loginUser.getPassword())){
-            return ajax = AjaxResult.success("注册成功");
-        }
-        else{
-            return ajax = AjaxResult.error("注册失败");
-        }
+        return AjaxResult.error("注册失败！");
     }
+
 }

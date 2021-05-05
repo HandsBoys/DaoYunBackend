@@ -1,22 +1,26 @@
 package com.dy.service;
 
 import com.dy.domain.SysDictData;
-import org.springframework.stereotype.Repository;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.dy.dto.SysDictDataDto;
 
 import java.util.List;
 
 /**
  *
+ * @author cxj
  */
-public interface SysDictDataService {
+public interface SysDictDataService extends IService<SysDictData> {
 
-   public List<SysDictData> listDictData(SysDictData dictData);
+    List<SysDictDataDto> listDictDataAll();
 
-   public int insertDictData(SysDictData dictData);
+    int insertDictData(SysDictDataDto dictDataDto);
 
-   public int updateDictData(SysDictData dictData);
+    int updateDictData(SysDictDataDto dictDataDto);
 
-   public boolean checkDictTypeStatus(SysDictData dictData);
+    int deleteDictDataByIds(Long[] dictIds);
 
-   public int deleteDictDataById(SysDictData dictData);
+    String checkValue(SysDictDataDto dictDataDto);
+
+    List<SysDictDataDto> listDictDataByType(String dictType);
 }

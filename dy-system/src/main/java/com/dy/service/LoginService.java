@@ -1,15 +1,40 @@
 package com.dy.service;
 
-import com.dy.core.utils.AjaxResult;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import com.dy.common.utils.AjaxResult;
+import com.dy.domain.SysUser;
+import com.dy.dto.login.LoginBody;
+import com.dy.dto.login.TokenDto;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
-public interface LoginService{
+/**
+ * @author cxj
+ */
+public interface LoginService {
+    /**
+     * 通过用户名和密码登录，成功则返回token
+     * @param loginBody
+     * @param request
+     * @return AjaxResult
+     */
+    public TokenDto loginByPassword(LoginBody loginBody, HttpServletRequest request);
 
     /**
-     * 登录成功，返回token
+     * 使用短信验证登录，成功则返回token
+     * @param loginBody
+     * @param request
+     * @return AjaxResult
      */
-    public AjaxResult login(String userName, String password);
+    public TokenDto loginBySms(LoginBody loginBody, HttpServletRequest request);
 
+    /**
+     * 无验证码登录
+     * @param loginBody
+     * @param request
+     * @return
+     */
+    TokenDto loginWithoutCode(LoginBody loginBody, HttpServletRequest request);
+
+    SysUser getLoginUser(Principal principal);
 }

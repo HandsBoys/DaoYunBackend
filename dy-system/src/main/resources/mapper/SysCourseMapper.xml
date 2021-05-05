@@ -5,39 +5,14 @@
 <mapper namespace="com.dy.mapper.SysCourseMapper">
 
     <resultMap id="BaseResultMap" type="com.dy.domain.SysCourse">
-        <id property="courseId" column="course_id" jdbcType="BIGINT"/>
-        <result property="courseName" column="course_name" jdbcType="VARCHAR"/>
-        <result property="teachers" column="teachers" jdbcType="VARCHAR"/>
-        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-        <result property="lastUpdateBy" column="last_update_by" jdbcType="VARCHAR"/>
-        <result property="lastUpdateTime" column="last_update_time" jdbcType="TIMESTAMP"/>
-        <result property="delFlag" column="del_flag" jdbcType="CHAR"/>
-        <result property="students" column="students" jdbcType="VARCHAR"/>
-        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
-        <result property="orderNum" column="order_num" jdbcType="INTEGER"/>
-        <result property="status" column="status" jdbcType="CHAR"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="courseName" column="course_name" jdbcType="VARCHAR"/>
+            <result property="term" column="term" jdbcType="VARCHAR"/>
+            <result property="teacherId" column="teacher_id" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        select
-            c.course_id,c.course_name,c.teachers,
-            c.create_time,c.last_update_by,c.last_update_time,
-            c.del_flag,c.students,c.create_by,
-            c.order_num,c.status
-        from sys_course c
---             left join sys_user_course uc on uc.course_id = c.course_id
---             left join sys_user u on u.user_id = c.user_id
---             left join sys_user_role ur on ur.user_id = u.user_id
---             left join sys_role r on u.role_id = r.role_id
+        id,course_name,term,
+        teacher_id
     </sql>
-
-    <select id="listCoursesAll" resultType="com.dy.domain.SysCourse">
-        <include refid="Base_Column_List"/>
-    </select>
-
-    <select id="listCoursesByUserId" resultType="com.dy.domain.SysCourse">
-        <include refid="Base_Column_List"/>
-    </select>
-
-
 </mapper>

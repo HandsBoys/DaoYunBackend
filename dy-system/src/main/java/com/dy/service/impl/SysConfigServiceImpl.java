@@ -1,21 +1,33 @@
 package com.dy.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dy.domain.SysConfig;
-import com.dy.mapper.SysConfigMapper;
+import com.dy.dto.SysConfigDto;
 import com.dy.service.SysConfigService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dy.mapper.SysConfigMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ *
+ */
 @Service
-public class SysConfigServiceImpl implements SysConfigService {
+public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig>
+implements SysConfigService{
 
-    @Autowired
-    private SysConfigMapper configMapper;
+    //TODO
+    @Override
+    public List<SysConfig> listSysConfig(SysConfigDto configDto) {
+        return null;
+    }
 
     @Override
-    public List<SysConfig> listSysConfig(SysConfig config) {
-        return configMapper.listSysConfig(config);
+    public int updateSysConfig(SysConfigDto configDto) {
+        return 0;
     }
 }
+
+
+
+

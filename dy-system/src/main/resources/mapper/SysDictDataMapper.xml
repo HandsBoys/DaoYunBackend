@@ -5,73 +5,37 @@
 <mapper namespace="com.dy.mapper.SysDictDataMapper">
 
     <resultMap id="BaseResultMap" type="com.dy.domain.SysDictData">
-            <id property="dictCode" column="dict_code" jdbcType="BIGINT"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="dictSort" column="dict_sort" jdbcType="INTEGER"/>
             <result property="dictLabel" column="dict_label" jdbcType="VARCHAR"/>
-            <result property="dictValue" column="dict_value" jdbcType="VARCHAR"/>
+            <result property="dictValue" column="dict_value" jdbcType="INTEGER"/>
             <result property="dictType" column="dict_type" jdbcType="VARCHAR"/>
-            <result property="status" column="status" jdbcType="CHAR"/>
-            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="BOOLEAN"/>
+            <result property="createBy" column="create_by" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="lastUpdateBy" column="last_update_by" jdbcType="VARCHAR"/>
+            <result property="lastUpdateBy" column="last_update_by" jdbcType="BIGINT"/>
             <result property="lastUpdateTime" column="last_update_time" jdbcType="TIMESTAMP"/>
             <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         select
-        dict_code,dict_sort,dict_label,
+        id,dict_sort,dict_label,
         dict_value,dict_type,status,
         create_by,create_time,last_update_by,
         last_update_time,remark
         from sys_dict_data
     </sql>
-
-    <insert id="insertDictData" parameterType="SysDictData">
-        insert into sys_dict_data(
-        <if test="dictSort != null">dict_sort,</if>
-        <if test="dictLabel != null and dictLabel != ''">dict_label,</if>
-        <if test="dictValue != null and dictValue != ''">dict_value,</if>
-        <if test="dictType != null and dictType != ''">dict_type,</if>
-        <if test="status != null">status,</if>
-        <if test="remark != null and remark != ''">remark,</if>
-        <if test="createBy != null and createBy != ''">create_by,</if>
-        create_time
-        )values(
-        <if test="dictSort != null">#{dictSort},</if>
-        <if test="dictLabel != null and dictLabel != ''">#{dictLabel},</if>
-        <if test="dictValue != null and dictValue != ''">#{dictValue},</if>
-        <if test="dictType != null and dictType != ''">#{dictType},</if>
-        <if test="status != null">#{status},</if>
-        <if test="remark != null and remark != ''">#{remark},</if>
-        <if test="createBy != null and createBy != ''">#{createBy},</if>
-        sysdate()
-        )
-    </insert>
-
-    <update id="updateDictData">
-        update sys_dict_data
-        <set>
-            <if test="dictSort != null">dict_sort = #{dictSort},</if>
-            <if test="dictLabel != null and dictLabel != ''">dict_label = #{dictLabel},</if>
-            <if test="dictValue != null and dictValue != ''">dict_value = #{dictValue},</if>
-            <if test="dictType != null and dictType != ''">dict_type = #{dictType},</if>
-            <if test="status != null">status = #{status},</if>
-            <if test="remark != null">remark = #{remark},</if>
-            <if test="lastUpdateBy != null and lastUpdateBy != ''">last_update_by = #{lastUpdateBy},</if>
-            last_update_time = sysdate()
-        </set>
-        where dict_code = #{dictCode}
-    </update>
-
-    <delete id="deleteDictDataById" parameterType="Long">
-        delete from sys_dict_data where dict_code = #{dictCode}
+    <delete id="deleteDictDataByIds">
+        delete from sys_dict_data where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </delete>
-
-    <select id="listDictData" resultType="com.dy.domain.SysDictData">
-        <include refid="Base_Column_List"/>
-    </select>
     <select id="countDictDataByType" resultType="java.lang.Integer">
         select count(1) from sys_dict_data where dict_type=#{dictType}
+    </select>
+    <select id="listDictDataAll" resultType="com.dy.dto.SysDictDataDto">
+        <include refid="Base_Column_List"></include>
     </select>
 </mapper>

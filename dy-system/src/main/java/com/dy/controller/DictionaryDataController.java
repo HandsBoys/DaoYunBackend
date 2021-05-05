@@ -1,12 +1,14 @@
 package com.dy.controller;
 
-import com.dy.core.constant.UserConstants;
-import com.dy.core.utils.AjaxResult;
+import com.dy.common.utils.AjaxResult;
 import com.dy.domain.SysDictData;
-import com.dy.domain.SysDictType;
+import com.dy.dto.SysDictDataDto;
 import com.dy.service.SysDictDataService;
 import com.dy.service.SysDictTypeService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +20,7 @@ import java.util.List;
  */
 @Api(tags="数据字典DictionaryData管理接口")
 @RestController
-@RequestMapping("/system/dict/data")
+@RequestMapping("/system/dictdata")
 public class DictionaryDataController extends BaseController {
     @Autowired
     private SysDictDataService dictDataService;
@@ -26,37 +28,40 @@ public class DictionaryDataController extends BaseController {
     @Autowired
     private SysDictTypeService dictTypeService;
 
-    @GetMapping("/list")
-    public List<SysDictData> list(SysDictData dictData){
-        return dictDataService.listDictData(dictData);
+    @ApiOperation(value = "获取所有字典数据")
+    @GetMapping("/all")
+    public List<SysDictDataDto> listDictDataAll(){
+        return dictDataService.listDictDataAll();
     }
 
-    @PostMapping("/add")
-    public AjaxResult add(@Validated @RequestBody SysDictData dictData){
-        if(!dictDataService.checkDictTypeStatus(dictData)){
-            return AjaxResult.error("修改字典'" + dictData.getDictLabel() + "'失败，字典类型status字段设置错误");
-        }
-        //判断数据字典的dict_type字段是否在数据库中存在
-        if(UserConstants.UNIQUE.equals(dictTypeService.checkDictTypeUnique(dictData.getDictType()))){
-            return AjaxResult.error("修改数据字典'"+dictData.getDictLabel()+"'失败，数据字典类型不存在");
-        }
-        return toAjax(dictDataService.insertDictData(dictData));
+    @ApiOperation(value = "根据字典类型获取字典数据")
+    @ApiImplicitParam(name = "dictType",dataType = "String")
+    @GetMapping
+    public List<SysDictDataDto> listDictDataByType(String dictType){
+        return dictDataService.listDictDataByType(dictType);
     }
 
-    @PostMapping("/edit")
-    public AjaxResult edit(@Validated @RequestBody SysDictData dictData){
-        if(!dictDataService.checkDictTypeStatus(dictData)){
-            return AjaxResult.error("修改字典'" + dictData.getDictLabel() + "'失败，字典类型status字段设置错误");
+    @PutMapping
+    public AjaxResult add(@Validated @RequestBody SysDictDataDto dictDataDto){
+        String msg = dictDataService.checkValue(dictDataDto);
+        if(msg != null){
+            return AjaxResult.error(msg);
         }
-        if(UserConstants.UNIQUE.equals(dictTypeService.checkDictTypeUnique(dictData.getDictType()))){
-            return AjaxResult.error("修改数据字典'"+dictData.getDictLabel()+"'失败，数据字典类型不存在");
+        return toAjax(dictDataService.insertDictData(dictDataDto));
+    }
+
+    @PostMapping
+    public AjaxResult edit(@Validated @RequestBody SysDictDataDto dictDataDto){
+        String msg = dictDataService.checkValue(dictDataDto);
+        if(msg != null){
+            return AjaxResult.error(msg);
         }
         //TODO:设置修改者
-        return toAjax(dictDataService.updateDictData(dictData));
+        return toAjax(dictDataService.updateDictData(dictDataDto));
     }
 
-    @PostMapping("/delete")
-    public AjaxResult delete(@RequestBody SysDictData dictData){
-        return toAjax(dictDataService.deleteDictDataById(dictData));
+    @DeleteMapping("/{dictIds}")
+    public AjaxResult delete(@PathVariable Long[] dictIds){
+        return toAjax(dictDataService.deleteDictDataByIds(dictIds));
     }
 }

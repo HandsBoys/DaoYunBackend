@@ -1,25 +1,23 @@
 package com.dy.mapper;
 
 import com.dy.domain.SysDictData;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.dy.dto.SysDictDataDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * @Entity com.dy.system.domain.SysDictData
+ * @Entity com.dy.domain.SysDictData
  */
 @Repository
-public interface SysDictDataMapper {
-
-    List<SysDictData> listDictData();
-
-    int insertDictData(SysDictData dictData);
+public interface SysDictDataMapper extends BaseMapper<SysDictData> {
 
     int countDictDataByType(String dictType);
 
-    int updateDictData(SysDictData dictData);
+    List<SysDictDataDto> listDictDataAll();
 
-    int deleteDictDataById(Long dictCode);
+    int deleteDictDataByIds(Long[] dictIds);
 }
 
 

@@ -1,29 +1,13 @@
 package com.dy.mapper;
 
-import com.dy.domain.SysMenu;
 import com.dy.domain.SysRole;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * 菜单表 数据层
- * @Entity com.dy.system.domain.SysRole
+ * @Entity com.dy.domain.SysRole
  */
-@Repository
-public interface SysRoleMapper {
-    /**
-     * 获取角色列表
-     */
-    public List<SysRole> listRoles();
+public interface SysRoleMapper extends BaseMapper<SysRole> {
 
-    /**
-     * 根据用户id查询角色
-     *
-     * @return
-     */
-    List<SysRole> getRolesByUserId(@Param("userId") Long userId);
 }
 
 

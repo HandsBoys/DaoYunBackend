@@ -1,25 +1,21 @@
 package com.dy.service;
 
 import com.dy.domain.SysRole;
-import org.springframework.stereotype.Repository;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.dy.dto.SysRoleDto;
 
 import java.util.List;
 
 /**
- * 角色业务层
+ *
  */
-public interface SysRoleService {
-    /**
-     * 查询所有角色数据
-     */
-    //TODO:增加分页功能
-    public List<SysRole> listRoles(Long userId);
+public interface SysRoleService extends IService<SysRole> {
 
-    /**
-     * 根据用户id查询角色
-     *
-     * @return
-     */
-    List<SysRole> getRolesByUserId(Long userId);
+    List<SysRole> listRoles(Long userId);
 
+    int updateRole(SysRoleDto roleDto);
+
+    int deleteRoles(Long[] roleIds);
+
+    int insertRole(SysRoleDto roleDto);
 }

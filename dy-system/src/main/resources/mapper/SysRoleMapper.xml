@@ -4,41 +4,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dy.mapper.SysRoleMapper">
 
-    <resultMap id="SysRoleResult" type="com.dy.domain.SysRole">
-            <id property="roleId" column="role_id" jdbcType="BIGINT"/>
+    <resultMap id="BaseResultMap" type="com.dy.domain.SysRole">
+            <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
             <result property="roleKey" column="role_key" jdbcType="VARCHAR"/>
             <result property="roleSort" column="role_sort" jdbcType="INTEGER"/>
-            <result property="dataScope" column="data_scope" jdbcType="CHAR"/>
+            <result property="dataScope" column="data_scope" jdbcType="INTEGER"/>
             <result property="status" column="status" jdbcType="CHAR"/>
-            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createBy" column="create_by" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="lastUpdateBy" column="last_update_by" jdbcType="VARCHAR"/>
+            <result property="lastUpdateBy" column="last_update_by" jdbcType="BIGINT"/>
             <result property="lastUpdateTime" column="last_update_time" jdbcType="TIMESTAMP"/>
-            <result property="delFlag" column="del_flag" jdbcType="CHAR"/>
+            <result property="delFlag" column="del_flag" jdbcType="BOOLEAN"/>
             <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <sql id="selectRoleVo">
-        select
-            role_id,role_name,role_key,role_sort,data_scope,status,create_by,create_time,
-            last_update_by,last_update_time,del_flag,remark
-        from sys_role
+    <sql id="Base_Column_List">
+        id,role_name,role_key,
+        role_sort,data_scope,status,
+        create_by,create_time,last_update_by,
+        last_update_time,del_flag,remark
     </sql>
-
-    <!-- 查询所有角色 -->
-    <select id="listRoles" resultMap="SysRoleResult">
-        <include refid="selectRoleVo"/>
-    </select>
-
-    <!--根据用户id查询角色-->
-    <select id="getRolesByUserId" resultType="com.dy.domain.SysRole">
-        SELECT
-            r.*
-        FROM
-            sys_role r
-                LEFT JOIN sys_user_role ur ON ur.role_id = r.role_id
-        WHERE
-            ur.user_id = #{userId}
-    </select>
 </mapper>
