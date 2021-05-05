@@ -3,6 +3,7 @@ package com.dy.service.impl;
 
 import com.dy.common.constant.GlobalConstants;
 import com.dy.common.constant.UserConstants;
+import com.dy.common.redis.RedisCacheUtils;
 import com.dy.manager.sms.Sms;
 import com.dy.manager.sms.SmsManager;
 import com.dy.service.MessageService;
@@ -35,12 +36,17 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private SmsManager smsManager;
 
+    @Autowired
+    private RedisCacheUtils redisCacheUtils;
+
     @Override
-    public boolean sendMessage(String phone, HttpServletRequest request) {
+    public boolean sendMessage(String phone) {
         String captcha = producer.createText();
         //保存手机号和验证码到session
-        request.getSession().setAttribute(GlobalConstants.SMS_CAPTCHA_SESSION_KEY,captcha);
-        request.getSession().setAttribute(UserConstants.PHONE,phone);
+        //request.getSession().setAttribute(GlobalConstants.SMS_CAPTCHA_SESSION_KEY,captcha);
+        //request.getSession().setAttribute(UserConstants.PHONE,phone);
+        redisCacheUtils.setCacheObject(GlobalConstants.SMS_CAPTCHA_SESSION_KEY,captcha);
+        redisCacheUtils.setCacheObject(GlobalConstants.PHONE,phone);
         Sms sms = new Sms(phone,captcha);
         if(smsManager.sendSms(sms)){
             return true;

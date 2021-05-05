@@ -1,6 +1,7 @@
 package com.dy.service.impl;
 
 import com.dy.common.constant.GlobalConstants;
+import com.dy.common.redis.RedisCacheUtils;
 import com.dy.common.utils.AjaxResult;
 import com.dy.common.utils.CaptchaUtils;
 import com.dy.common.utils.JwtUtils;
@@ -36,6 +37,8 @@ public class LoginServiceImpl implements LoginService {
     private JwtUtils jwtUtils;
     @Autowired
     private SysUserService userService;
+    @Autowired
+    private RedisCacheUtils redisCacheUtils;
 
     /**
      * 通过用户名和密码登录，成功则返回token
@@ -45,11 +48,13 @@ public class LoginServiceImpl implements LoginService {
      * @return AjaxResult
      */
     @Override
-    public TokenDto loginByPassword(LoginBody loginBody, HttpServletRequest request) {
+    public TokenDto loginByPassword(LoginBody loginBody) {
         String username = loginBody.getUserName();
         String password = loginBody.getPassword();
         String code = loginBody.getCode();
-        String captcha = CaptchaUtils.getImageCaptcha(request);
+
+        String captcha = redisCacheUtils.getCacheObject(GlobalConstants.IMAGE_CAPTCHA_SESSION_KEY);
+        System.out.println(captcha);
 
         TokenDto tokenDto = new TokenDto();
 
@@ -86,18 +91,17 @@ public class LoginServiceImpl implements LoginService {
      * 使用短信验证登录，成功则返回token
      *
      * @param loginBody
-     * @param request
      * @return token
      */
     @Override
-    public TokenDto loginBySms(LoginBody loginBody, HttpServletRequest request) {
+    public TokenDto loginBySms(LoginBody loginBody) {
         String phone = loginBody.getPhone();
         String code = loginBody.getCode();
-        String captcha = CaptchaUtils.getSmsCaptcha(request);
+        String captcha = redisCacheUtils.getCacheObject(GlobalConstants.SMS_CAPTCHA_SESSION_KEY);
 
         TokenDto tokenDto = new TokenDto();
         String msg = null;
-        if(!phone.equals(CaptchaUtils.getPhone(request))){
+        if(!phone.equals(redisCacheUtils.getCacheObject(GlobalConstants.PHONE))){
             msg = "请使用接受验证码的手机号登录!";
             tokenDto.setAjaxResult(AjaxResult.error(msg));
             return tokenDto;
@@ -135,11 +139,10 @@ public class LoginServiceImpl implements LoginService {
      * 无验证码登录
      *
      * @param loginBody
-     * @param request
      * @return
      */
     @Override
-    public TokenDto loginWithoutCode(LoginBody loginBody, HttpServletRequest request) {
+    public TokenDto loginWithoutCode(LoginBody loginBody) {
         String username = loginBody.getUserName();
         String password = loginBody.getPassword();
 

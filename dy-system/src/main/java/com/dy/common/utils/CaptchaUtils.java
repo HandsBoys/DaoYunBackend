@@ -2,12 +2,15 @@ package com.dy.common.utils;
 
 import com.dy.common.constant.GlobalConstants;
 import com.dy.common.constant.UserConstants;
+import com.dy.common.redis.RedisCacheUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * 验证码工具类
+ * @author cxj
  */
 @Component
 public class CaptchaUtils {
@@ -22,24 +25,6 @@ public class CaptchaUtils {
             return false;
         }
         return  true;
-    }
-
-    /**
-     * 获取生成的验证码
-     *
-     * @param request
-     * @return 验证码
-     */
-    public static String getImageCaptcha(HttpServletRequest request) {
-        return (String) request.getSession().getAttribute(GlobalConstants.IMAGE_CAPTCHA_SESSION_KEY);
-    }
-
-    public static String getSmsCaptcha(HttpServletRequest request) {
-        return (String) request.getSession().getAttribute(GlobalConstants.SMS_CAPTCHA_SESSION_KEY);
-    }
-
-    public static String getPhone(HttpServletRequest request){
-        return (String) request.getSession().getAttribute(UserConstants.PHONE);
     }
 
     /**

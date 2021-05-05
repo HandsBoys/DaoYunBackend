@@ -76,32 +76,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login", "/logout")
                 .permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
-                .anyRequest().permitAll()
-                .and()
-                //禁用缓存
-                .headers()
-                .cacheControl().disable();
+                .anyRequest().permitAll();
         // 添加jwt登录授权过滤器
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-//        http.cors().and().csrf().disable().authorizeRequests()
-//            .antMatchers("/test").authenticated()
-//            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-//            .antMatchers("/").permitAll()
-//
-//            .antMatchers("/webjars/**").permitAll()
-//            // swagger
-//            .antMatchers("/swagger-ui.html").permitAll()
-//            .antMatchers("/swagger-resources/**").permitAll()
-//            .antMatchers("/v2/api-docs").permitAll()
-//            .antMatchers("/webjars/springfox-swagger-ui/**").permitAll()
-//            //验证码
-//            .antMatchers("/captcha.jpg").permitAll()
-//            // 其他
-////            .anyRequest().authenticated()
-//                .anyRequest().permitAll();
-////            .and()
-////            .formLogin()
-////            .loginProcessingUrl("/login").permitAll();
 
         // 未授权处理
         http.exceptionHandling()

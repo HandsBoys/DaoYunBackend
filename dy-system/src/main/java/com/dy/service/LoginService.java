@@ -15,26 +15,23 @@ public interface LoginService {
     /**
      * 通过用户名和密码登录，成功则返回token
      * @param loginBody
-     * @param request
      * @return AjaxResult
      */
-    public TokenDto loginByPassword(LoginBody loginBody, HttpServletRequest request);
+    public TokenDto loginByPassword(LoginBody loginBody);
 
     /**
      * 使用短信验证登录，成功则返回token
      * @param loginBody
-     * @param request
      * @return AjaxResult
      */
-    public TokenDto loginBySms(LoginBody loginBody, HttpServletRequest request);
+    public TokenDto loginBySms(LoginBody loginBody);
 
     /**
      * 无验证码登录
      * @param loginBody
-     * @param request
      * @return
      */
-    TokenDto loginWithoutCode(LoginBody loginBody, HttpServletRequest request);
+    TokenDto loginWithoutCode(LoginBody loginBody );
 
     SysUser getLoginUser(Principal principal);
 }

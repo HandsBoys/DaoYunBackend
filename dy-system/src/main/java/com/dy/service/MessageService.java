@@ -8,5 +8,5 @@ import javax.servlet.http.HttpServletRequest;
  * @author cxj
  */
 public interface MessageService {
-    public boolean sendMessage(String phone, HttpServletRequest request);
+    public boolean sendMessage(String phone);
 }

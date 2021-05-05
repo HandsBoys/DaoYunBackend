@@ -35,25 +35,16 @@ public class LoginController extends BaseController{
     @ApiImplicitParam(name = "loginBody",dataType = "LoginBody",value = "需要传输的字段:  userName(用户名),password(密码),code" +
             "(图片验证码)", required = true,paramType = "body")
     @PostMapping("/login")
-    public TokenDto loginByPassword(@RequestBody LoginBody loginBody, HttpServletRequest request){
-        return loginService.loginByPassword(loginBody,request);
+    public TokenDto loginByPassword(@RequestBody LoginBody loginBody ){
+        return loginService.loginByPassword(loginBody);
     }
 
     @ApiOperation(value = "手机号验证码登录，成功则返回token")
     @ApiImplicitParam(name = "loginBody",dataType = "LoginBody",value = "需要传输的字段:  phone(手机号),code" +
             "(短信验证码)", required = true,paramType = "body")
     @PostMapping("/login2")
-    public TokenDto loginBySms(@RequestBody LoginBody loginBody, HttpServletRequest request){
-
-        System.out.println(request.getSession().getId());
-        System.out.println(request.getCookies().toString());
-        Cookie[] Cookies = request.getCookies();
-        for(int i =0;i<Cookies.length;i++){
-            Cookie c = Cookies[i];
-            System.out.println(c.getName() + "=" + c.getValue());
-        }
-
-        return loginService.loginBySms(loginBody,request);
+    public TokenDto loginBySms(@RequestBody LoginBody loginBody ){
+        return loginService.loginBySms(loginBody);
     }
 
     @ApiOperation(value = "获取登录用户的信息")
