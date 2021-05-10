@@ -5,8 +5,9 @@ import com.dy.common.utils.AjaxResult;
 import com.dy.domain.SysUser;
 import com.dy.dto.SysUserDto;
 import com.dy.service.SysUserService;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +15,6 @@ import java.util.List;
 /**
  * 用户管理的操作
  */
-@Api(tags = "用户管理接口")
 @RestController
 @RequestMapping("/system/user")
 public class UserController extends BaseController{
@@ -24,6 +24,7 @@ public class UserController extends BaseController{
     /**
      * 获取用户列表
      */
+    @PreAuthorize("hasAuthority('system:user:list') or hasAuthority('*:*:*')")
     @GetMapping
     public List<SysUserDto> listUserAll(){
         List<SysUserDto> list = userService.listUserAll();
@@ -35,6 +36,7 @@ public class UserController extends BaseController{
      * 修改用户手机号，邮箱
      * @param user:userName不变
      */
+    @PreAuthorize("hasAuthority('system:user:edit') or hasAuthority('*:*:*')")
     @PutMapping
     public AjaxResult editUser(SysUser user){
         // 添加：校验是否是管理员
@@ -59,6 +61,7 @@ public class UserController extends BaseController{
     /**
      * 删除用户
      */
+    @PreAuthorize("hasAuthority('system:user:remove') or hasAuthority('*:*:*')")
     @DeleteMapping("/{userIds}")
     public AjaxResult delete(@PathVariable Long[] userIds){
         return toAjax(userService.deleteUserByIds(userIds));
@@ -67,6 +70,7 @@ public class UserController extends BaseController{
     /**
      * 新增用户
      */
+    @PreAuthorize("hasAuthority('system:user:add') or hasAuthority('*:*:*')")
     @PostMapping
     public AjaxResult addUser(SysUser user){
         if(UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user))){

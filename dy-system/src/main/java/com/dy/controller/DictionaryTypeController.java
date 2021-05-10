@@ -1,18 +1,13 @@
 package com.dy.controller;
 
-import com.dy.common.constant.UserConstants;
 import com.dy.common.utils.AjaxResult;
-import com.dy.common.utils.SecurityUtils;
 import com.dy.domain.SysDictType;
 import com.dy.dto.SysDictTypeDto;
 import com.dy.service.SysDictTypeService;
 import com.dy.service.SysUserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +16,6 @@ import java.util.List;
 /**
  * 数据字典类型信息
  */
-@Api(tags="数据字典类型DictionaryType管理接口")
 @RestController
 @RequestMapping("/system/dicttype")
 public class DictionaryTypeController extends BaseController{
@@ -31,23 +25,22 @@ public class DictionaryTypeController extends BaseController{
     @Autowired
     private SysUserService userService;
 
-    @ApiOperation(value = "获取所有数据字典类型")
     @GetMapping
+    @PreAuthorize("hasAuthority('system:dict:list') or hasAuthority('*:*:*')")
     public List<SysDictTypeDto> list(){
         List<SysDictTypeDto> list = dictTypeService.listAllDictTypes();
         return list;
     }
 
-    @ApiOperation(value = "批量删除数据字典类型")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "dictIds",paramType = "path")
-    })
+
     @DeleteMapping("/{dictIds}")
+    @PreAuthorize("hasAuthority('system:dict:remove') or hasAuthority('*:*:*')")
     public AjaxResult delete(@PathVariable Long[] dictIds){
         return toAjax(dictTypeService.deleteDictTypeByIds(dictIds));
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('system:dict:add') or hasAuthority('*:*:*')")
     public AjaxResult add(@Validated @RequestBody SysDictTypeDto dictTypeDto){
         String msg = dictTypeService.checkValue(dictTypeDto);
         if(msg != null){
@@ -62,6 +55,7 @@ public class DictionaryTypeController extends BaseController{
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('system:dict:edit') or hasAuthority('*:*:*')")
     public AjaxResult edit(@Validated @RequestBody SysDictTypeDto dictTypeDto){
         String msg = dictTypeService.checkValue(dictTypeDto);
         if(msg != null){

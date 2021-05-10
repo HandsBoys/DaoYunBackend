@@ -5,11 +5,13 @@ import com.dy.common.redis.RedisCacheUtils;
 import com.dy.common.utils.AjaxResult;
 import com.dy.service.MessageService;
 import com.google.code.kaptcha.Producer;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
@@ -21,7 +23,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-@Api(tags = "验证码接口")
 @RestController
 public class CaptchaController {
     /**
@@ -34,7 +35,6 @@ public class CaptchaController {
     @Autowired
     private RedisCacheUtils redisCacheUtils;
 
-    @ApiOperation(value = "获取图片验证码")
     @PostMapping("/captcha.jpg")
     public void captcha(HttpServletResponse response) throws ServletException, IOException {
         response.setHeader("Cache-Control","no-store, no-cache");
@@ -43,8 +43,6 @@ public class CaptchaController {
         String text = producer.createText();
         //生成图片验证码
         BufferedImage image = producer.createImage(text);
-        //保存验证码到session
-        //request.getSession().setAttribute(GlobalConstants.IMAGE_CAPTCHA_SESSION_KEY,text);
 
         //TODO: UUID
         redisCacheUtils.setCacheObject(GlobalConstants.IMAGE_CAPTCHA_SESSION_KEY, text, 2, TimeUnit.MINUTES);
@@ -54,11 +52,11 @@ public class CaptchaController {
         IOUtils.closeQuietly(out);
     }
 
-    @ApiOperation(value = "获取短信验证码")
+    @Operation()
+    @Parameter(name = "phone", description = "电话号码", in = ParameterIn.QUERY)
     @PostMapping("/message")
-    public AjaxResult getSmsCaptcha(String phone,HttpServletRequest request){
+    public AjaxResult<String> getSmsCaptcha(String phone){
         if(messageService.sendMessage( phone )){
-            System.out.println(request.getSession().getId());
             return AjaxResult.success("短信发送成功!");
         }
         return AjaxResult.error("短信发送失败!");

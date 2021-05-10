@@ -1,4 +1,4 @@
-package com.dy.service;
+package com.dy.manager.service;
 
 import com.dy.domain.SysUserDept;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -6,6 +6,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 /**
  *
  */
-public interface SysUserDeptService extends IService<SysUserDept> {
+public interface SysUserDeptManager extends IService<SysUserDept> {
 
 }

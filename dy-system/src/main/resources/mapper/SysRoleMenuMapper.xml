@@ -13,4 +13,12 @@
     <sql id="Base_Column_List">
         id,role_id,menu_id
     </sql>
+    <select id="getMenuPermsByUserId" parameterType="Long" resultType="java.lang.String" >
+        select distinct m.perms
+        from sys_menu m
+                 left join sys_role_menu rm on m.id = rm.menu_id
+                 left join sys_user_role ur on rm.role_id = ur.role_id
+                 left join sys_role r on r.id = ur.role_id
+        where m.status = 0 and r.status = 0 and ur.user_id = #{userId}
+    </select>
 </mapper>

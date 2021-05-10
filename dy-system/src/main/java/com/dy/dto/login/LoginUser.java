@@ -1,12 +1,15 @@
 package com.dy.dto.login;
 
+import com.dy.common.service.GrantedAuthorityImpl;
 import com.dy.domain.SysUser;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 public class LoginUser implements UserDetails {
@@ -59,7 +62,9 @@ public class LoginUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> grantedAuthorityList =
+                permissions.stream().map(GrantedAuthorityImpl::new).collect(Collectors.toList());
+        return grantedAuthorityList;
     }
 
     /**
@@ -88,7 +93,7 @@ public class LoginUser implements UserDetails {
      */
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     /**
@@ -96,7 +101,7 @@ public class LoginUser implements UserDetails {
      */
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     /**
@@ -104,7 +109,7 @@ public class LoginUser implements UserDetails {
      */
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     /**

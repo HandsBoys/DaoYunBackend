@@ -27,4 +27,9 @@ public class GlobalConstants {
     public static final String SMS_CAPTCHA_SESSION_KEY = "smsCaptcha";
 
     public static final String PHONE = "phone";
+
+    /**
+     * 所有权限标识
+     */
+    public static final String ALL_PERMISSION = "*:*:*";
 }

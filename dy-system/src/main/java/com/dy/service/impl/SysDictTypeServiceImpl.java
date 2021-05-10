@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dy.common.constant.UserConstants;
 import com.dy.common.exception.CustomException;
-import com.dy.common.utils.AjaxResult;
 import com.dy.domain.SysDictType;
 import com.dy.dto.SysDictTypeDto;
 import com.dy.mapper.SysDictDataMapper;

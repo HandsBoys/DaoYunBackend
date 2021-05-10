@@ -5,12 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * 用户信息表
@@ -133,6 +130,4 @@ public class SysUser implements Serializable {
         this.nickName = phone;
         this.status = false;
     }
-
-
 }

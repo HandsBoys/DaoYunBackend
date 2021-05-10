@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,13 +16,25 @@ import java.util.Map;
  * jwt工具类
  */
 @Component
-public class JwtUtils {
-    private final String CLAIMS_USER = "sub";
-    private final String CLAIMS_CREATED = "created";
+public class TokenUtils {
+
+    // 令牌自定义标识
+    @Value("${jwt.tokenHeader}")
+    private String header;
+
+    // 令牌秘钥
     @Value("${jwt.secret}")
     private String secret;
+
+    // 令牌前缀
+    @Value("${jwt.tokenPrefix}")
+    private String tokenPrefix;
+
+    private final String CLAIMS_USER = "sub";
+    private final String CLAIMS_CREATED = "created";
+
     @Value("${jwt.expiration}")
-    private Integer expiration;
+    private Integer expirationTime;
 
     /**
      * 根据用户名生成token
@@ -56,7 +69,7 @@ public class JwtUtils {
      * @return
      */
     private Date generateExpiration() {
-        return new Date(System.currentTimeMillis() + expiration * 1000);
+        return new Date(System.currentTimeMillis() + expirationTime * 1000 * 60);
     }
 
     /**
@@ -66,8 +79,14 @@ public class JwtUtils {
      * @return
      */
     public String getUserNameFromToken(String token) {
-        Claims claims = getClaimsFromToken(token);
-        return claims.getSubject();
+        try{
+            Claims claims = getClaimsFromToken(token);
+            return claims.getSubject();
+        }catch (Exception e){
+            System.out.println(e);
+            return null;
+        }
+
     }
 
     /**
@@ -130,6 +149,18 @@ public class JwtUtils {
         Claims claims = getClaimsFromToken(token);
         claims.put(CLAIMS_CREATED,new Date());
         return generatorToken(claims);
+    }
+
+
+    public String getToken(HttpServletRequest request){
+        String token = request.getHeader(header);
+        if(StringUtils.isNotEmpty(token) && token.startsWith(tokenPrefix)){
+            token = token.substring(tokenPrefix.length());
+        }
+        else {
+            token = null;
+        }
+        return token;
     }
 
 }

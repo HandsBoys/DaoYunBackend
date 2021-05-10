@@ -45,4 +45,6 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     Long getIdByUserName(String username);
+
+    boolean isAdmin(Long userId);
 }

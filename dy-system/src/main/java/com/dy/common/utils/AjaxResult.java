@@ -1,5 +1,7 @@
 package com.dy.common.utils;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
@@ -8,24 +10,29 @@ import java.util.HashMap;
  * 操作消息
  * @author cxj
  */
-public class AjaxResult extends HashMap<String, Object> {
-    private static final long serialVersionUID = 1L;
-
+@Data
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
+public class AjaxResult<T>{
     /**
      * 状态码
      */
-    private static final String CODE = "code";
+    private int code;
 
     /**
      * 返回内容
      */
-    private static final String MSG = "msg";
+    private String msg;
+
+    /**
+     * 返回数据
+     */
+    private T data;
 
     public AjaxResult(){
     }
 
     public AjaxResult(int code) {
-        super.put(CODE, code);
+        this.code = code;
     }
 
     /**
@@ -36,8 +43,16 @@ public class AjaxResult extends HashMap<String, Object> {
      */
     public AjaxResult(int code, String msg)
     {
-        super.put(CODE, code);
-        super.put(MSG, msg);
+        this.code = code;
+        this.msg = msg;
+    }
+
+    public AjaxResult(int code, String msg, T data){
+        this.code = code;
+        this.msg = msg;
+        if(data != null){
+            this.data = data;
+        }
     }
 
     /**
@@ -59,6 +74,19 @@ public class AjaxResult extends HashMap<String, Object> {
     public static AjaxResult success(String msg)
     {
         return new AjaxResult(HttpStatus.OK.value(), msg);
+    }
+
+
+    /**
+     * 返回成功消息
+     *
+     * @param msg 返回内容
+     * @param data 数据对象
+     * @return 成功消息
+     */
+    public static<T> AjaxResult success(String msg, T data)
+    {
+        return new AjaxResult(HttpStatus.OK.value(), msg, data);
     }
 
     /**
@@ -83,6 +111,11 @@ public class AjaxResult extends HashMap<String, Object> {
     public static AjaxResult error(int code, String msg)
     {
         return new AjaxResult(code, msg);
+    }
+
+    public static<T> AjaxResult error(int code, String msg, T data)
+    {
+        return new AjaxResult(code, msg, data);
     }
 }
 

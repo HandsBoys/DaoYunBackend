@@ -4,7 +4,9 @@ import com.dy.domain.SysMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dy.dto.SysMenuDto;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单管理业务功能
@@ -20,4 +22,6 @@ public interface SysMenuService extends IService<SysMenu> {
     int updateMenu(SysMenuDto menuDto);
 
     int deleteMenus(Long[] menuIds);
+
+    Set<String> getMenuPermsByUserId(Long userId);
 }

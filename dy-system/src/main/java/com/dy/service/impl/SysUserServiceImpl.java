@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dy.domain.SysUser;
 import com.dy.dto.SysUserDto;
+import com.dy.manager.service.SysUserRoleManager;
 import com.dy.service.SysUserService;
 import com.dy.mapper.SysUserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,8 @@ import java.util.List;
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
 implements SysUserService{
+    @Autowired
+    private SysUserRoleManager userRoleService;
 
     @Override
     public SysUser getUserByUserName(String username) {
@@ -88,6 +92,11 @@ implements SysUserService{
     @Override
     public Long getIdByUserName(String username) {
         return baseMapper.getIdByUserName(username);
+    }
+
+    @Override
+    public boolean isAdmin(Long userId) {
+        return userRoleService.isAdmin(userId);
     }
 }
 

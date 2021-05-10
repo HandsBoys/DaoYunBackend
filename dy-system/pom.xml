@@ -71,18 +71,6 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.4.1</version>
         </dependency>
-<!--        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-annotation</artifactId>
-            <version>3.4.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-extension</artifactId>
-            <version>3.4.1</version>
-            <scope>compile</scope>
-        </dependency>-->
 
         <!-- Mysql驱动包 -->
         <dependency>
@@ -91,24 +79,24 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!--druid-->
+        <!--接口文档-->
 <!--        <dependency>-->
-<!--            <groupId>com.alibaba</groupId>-->
-<!--            <artifactId>druid-spring-boot-starter</artifactId>-->
-<!--            <version>1.2.4</version>-->
+<!--            <groupId>io.springfox</groupId>-->
+<!--            <artifactId>springfox-swagger2</artifactId>-->
+<!--            <version>2.9.2</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>io.springfox</groupId>-->
+<!--            <artifactId>springfox-swagger-ui</artifactId>-->
+<!--            <version>2.9.2</version>-->
 <!--        </dependency>-->
 
-        <!--swagger-->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.5.8</version>
         </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.9.2</version>
-        </dependency>
+
 
         <dependency>
             <groupId>org.projectlombok</groupId>

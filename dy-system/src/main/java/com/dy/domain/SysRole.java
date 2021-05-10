@@ -49,7 +49,7 @@ public class SysRole implements Serializable {
      * 角色状态（0正常 1停用）
      */
     @TableField(value = "status")
-    private String status;
+    private boolean status;
 
     /**
      * 创建者

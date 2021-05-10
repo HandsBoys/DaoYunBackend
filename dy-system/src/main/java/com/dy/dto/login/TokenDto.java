@@ -1,6 +1,5 @@
 package com.dy.dto.login;
 
-import com.dy.common.utils.AjaxResult;
 import lombok.Data;
 
 /**
@@ -9,9 +8,8 @@ import lombok.Data;
 @Data
 public class TokenDto {
     private String token;
-    public AjaxResult ajaxResult;
 
-    public TokenDto() {
-        this.token = null;
+    public TokenDto(String token){
+        this.token = token;
     }
 }

@@ -10,8 +10,6 @@ public interface SignupService {
      * @param loginBody
      * @return
      */
-    boolean signUp(LoginBody loginBody, HttpServletRequest request);
+    boolean signUp(LoginBody loginBody);
 
-    //TODO:删除，未作验证码校验
-    boolean signUpWithoutCode(LoginBody loginBody, HttpServletRequest request);
 }

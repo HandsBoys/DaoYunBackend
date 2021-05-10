@@ -1,9 +1,7 @@
 package com.dy.dto.login;
 
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+
 
 /**
  * @author cxj

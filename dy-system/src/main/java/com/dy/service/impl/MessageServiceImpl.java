@@ -26,6 +26,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -42,10 +43,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public boolean sendMessage(String phone) {
         String captcha = producer.createText();
-        //保存手机号和验证码到session
-        //request.getSession().setAttribute(GlobalConstants.SMS_CAPTCHA_SESSION_KEY,captcha);
-        //request.getSession().setAttribute(UserConstants.PHONE,phone);
-        redisCacheUtils.setCacheObject(GlobalConstants.SMS_CAPTCHA_SESSION_KEY,captcha);
+        redisCacheUtils.setCacheObject(GlobalConstants.SMS_CAPTCHA_SESSION_KEY,captcha,2, TimeUnit.MINUTES);
         redisCacheUtils.setCacheObject(GlobalConstants.PHONE,phone);
         Sms sms = new Sms(phone,captcha);
         if(smsManager.sendSms(sms)){

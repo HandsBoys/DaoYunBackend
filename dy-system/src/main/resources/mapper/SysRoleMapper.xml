@@ -25,4 +25,10 @@
         create_by,create_time,last_update_by,
         last_update_time,del_flag,remark
     </sql>
+    <delete id="deleteRolesById" parameterType="Long">
+        delete from sys_role where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{roleIds}
+        </foreach>
+    </delete>
 </mapper>
