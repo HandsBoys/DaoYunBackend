@@ -27,7 +27,7 @@
             #{dictId}
         </foreach>
     </delete>
-    <select id="listAllDictTypes" resultType="com.dy.dto.SysDictTypeDto">
+    <select id="listAllDictTypes" resultType="com.dy.dto.system.SysDictTypeDto">
         <include refid="Base_Column_List"/>
     </select>
     <select id="getDictTypeById" resultType="com.dy.domain.SysDictType">

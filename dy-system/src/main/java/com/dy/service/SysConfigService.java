@@ -2,7 +2,7 @@ package com.dy.service;
 
 import com.dy.domain.SysConfig;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.dy.dto.SysConfigDto;
+import com.dy.dto.system.SysConfigDto;
 
 import java.util.List;
 
@@ -11,7 +11,16 @@ import java.util.List;
  */
 public interface SysConfigService extends IService<SysConfig> {
 
-    List<SysConfig> listSysConfig(SysConfigDto configDto);
+    List<SysConfigDto> listSysConfig();
 
     int updateSysConfig(SysConfigDto configDto);
+
+    /**
+     * 增加系统参数项
+     * @param configDto
+     * @return
+     */
+    int addSysConfig(SysConfigDto configDto);
+
+    int deleteConfigs(Long[] configIds);
 }

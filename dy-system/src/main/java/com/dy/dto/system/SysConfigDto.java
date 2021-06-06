@@ -1,4 +1,4 @@
-package com.dy.dto;
+package com.dy.dto.system;
 
 import lombok.Data;
 
@@ -10,27 +10,27 @@ public class SysConfigDto {
     /**
      * 参数主键
      */
-    private Integer id;
+    private Long id;
 
     /**
      * 参数名称
      */
-    private String name;
+    private String configName;
 
     /**
      * 参数键名
      */
-    private String key;
+    private String configKey;
 
     /**
      * 参数键值
      */
-    private String value;
+    private String configValue;
 
     /**
      * 系统内置（Y是 N否）
      */
-    private String type;
+    private String configType;
 
     /**
      * 备注

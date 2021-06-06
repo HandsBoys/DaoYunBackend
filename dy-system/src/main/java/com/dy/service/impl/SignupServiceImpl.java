@@ -30,7 +30,7 @@ public class SignupServiceImpl implements SignupService {
                 !CaptchaUtils.checkCaptcha(captcha,code) ||
                 StringUtils.isBlank(phone) ||
                 StringUtils.isBlank(password) ||
-                userService.checkPhoneUnique(phone) != null){
+                !userService.checkPhoneUnique(phone)){
             return false;
         }
         else{

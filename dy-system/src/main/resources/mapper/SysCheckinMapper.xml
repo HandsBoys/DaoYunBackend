@@ -8,7 +8,7 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="type" column="type" jdbcType="BOOLEAN"/>
             <result property="courseId" column="course_id" jdbcType="BIGINT"/>
-            <result property="promoterId" column="promoter_id" jdbcType="BIGINT"/>
+            <result property="teacherId" column="teacher_id" jdbcType="BIGINT"/>
             <result property="lng" column="lng" jdbcType="DOUBLE"/>
             <result property="lat" column="lat" jdbcType="DOUBLE"/>
             <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
@@ -17,11 +17,9 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        select
         id,type,course_id,
-        promoter_id,lng,lat,
+        teacher_id,lng,lat,
         start_time,end_time,is_finish
-        from sys_checkin
     </sql>
     <select id="getActiveCheckin" resultType="com.dy.domain.SysCheckin">
         <include refid="Base_Column_List"/>

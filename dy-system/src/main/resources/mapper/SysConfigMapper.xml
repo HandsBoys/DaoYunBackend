@@ -23,4 +23,10 @@
         create_time,update_by,update_time,
         remark
     </sql>
+    <delete id="deleteConfigsById" parameterType="Long">
+        delete from sys_config where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

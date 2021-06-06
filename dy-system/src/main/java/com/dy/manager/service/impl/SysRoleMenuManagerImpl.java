@@ -32,6 +32,13 @@ implements SysRoleMenuManager {
         }
         return permsSet;
     }
+
+    @Override
+    public Long[] getMenuIdsByRoleId(Long roleId) {
+        List<Long> menuIds = baseMapper.getMenuIdsByRoleId(roleId);
+        Long[] menus = menuIds.stream().toArray(Long[]::new);
+        return menus;
+    }
 }
 
 

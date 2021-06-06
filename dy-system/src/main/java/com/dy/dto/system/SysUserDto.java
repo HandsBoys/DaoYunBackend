@@ -1,8 +1,11 @@
-package com.dy.dto;
+package com.dy.dto.system;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
+/**
+ * @author cxj
+ */
 @Data
 public class SysUserDto {
     /**
@@ -40,7 +43,7 @@ public class SysUserDto {
     /**
      * 性别（0男 1女 2未知）
      */
-    private String sex;
+    private Integer sex;
 
     /**
      * 帐号状态（0正常 1停用）
@@ -51,5 +54,10 @@ public class SysUserDto {
      * 备注
      */
     private String remark;
+
+    /**
+     * 角色
+     */
+    private SysRoleDto role;
 
 }

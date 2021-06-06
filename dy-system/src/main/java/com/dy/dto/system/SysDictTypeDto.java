@@ -1,29 +1,20 @@
-package com.dy.dto;
+package com.dy.dto.system;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
-
 @Data
-public class SysDictDataDto {
+public class SysDictTypeDto {
     /**
-     * 字典编码
+     * 字典主键
      */
+    @TableId
     private Long id;
 
     /**
-     * 字典排序
+     * 字典名称
      */
-    private Integer dictSort;
-
-    /**
-     * 字典标签
-     */
-    private String dictLabel;
-
-    /**
-     * 字典键值
-     */
-    private Integer dictValue;
+    private String dictName;
 
     /**
      * 字典类型
@@ -39,5 +30,4 @@ public class SysDictDataDto {
      * 备注
      */
     private String remark;
-
 }

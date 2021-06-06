@@ -1,8 +1,9 @@
-package com.dy.controller;
+package com.dy.controller.system;
 
 import com.dy.common.utils.AjaxResult;
+import com.dy.controller.BaseController;
 import com.dy.domain.SysDictType;
-import com.dy.dto.SysDictTypeDto;
+import com.dy.dto.system.SysDictTypeDto;
 import com.dy.service.SysDictTypeService;
 import com.dy.service.SysUserService;
 import org.springframework.beans.BeanUtils;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/dicttype")
-public class DictionaryTypeController extends BaseController{
+public class SysDictionaryTypeController extends BaseController {
 
     @Autowired
     private SysDictTypeService dictTypeService;

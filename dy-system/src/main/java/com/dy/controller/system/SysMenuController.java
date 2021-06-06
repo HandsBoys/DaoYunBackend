@@ -1,8 +1,9 @@
-package com.dy.controller;
+package com.dy.controller.system;
 
 import com.dy.common.utils.AjaxResult;
+import com.dy.controller.BaseController;
 import com.dy.domain.SysMenu;
-import com.dy.dto.SysMenuDto;
+import com.dy.dto.system.SysMenuDto;
 import com.dy.service.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,23 +18,34 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("system/menu")
-public class MenuController extends BaseController{
+public class SysMenuController extends BaseController {
     @Autowired
     private SysMenuService menuService;
 
     /**
      * 按照用户的权限获取可访问的菜单项
-     * @param userId
      * @return
      */
     @GetMapping
     @PreAuthorize("hasAuthority('system:menu:list') or hasAuthority('*:*:*')")
-    public List<SysMenu> listMenus(Long userId){
-        //TODO:保存登录用户的信息？
-        List<SysMenu> menus = menuService.listMenus(userId);
+    public List<SysMenu> listMenus(){
+        List<SysMenu> menus = menuService.listMenus();
         List<SysMenu> menuTree = menuService.buildMenuTree(menus);
         return menuTree;
     }
+
+    /**
+     * 获取所有菜单项
+     * @return
+     */
+    @GetMapping("/listall")
+    @PreAuthorize("hasAuthority('system:menu:list') or hasAuthority('*:*:*')")
+    public List<SysMenu> listAllMenus(){
+        List<SysMenu> menus = menuService.listAllMenus();
+        List<SysMenu> menuTree = menuService.buildMenuTree(menus);
+        return menuTree;
+    }
+
 
     //TODO:新增菜单
     @PutMapping

@@ -33,4 +33,20 @@
         icon,create_by,create_time,
         last_update_by,last_update_time,remark
     </sql>
+
+    <select id="getMenuListByUserId" resultType="com.dy.domain.SysMenu" parameterType="Long">
+        select distinct
+            m.id,m.menu_name,m.parent_id,
+            m.order_num,m.path,m.component,
+            m.is_frame,m.is_cache,m.menu_type,
+            m.visible,m.status,m.perms,
+            m.icon,m.create_by,m.create_time,
+            m.last_update_by,m.last_update_time,m.remark
+        from sys_menu m
+        left join sys_role_menu rm on m.id = rm.menu_id
+        left join sys_user_role ur on rm.role_id = ur.role_id
+        left join sys_role r on ur.role_id = r.id
+        where ur.user_id = #{userId} AND (m.menu_type = "M" OR menu_type="C")
+        order by m.parent_id, m.order_num
+    </select>
 </mapper>

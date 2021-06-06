@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SysClassMapper extends BaseMapper<SysClass> {
 
+    Long getLastId();
 }
 
 

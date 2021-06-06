@@ -1,8 +1,8 @@
-package com.dy.controller;
+package com.dy.controller.client;
 
 import com.dy.common.utils.AjaxResult;
+import com.dy.controller.BaseController;
 import com.dy.domain.SysCheckin;
-import com.dy.service.SysCheckinInfoService;
 import com.dy.service.SysCheckinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/checkin")
-public class CheckinController extends BaseController{
+@RequestMapping("/client/checkin")
+public class CheckinController extends BaseController {
     @Autowired
     private SysCheckinService checkinService;
-    @Autowired
-    private SysCheckinInfoService checkinInfoService;
 
     //TODO:数据校验
     @PutMapping

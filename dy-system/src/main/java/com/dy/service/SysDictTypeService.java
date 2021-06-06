@@ -2,7 +2,7 @@ package com.dy.service;
 
 import com.dy.domain.SysDictType;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.dy.dto.SysDictTypeDto;
+import com.dy.dto.system.SysDictTypeDto;
 
 import java.util.List;
 

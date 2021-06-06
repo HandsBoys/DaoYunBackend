@@ -11,4 +11,6 @@ import java.util.Set;
  */
 public interface SysRoleMenuManager extends IService<SysRoleMenu> {
     Set<String> getMenuPermsByUserId(Long userId);
+
+    Long[] getMenuIdsByRoleId(Long roleId);
 }

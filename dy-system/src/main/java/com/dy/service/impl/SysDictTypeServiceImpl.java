@@ -2,10 +2,10 @@ package com.dy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dy.common.constant.UserConstants;
+import com.dy.common.constant.GlobalConstants;
 import com.dy.common.exception.CustomException;
 import com.dy.domain.SysDictType;
-import com.dy.dto.SysDictTypeDto;
+import com.dy.dto.system.SysDictTypeDto;
 import com.dy.mapper.SysDictDataMapper;
 import com.dy.service.SysDictTypeService;
 import com.dy.mapper.SysDictTypeMapper;
@@ -32,9 +32,9 @@ implements SysDictTypeService{
         SysDictType dict = baseMapper.selectOne(param);
         if (dict!= null)
         {
-            return UserConstants.NOT_UNIQUE;
+            return GlobalConstants.NOT_UNIQUE;
         }
-        return UserConstants.UNIQUE;
+        return GlobalConstants.UNIQUE;
     }
 
     @Override
@@ -45,9 +45,9 @@ implements SysDictTypeService{
         SysDictType dictType = baseMapper.selectOne(param);
         if ((dictType!= null) && dictType.getId().longValue() != dictId.longValue())
         {
-            return UserConstants.NOT_UNIQUE;
+            return GlobalConstants.NOT_UNIQUE;
         }
-        return UserConstants.UNIQUE;
+        return GlobalConstants.UNIQUE;
     }
 
     @Override
@@ -88,7 +88,7 @@ implements SysDictTypeService{
     @Override
     public String checkValue(SysDictTypeDto dictTypeDto){
         String msg = null;
-        if(UserConstants.NOT_UNIQUE.equals(checkDictTypeUnique(dictTypeDto))){
+        if(GlobalConstants.NOT_UNIQUE.equals(checkDictTypeUnique(dictTypeDto))){
             msg = dictTypeDto.getDictName() + "字典类型已存在";
         }
         return msg;

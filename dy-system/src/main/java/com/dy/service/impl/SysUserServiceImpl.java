@@ -1,15 +1,20 @@
 package com.dy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dy.domain.SysUser;
-import com.dy.dto.SysUserDto;
+import com.dy.domain.SysUserRole;
+import com.dy.dto.system.SysUserDto;
 import com.dy.manager.service.SysUserRoleManager;
+import com.dy.service.SysRoleService;
 import com.dy.service.SysUserService;
 import com.dy.mapper.SysUserMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +25,10 @@ import java.util.List;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
 implements SysUserService{
     @Autowired
-    private SysUserRoleManager userRoleService;
+    private SysUserRoleManager userRoleManager;
+
+    @Autowired
+    private SysRoleService roleService;
 
     @Override
     public SysUser getUserByUserName(String username) {
@@ -39,26 +47,45 @@ implements SysUserService{
     }
 
     @Override
-    public SysUser checkPhoneUnique(String phone) {
+    public boolean checkPhoneUnique(String phone) {
         QueryWrapper param = new QueryWrapper();
         param.eq("phone",phone);
-        return baseMapper.selectOne(param);
+        if(baseMapper.selectCount(param) > 0){
+            return false;
+        }
+        return true;
     }
 
     @Override
-    public String checkEmailUnique(SysUser user) {
-        return null;
+    public boolean checkEmailUnique(String email) {
+        QueryWrapper param = new QueryWrapper();
+        param.eq("email",email);
+        if(baseMapper.selectCount(param) > 0){
+            return false;
+        }
+        return true;
     }
 
     @Override
-    public void updateUser(SysUser user) {
-
-
+    public void updateUser(SysUserDto userDto) {
+        SysUser user = new SysUser();
+        BeanUtils.copyProperties(userDto,user);
+        baseMapper.updateById(user);
+        Long roleId = userDto.getRole().getId();
+        UpdateWrapper<SysUserRole> param = new UpdateWrapper<>();
+        param.set("role_id",roleId);
+        param.eq("user_id",userDto.getId());
+        userRoleManager.update(param);
     }
 
     @Override
-    public String checkUserNameUnique(SysUser user) {
-        return null;
+    public boolean checkUserNameUnique(String username) {
+        QueryWrapper param = new QueryWrapper();
+        param.eq("user_name",username);
+        if(baseMapper.selectCount(param) > 0){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -75,7 +102,15 @@ implements SysUserService{
     public List<SysUserDto> listUserAll() {
         QueryWrapper param = new QueryWrapper();
         param.isNotNull("id");
-        return baseMapper.selectList(param);
+        List<SysUser> userList = baseMapper.selectList(param);
+        List<SysUserDto> userDtoList = new ArrayList<>();
+        for(SysUser user:userList){
+            SysUserDto userDto = new SysUserDto();
+            BeanUtils.copyProperties(user,userDto);
+            userDto.setRole(roleService.getRoleById(userRoleManager.getRoleIdByUserId(user.getId())));
+            userDtoList.add(userDto);
+        }
+        return userDtoList;
     }
 
     @Override
@@ -96,7 +131,7 @@ implements SysUserService{
 
     @Override
     public boolean isAdmin(Long userId) {
-        return userRoleService.isAdmin(userId);
+        return userRoleManager.isAdmin(userId);
     }
 }
 

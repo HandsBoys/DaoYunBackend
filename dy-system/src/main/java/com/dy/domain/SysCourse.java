@@ -5,10 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
 
 /**
- * 课程表
+ * 班课表
  * @TableName sys_course
  */
 @TableName(value ="sys_course")
@@ -37,6 +38,42 @@ public class SysCourse implements Serializable {
      */
     @TableField(value = "teacher_id")
     private Long teacherId;
+
+    /**
+     * 班级id
+     */
+    @TableField(value = "class_id")
+    private Long classId;
+
+    /**
+     * 能否加入（0：可以加入，1：禁止加入）
+     */
+    @TableField(value = "enable_join")
+    private Boolean enableJoin;
+
+    /**
+     * 创建者
+     */
+    @TableField(value = "create_by")
+    private Long createBy;
+
+    /**
+     * 创建时间
+     */
+    @TableField(value = "create_time")
+    private Date createTime;
+
+    /**
+     * 更新者
+     */
+    @TableField(value = "last_update_by")
+    private Long lastUpdateBy;
+
+    /**
+     * 更新时间
+     */
+    @TableField(value = "last_update_time")
+    private Date lastUpdateTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

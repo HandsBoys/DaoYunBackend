@@ -34,12 +34,6 @@ public class SysClass implements Serializable {
     private Boolean status;
 
     /**
-     * 能否加入（0：可以加入，1：禁止加入）
-     */
-    @TableField(value = "enable_join")
-    private Boolean enableJoin;
-
-    /**
      * 创建者
      */
     @TableField(value = "create_by")

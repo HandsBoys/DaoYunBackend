@@ -26,7 +26,7 @@ public class SysCheckin implements Serializable {
      * 签到类型
      */
     @TableField(value = "type")
-    private Integer type;
+    private Boolean type;
 
     /**
      * 发起签到的班课id
@@ -37,8 +37,8 @@ public class SysCheckin implements Serializable {
     /**
      * 发起者id
      */
-    @TableField(value = "promoter_id")
-    private Long promoterId;
+    @TableField(value = "teacher_id")
+    private Long teacherId;
 
     /**
      * 经度

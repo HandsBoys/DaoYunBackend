@@ -2,9 +2,11 @@ package com.dy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.dy.common.utils.SecurityUtils;
 import com.dy.domain.SysMenu;
-import com.dy.dto.SysMenuDto;
+import com.dy.dto.system.SysMenuDto;
 import com.dy.manager.service.SysRoleMenuManager;
+import com.dy.manager.service.SysUserRoleManager;
 import com.dy.service.SysMenuService;
 import com.dy.mapper.SysMenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,24 +22,34 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
 implements SysMenuService{
 
     @Autowired
-    private SysRoleMenuManager roleMenuService;
+    private SysRoleMenuManager roleMenuManager;
+
+    @Autowired
+    private SysUserRoleManager userRoleManager;
+
+    @Autowired
+    private SysMenuMapper menuMapper;
 
     /**
      * 根据用户查询系统菜单列表
      *
-     * @param userId 用户ID
+     * @param
      * @return 菜单列表
      */
     @Override
-    public List<SysMenu> listMenus(Long userId) {
+    public List<SysMenu> listMenus() {
         List<SysMenu> menuList = null;
-        //TODO:按照权限显示菜单
-        // 管理员显示所有菜单信息
-        QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<SysMenu>()
-                .eq("menu_type", "M")
-                .or()
-                .eq("menu_type", "C");
-        menuList = baseMapper.selectList(queryWrapper);
+        Long userId = SecurityUtils.getLoginUser().getUser().getId();
+        if(userRoleManager.isAdmin(userId)){
+            QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<SysMenu>()
+                    .eq("menu_type", "M")
+                    .or()
+                    .eq("menu_type", "C");
+            menuList = baseMapper.selectList(queryWrapper);
+        }
+        else {
+            menuList = menuMapper.getMenuListByUserId(userId);
+        }
         return menuList;
     }
 
@@ -128,6 +140,11 @@ implements SysMenuService{
         return 0;
     }
 
+    /**
+     * TODO:删除
+     * @param menuIds
+     * @return
+     */
     @Override
     public int deleteMenus(Long[] menuIds) {
         return 0;
@@ -135,7 +152,16 @@ implements SysMenuService{
 
     @Override
     public Set<String> getMenuPermsByUserId(Long userId) {
-        return roleMenuService.getMenuPermsByUserId(userId);
+        return roleMenuManager.getMenuPermsByUserId(userId);
+    }
+
+    @Override
+    public List<SysMenu> listAllMenus() {
+        List<SysMenu> menuList = null;
+        QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<SysMenu>()
+                .eq("status", 0);
+        menuList = baseMapper.selectList(queryWrapper);
+        return menuList;
     }
 
 

@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SysConfigMapper extends BaseMapper<SysConfig> {
 
+    int deleteConfigsById(Long[] configIds);
 }
 
 

@@ -28,7 +28,11 @@
     <delete id="deleteRolesById" parameterType="Long">
         delete from sys_role where id in
         <foreach collection="array" item="id" open="(" separator="," close=")">
-            #{roleIds}
+            #{id}
         </foreach>
     </delete>
+
+    <select id="getRoleIdByRoleKey" resultType="java.lang.Long">
+        select distinct id from sys_role where role_key = #{roleKey}
+    </select>
 </mapper>

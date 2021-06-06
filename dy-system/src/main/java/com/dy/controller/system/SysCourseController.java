@@ -1,8 +1,9 @@
-package com.dy.controller;
+package com.dy.controller.system;
 
 import com.dy.common.utils.AjaxResult;
+import com.dy.controller.BaseController;
 import com.dy.domain.SysCourse;
-import com.dy.dto.SysCourseDto;
+import com.dy.dto.system.SysCourseDto;
 import com.dy.service.SysCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("system/course")
-public class CourseController extends BaseController{
+public class SysCourseController extends BaseController {
     @Autowired
     private SysCourseService courseService;
 
@@ -26,7 +27,7 @@ public class CourseController extends BaseController{
     //TODO:删除班课
     @DeleteMapping("/{courseIds}")
     public AjaxResult deleteCourses(@PathVariable Long[] courseIds){
-        return toAjax(courseService.deleteCourses(courseIds));
+        return toAjax(courseService.deleteCoursesByIds(courseIds));
     }
 
     //TODO:新增班课

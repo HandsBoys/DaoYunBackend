@@ -54,6 +54,15 @@ implements SysUserRoleManager {
                 .eq("role_id",roleId);
         return baseMapper.selectCount(param);
     }
+
+    @Override
+    public Long getRoleIdByUserId(Long userId) {
+        QueryWrapper param = new QueryWrapper<>()
+                .eq("user_id",userId)
+                .select("role_id");
+        SysUserRole userRole = baseMapper.selectOne(param);
+        return userRole.getRoleId();
+    }
 }
 
 

@@ -13,6 +13,15 @@ import org.springframework.stereotype.Service;
 public class SysClassServiceImpl extends ServiceImpl<SysClassMapper, SysClass>
 implements SysClassService{
 
+    @Override
+    public int insertClass(SysClass sysClass) {
+        return baseMapper.insert(sysClass);
+    }
+
+    @Override
+    public Long getLastId() {
+        return baseMapper.getLastId();
+    }
 }
 
 

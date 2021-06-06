@@ -1,4 +1,4 @@
-package com.dy.dto;
+package com.dy.dto.system;
 
 import lombok.Data;
 
@@ -27,7 +27,7 @@ public class SysRoleDto {
     /**
      * 数据范围（1：全部数据权限 2：自定数据权限 3：本班课数据权限 ）
      */
-    private String dataScope;
+    private Integer dataScope;
 
     /**
      * 角色状态（0正常 1停用）
@@ -38,4 +38,7 @@ public class SysRoleDto {
      * 备注
      */
     private String remark;
+
+    /** 菜单组 */
+    private Long[] menuIds;
 }

@@ -8,7 +8,6 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="className" column="class_name" jdbcType="VARCHAR"/>
             <result property="status" column="status" jdbcType="BOOLEAN"/>
-            <result property="enableJoin" column="enable_join" jdbcType="BOOLEAN"/>
             <result property="createBy" column="create_by" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="lastUpdateBy" column="last_update_by" jdbcType="BIGINT"/>
@@ -19,8 +18,10 @@
 
     <sql id="Base_Column_List">
         id,class_name,status,
-        enable_join,create_by,create_time,
-        last_update_by,last_update_time,del_flag,
-        order_num
+        create_by,create_time,last_update_by,
+        last_update_time,del_flag,order_num
     </sql>
+    <select id="getLastId" resultType="java.lang.Long">
+        select id from sys_class order by id DESC limit 1
+    </select>
 </mapper>

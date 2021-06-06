@@ -2,7 +2,7 @@ package com.dy.service;
 
 import com.dy.domain.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.dy.dto.SysUserDto;
+import com.dy.dto.system.SysUserDto;
 
 import java.util.List;
 
@@ -21,13 +21,13 @@ public interface SysUserService extends IService<SysUser> {
 
     SysUser getUserByPhone(String phone);
 
-    SysUser checkPhoneUnique(String phone);
+    boolean checkPhoneUnique(String phone);
 
-    String checkEmailUnique(SysUser user);
+    boolean checkEmailUnique(String email);
 
-    void updateUser(SysUser user);
+    void updateUser(SysUserDto userDto);
 
-    String checkUserNameUnique(SysUser user);
+    boolean checkUserNameUnique(String username);
 
     /**
      * 删除用户
@@ -46,5 +46,10 @@ public interface SysUserService extends IService<SysUser> {
      */
     Long getIdByUserName(String username);
 
+    /**
+     * 判断是否是管理员
+     * @param userId
+     * @return
+     */
     boolean isAdmin(Long userId);
 }

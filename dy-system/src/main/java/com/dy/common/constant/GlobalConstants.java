@@ -32,4 +32,8 @@ public class GlobalConstants {
      * 所有权限标识
      */
     public static final String ALL_PERMISSION = "*:*:*";
+
+    /** 校验返回结果码 */
+    public final static String UNIQUE = "0";
+    public final static String NOT_UNIQUE = "1";
 }

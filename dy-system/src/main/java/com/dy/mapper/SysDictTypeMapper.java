@@ -2,7 +2,7 @@ package com.dy.mapper;
 
 import com.dy.domain.SysDictType;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.dy.dto.SysDictTypeDto;
+import com.dy.dto.system.SysDictTypeDto;
 
 import java.util.List;
 

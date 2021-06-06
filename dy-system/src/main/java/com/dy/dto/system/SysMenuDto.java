@@ -1,4 +1,4 @@
-package com.dy.dto;
+package com.dy.dto.system;
 
 import com.dy.domain.SysMenu;
 import lombok.Data;

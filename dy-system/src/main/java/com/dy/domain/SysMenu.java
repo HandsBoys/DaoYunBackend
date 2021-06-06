@@ -126,7 +126,6 @@ public class SysMenu implements Serializable {
     @TableField(value = "remark")
     private String remark;
 
-
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 

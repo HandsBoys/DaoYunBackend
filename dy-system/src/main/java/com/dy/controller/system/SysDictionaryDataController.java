@@ -1,7 +1,8 @@
-package com.dy.controller;
+package com.dy.controller.system;
 
 import com.dy.common.utils.AjaxResult;
-import com.dy.dto.SysDictDataDto;
+import com.dy.controller.BaseController;
+import com.dy.dto.system.SysDictDataDto;
 import com.dy.service.SysDictDataService;
 import com.dy.service.SysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/system/dictdata")
-public class DictionaryDataController extends BaseController {
+public class SysDictionaryDataController extends BaseController {
     @Autowired
     private SysDictDataService dictDataService;
 

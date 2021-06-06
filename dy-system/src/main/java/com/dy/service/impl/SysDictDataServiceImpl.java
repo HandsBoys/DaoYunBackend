@@ -2,9 +2,9 @@ package com.dy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dy.common.constant.UserConstants;
+import com.dy.common.constant.GlobalConstants;
 import com.dy.domain.SysDictData;
-import com.dy.dto.SysDictDataDto;
+import com.dy.dto.system.SysDictDataDto;
 import com.dy.service.SysDictDataService;
 import com.dy.mapper.SysDictDataMapper;
 import com.dy.service.SysDictTypeService;
@@ -55,7 +55,7 @@ implements SysDictDataService{
     @Override
     public String checkValue(SysDictDataDto dictDataDto){
         String msg = null;
-        if(UserConstants.UNIQUE.equals(dictTypeService.checkDictTypeUnique(dictDataDto.getDictType()))){
+        if(GlobalConstants.UNIQUE.equals(dictTypeService.checkDictTypeUnique(dictDataDto.getDictType()))){
             msg = dictDataDto.getDictLabel()+"的数据字典类型"+dictDataDto.getDictType()+"不存在";
         }
         return msg;

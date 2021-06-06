@@ -1,6 +1,7 @@
 package com.dy.dto.login;
 
 import com.dy.common.service.GrantedAuthorityImpl;
+import com.dy.domain.SysRole;
 import com.dy.domain.SysUser;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -58,7 +59,6 @@ public class LoginUser implements UserDetails {
      * 用户信息
      */
     private SysUser user;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

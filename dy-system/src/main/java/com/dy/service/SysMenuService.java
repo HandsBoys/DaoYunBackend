@@ -2,9 +2,8 @@ package com.dy.service;
 
 import com.dy.domain.SysMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.dy.dto.SysMenuDto;
+import com.dy.dto.system.SysMenuDto;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -13,7 +12,7 @@ import java.util.Set;
  */
 public interface SysMenuService extends IService<SysMenu> {
 
-    List<SysMenu> listMenus(Long userId);
+    List<SysMenu> listMenus();
 
     List<SysMenu> buildMenuTree(List<SysMenu> menus);
 
@@ -24,4 +23,6 @@ public interface SysMenuService extends IService<SysMenu> {
     int deleteMenus(Long[] menuIds);
 
     Set<String> getMenuPermsByUserId(Long userId);
+
+    List<SysMenu> listAllMenus();
 }
