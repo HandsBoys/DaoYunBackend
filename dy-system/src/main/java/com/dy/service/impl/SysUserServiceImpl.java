@@ -3,6 +3,7 @@ package com.dy.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.dy.common.utils.SecurityUtils;
 import com.dy.domain.SysUser;
 import com.dy.domain.SysUserRole;
 import com.dy.dto.system.SysUserDto;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,10 +60,12 @@ implements SysUserService{
 
     @Override
     public boolean checkEmailUnique(String email) {
-        QueryWrapper param = new QueryWrapper();
-        param.eq("email",email);
-        if(baseMapper.selectCount(param) > 0){
-            return false;
+        if(email != ""){
+            QueryWrapper param = new QueryWrapper();
+            param.eq("email",email);
+            if(baseMapper.selectCount(param) > 0){
+                return false;
+            }
         }
         return true;
     }
@@ -132,6 +136,16 @@ implements SysUserService{
     @Override
     public boolean isAdmin(Long userId) {
         return userRoleManager.isAdmin(userId);
+    }
+
+    @Override
+    public int addUser(SysUserDto userDto) {
+        SysUser user = new SysUser();
+        BeanUtils.copyProperties(userDto,user);
+        user.setCreateBy(SecurityUtils.getLoginUser().getUser().getId());
+        user.setCreateTime(new Date());
+        user.setStatus(true);
+        return baseMapper.insert(user);
     }
 }
 

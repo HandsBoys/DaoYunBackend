@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dy.common.constant.GlobalConstants;
 import com.dy.common.exception.CustomException;
+import com.dy.common.utils.SecurityUtils;
 import com.dy.domain.SysDictType;
 import com.dy.dto.system.SysDictTypeDto;
 import com.dy.mapper.SysDictDataMapper;
@@ -13,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -81,6 +83,8 @@ implements SysDictTypeService{
     public int updateDictType(SysDictTypeDto dictTypeDto) {
         SysDictType dictType = new SysDictType();
         BeanUtils.copyProperties(dictTypeDto,dictType);
+        dictType.setLastUpdateBy(SecurityUtils.getLoginUser().getUser().getId());
+        dictType.setLastUpdateTime(new Date());
         return baseMapper.updateById(dictType);
     }
 

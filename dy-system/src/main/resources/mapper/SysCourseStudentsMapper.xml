@@ -15,4 +15,14 @@
         id,course_id,student_id,
         score
     </sql>
+    <select id="getCoursesByStudentId" resultType="com.dy.domain.SysCourse">
+        select distinct
+            c.id,c.course_name,c.term,
+            c.teacher_id,c.class_id,c.enable_join,
+            c.create_by,c.create_time,c.last_update_by,
+            c.last_update_time
+        from sys_course as c
+        left join sys_course_students as cs on cs.course_id = c.id
+        where cs.student_id = #{studentId}
+    </select>
 </mapper>

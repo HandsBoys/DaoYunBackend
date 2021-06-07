@@ -33,9 +33,6 @@ implements SysDictDataService{
         //TODO:设置创建者
         SysDictData dictData = new SysDictData();
         BeanUtils.copyProperties(dictDataDto,dictData);
-        //TODO:System.out.println
-        System.out.println(dictDataDto);
-        System.out.println(dictData);
 
         return baseMapper.insert(dictData);
     }

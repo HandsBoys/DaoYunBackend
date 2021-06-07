@@ -8,9 +8,12 @@ import com.dy.service.SysCourseStudentsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author cxj
@@ -51,6 +54,34 @@ public class CourseController extends BaseController {
     @PreAuthorize("hasAuthority('system:course:quit') or hasAuthority('*:*:*')")
     public AjaxResult quitCourse(Long id){
         return toAjax(courseStudentsService.quitCourse(id));
+    }
+
+    @Operation(summary = "根据账户获取我创建的班课")
+    @GetMapping("/created-course")
+    @PreAuthorize("hasAuthority('system:course:list') or hasAuthority('*:*:*')")
+    public AjaxResult listCreatedCourse(){
+        List<CourseDto> list = courseService.listCreatedCourse();
+        AjaxResult<List> ret = new AjaxResult<>();
+        ret.setData(list);
+        return ret;
+    }
+
+    @Operation(summary = "根据账户获取我加入的班课")
+    @GetMapping("/joined-course")
+    @PreAuthorize("hasAuthority('system:course:list') or hasAuthority('*:*:*')")
+    public AjaxResult listJoinedCourse(){
+        List<CourseDto> list = courseStudentsService.listJoinedCourse();
+        AjaxResult<List> ret = new AjaxResult<>();
+        ret.setData(list);
+        if(list != null){
+            ret.setMsg("班课获取成功！");
+            ret.setCode(HttpStatus.OK.value());
+        }
+        else {
+            ret.setMsg("班课获取失败！");
+            ret.setCode(HttpStatus.NO_CONTENT.value());
+        }
+        return ret;
     }
 
 }

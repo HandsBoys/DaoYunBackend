@@ -29,4 +29,9 @@
             #{id}
         </foreach>
     </delete>
+    <select id="listCreatedCourse" resultType="com.dy.domain.SysCourse">
+        select <include refid="Base_Column_List"/> from sys_course where teacher_id = #{teacherId}
+    </select>
+
+
 </mapper>

@@ -9,10 +9,12 @@ import com.dy.dto.system.SysCourseDto;
 import com.dy.service.SysClassService;
 import com.dy.service.SysCourseService;
 import com.dy.mapper.SysCourseMapper;
+import com.dy.service.SysCourseStudentsService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +26,10 @@ public class SysCourseServiceImpl extends ServiceImpl<SysCourseMapper, SysCourse
 implements SysCourseService{
     @Autowired
     private SysClassService classService;
-//TODO
+
+    @Autowired
+    private SysCourseStudentsService courseStudentsService;
+
     @Override
     public List<SysCourse> listCoursesAll() {
         return null;
@@ -70,6 +75,20 @@ implements SysCourseService{
         }
         return 0;
     }
+
+    @Override
+    public List<CourseDto> listCreatedCourse() {
+        Long teacherId = SecurityUtils.getLoginUser().getUser().getId();
+        List<SysCourse> coursesList = baseMapper.listCreatedCourse(teacherId);
+        List<CourseDto> ret = new ArrayList<>();
+        for(SysCourse course: coursesList){
+            CourseDto courseDto = new CourseDto();
+            BeanUtils.copyProperties(course,courseDto);
+            ret.add(courseDto);
+        }
+        return ret;
+    }
+
 }
 
 

@@ -37,7 +37,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         loginUser.setUser(user);
         Set<String> permissions = permissionService.getMenuPermission(user);
         loginUser.setPermissions(permissions);
-        System.out.println(loginUser);
         return loginUser;
     }
 }

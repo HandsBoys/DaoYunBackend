@@ -33,7 +33,6 @@ public class SysConfigController extends BaseController {
     @PutMapping
     @PreAuthorize("hasAuthority('system:config:add') or hasAuthority('*:*:*')")
     public AjaxResult add(@Validated @RequestBody SysConfigDto configDto){
-        System.out.println(configDto);
         return toAjax(configService.addSysConfig(configDto));
     }
 

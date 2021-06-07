@@ -1,6 +1,7 @@
 package com.dy.controller.system;
 
 import com.dy.common.utils.AjaxResult;
+import com.dy.common.utils.SecurityUtils;
 import com.dy.controller.BaseController;
 import com.dy.domain.SysDictType;
 import com.dy.dto.system.SysDictTypeDto;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,9 +51,8 @@ public class SysDictionaryTypeController extends BaseController {
         }
         SysDictType dictType = new SysDictType();
         BeanUtils.copyProperties(dictTypeDto,dictType);
-        System.out.println(dictType);
-        //TODO:设置创建者
-        // dictType.setCreateBy(userService.getIdByUserName(SecurityUtils.getUsername()));
+        dictType.setCreateBy(SecurityUtils.getLoginUser().getUser().getId());
+        dictType.setCreateTime(new Date());
         return toAjax(dictTypeService.insertDictType(dictType));
     }
 
@@ -62,9 +63,6 @@ public class SysDictionaryTypeController extends BaseController {
         if(msg != null){
             return AjaxResult.error(msg);
         }
-        //TODO:设置修改者
-        //dict.setUpdateBy(SecurityUtils.getUsername());
-
         return toAjax(dictTypeService.updateDictType(dictTypeDto));
     }
 

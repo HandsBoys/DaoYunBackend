@@ -26,4 +26,7 @@ public interface SysCourseService extends IService<SysCourse> {
      * @return
      */
     int addNewCourse(CourseDto course);
+
+    List<CourseDto> listCreatedCourse();
+
 }

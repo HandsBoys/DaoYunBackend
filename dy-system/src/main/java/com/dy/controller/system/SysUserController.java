@@ -40,7 +40,6 @@ public class SysUserController extends BaseController {
     @PreAuthorize("hasAuthority('system:user:edit') or hasAuthority('*:*:*')")
     @PutMapping
     public AjaxResult editUser(@Validated @RequestBody SysUserDto userDto){
-        System.out.println(userDto.getPhone());
         if(userDto.getPhone() == null){
             return AjaxResult.error("修改用户'" + userDto.getUserName() + "'失败，手机号码不能为空");
         }
@@ -72,19 +71,17 @@ public class SysUserController extends BaseController {
      */
     @PreAuthorize("hasAuthority('system:user:add') or hasAuthority('*:*:*')")
     @PostMapping
-    public AjaxResult addUser(SysUser user){
-        if(!userService.checkUserNameUnique(user.getUserName())){
+    public AjaxResult addUser(@Validated @RequestBody SysUserDto userDto){
+        System.out.println(userDto);
+        if(!userService.checkUserNameUnique(userDto.getUserName())){
             return AjaxResult.error("用户名已使用");
         }
-        else if(!userService.checkPhoneUnique(user.getPhone())){
+        else if(!userService.checkPhoneUnique(userDto.getPhone())){
             return  AjaxResult.error("手机号已使用");
         }
-        else if(!userService.checkEmailUnique(user.getEmail())){
+        else if(!userService.checkEmailUnique(userDto.getEmail())){
             return AjaxResult.error("邮箱已使用");
         }
-
-        //TODO:设置创建者
-
-        return toAjax(userService.insertUser(user));
+        return toAjax(userService.addUser(userDto));
     }
 }

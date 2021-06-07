@@ -41,7 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             //获取令牌
             String token = tokenUtils.getToken(request);
-            System.out.println(token);
             //判断令牌是否存在并且正确
             if (null != token) {
                 //根据令牌获取用户名

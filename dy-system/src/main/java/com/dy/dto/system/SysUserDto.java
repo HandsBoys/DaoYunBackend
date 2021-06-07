@@ -11,7 +11,6 @@ public class SysUserDto {
     /**
      * 用户ID
      */
-    @TableId
     private Long id;
 
     /**

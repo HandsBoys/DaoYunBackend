@@ -118,7 +118,6 @@ implements SysRoleService{
             rm.setMenuId(menuId);
             list.add(rm);
         }
-        System.out.println(list);
         if (list.size() > 0)
         {
             rows = roleMenuMapper.batchRoleMenu(list);

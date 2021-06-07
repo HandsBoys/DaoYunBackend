@@ -52,4 +52,11 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     boolean isAdmin(Long userId);
+
+    /**
+     * 新增用户账号
+     * @param userDto
+     * @return
+     */
+    int addUser(SysUserDto userDto);
 }
