@@ -59,4 +59,6 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     int addUser(SysUserDto userDto);
+
+    String getNickNameById(Long teacherId);
 }

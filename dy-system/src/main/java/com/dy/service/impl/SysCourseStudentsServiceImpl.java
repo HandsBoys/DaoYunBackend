@@ -9,6 +9,7 @@ import com.dy.dto.client.CourseDto;
 import com.dy.mapper.SysClassMapper;
 import com.dy.mapper.SysCourseStudentsMapper;
 import com.dy.service.SysCourseStudentsService;
+import com.dy.service.SysUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class SysCourseStudentsServiceImpl extends ServiceImpl<SysCourseStudentsM
 implements SysCourseStudentsService {
     @Autowired
     private SysClassMapper classMapper;
+
+    @Autowired
+    private SysUserService userService;
 
     @Override
     public int joinCourse(Long courseId) {
@@ -52,10 +56,11 @@ implements SysCourseStudentsService {
         for(SysCourse c:list){
             CourseDto courseDto = new CourseDto();
             BeanUtils.copyProperties(c,courseDto);
+            // 设置教师名字
+            courseDto.setTeacherName(userService.getNickNameById(courseDto.getTeacherId()));
             courseDto.setClassDto(classMapper.getClassById(c.getClassId()));
             ret.add(courseDto);
         }
-        System.out.println(ret);
         return ret;
     }
 }

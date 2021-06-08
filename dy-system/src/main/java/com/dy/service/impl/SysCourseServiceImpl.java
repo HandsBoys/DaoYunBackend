@@ -10,6 +10,7 @@ import com.dy.service.SysClassService;
 import com.dy.service.SysCourseService;
 import com.dy.mapper.SysCourseMapper;
 import com.dy.service.SysCourseStudentsService;
+import com.dy.service.SysUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ implements SysCourseService{
     private SysClassService classService;
 
     @Autowired
-    private SysCourseStudentsService courseStudentsService;
+    private SysUserService userService;
 
     @Override
     public List<SysCourse> listCoursesAll() {
@@ -84,6 +85,8 @@ implements SysCourseService{
         for(SysCourse course: coursesList){
             CourseDto courseDto = new CourseDto();
             BeanUtils.copyProperties(course,courseDto);
+            // 设置教师名字
+            courseDto.setTeacherName(userService.getNickNameById(courseDto.getTeacherId()));
             ret.add(courseDto);
         }
         return ret;

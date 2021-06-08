@@ -147,6 +147,14 @@ implements SysUserService{
         user.setStatus(true);
         return baseMapper.insert(user);
     }
+
+    @Override
+    public String getNickNameById(Long teacherId) {
+        QueryWrapper param = new QueryWrapper<>()
+                .eq("id",teacherId)
+                .select("nick_name");
+        return baseMapper.selectOne(param).getNickName();
+    }
 }
 
 

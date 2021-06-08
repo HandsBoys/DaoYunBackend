@@ -23,9 +23,13 @@ public class CourseDto {
     private String term;
 
     /**
-     * 课程教师
+     * 课程教师id
      */
     private Long teacherId;
+    /**
+     * 教师名字
+     */
+    private String teacherName;
 
     /**
      * 能否加入（0：可以加入，1：禁止加入）
@@ -33,4 +37,5 @@ public class CourseDto {
     private Boolean enableJoin;
 
     private ClassDto classDto;
+
 }
