@@ -1,6 +1,7 @@
 package com.dy.controller.system;
 
 import com.dy.common.utils.AjaxResult;
+import com.dy.common.utils.StringUtils;
 import com.dy.controller.BaseController;
 import com.dy.dto.system.SysDictDataDto;
 import com.dy.service.SysDictDataService;
@@ -54,7 +55,6 @@ public class SysDictionaryDataController extends BaseController {
         if(msg != null){
             return AjaxResult.error(msg);
         }
-        //TODO:设置修改者
         return toAjax(dictDataService.updateDictData(dictDataDto));
     }
 
@@ -62,5 +62,11 @@ public class SysDictionaryDataController extends BaseController {
     @PreAuthorize("hasAuthority('system:dict:remove') or hasAuthority('*:*:*')")
     public AjaxResult delete(@PathVariable Long[] dictIds){
         return toAjax(dictDataService.deleteDictDataByIds(dictIds));
+    }
+
+    @GetMapping("/query-dict-value")
+    @PreAuthorize("hasAuthority('system:dict:add') or hasAuthority('system:dict:edit') or hasAuthority('*:*:*')")
+    public boolean queryDictValue(String dictType, int dictValue){
+        return dictDataService.queryDictValue(dictType,dictValue);
     }
 }

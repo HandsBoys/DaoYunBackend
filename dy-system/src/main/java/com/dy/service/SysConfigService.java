@@ -23,4 +23,6 @@ public interface SysConfigService extends IService<SysConfig> {
     int addSysConfig(SysConfigDto configDto);
 
     int deleteConfigs(Long[] configIds);
+
+    boolean queryConfigKeyUnique(String configKey);
 }

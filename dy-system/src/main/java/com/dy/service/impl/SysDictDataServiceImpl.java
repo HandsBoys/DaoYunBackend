@@ -1,8 +1,10 @@
 package com.dy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dy.common.constant.GlobalConstants;
+import com.dy.common.utils.SecurityUtils;
 import com.dy.domain.SysDictData;
 import com.dy.dto.system.SysDictDataDto;
 import com.dy.service.SysDictDataService;
@@ -12,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,10 +33,14 @@ implements SysDictDataService{
 
     @Override
     public int insertDictData(SysDictDataDto dictDataDto) {
-        //TODO:设置创建者
         SysDictData dictData = new SysDictData();
         BeanUtils.copyProperties(dictDataDto,dictData);
-
+        dictData.setCreateBy(SecurityUtils.getLoginUser().getUser().getId());
+        dictData.setCreateTime(new Date());
+        if(dictData.getIsDefault() == null){
+            dictData.setIsDefault(false);
+        }
+        // setAllDefault(dictData.getDictType(),false);
         return baseMapper.insert(dictData);
     }
 
@@ -41,6 +48,12 @@ implements SysDictDataService{
     public int updateDictData(SysDictDataDto dictDataDto) {
         SysDictData dictData = new SysDictData();
         BeanUtils.copyProperties(dictDataDto,dictData);
+        dictData.setLastUpdateBy(SecurityUtils.getLoginUser().getUser().getId());
+        dictData.setLastUpdateTime(new Date());
+        if(dictData.getIsDefault() == null){
+            dictData.setIsDefault(true);
+        }
+        // setAllDefault(dictData.getDictType(),false);
         return baseMapper.updateById(dictData);
     }
 
@@ -60,10 +73,30 @@ implements SysDictDataService{
 
     @Override
     public List<SysDictDataDto> listDictDataByType(String dictType) {
-        QueryWrapper param = new QueryWrapper();
-        param.eq("dict_type",dictType);
+        QueryWrapper param = new QueryWrapper<>()
+            .eq("dict_type",dictType)
+            .orderByAsc("dict_sort");
         return baseMapper.selectList(param);
     }
+
+    @Override
+    public boolean queryDictValue(String dictType, int dictValue) {
+        QueryWrapper param = new QueryWrapper<>()
+                .eq("dict_value",dictValue)
+                .eq("dict_type",dictType);
+        if(baseMapper.selectCount(param) > 0){
+            return false;
+        }
+        return true;
+    }
+
+    // 将同一字典类型的所有数据项的是否默认设置为false
+//    private void setAllDefault(String dictType,boolean isDefault){
+//        UpdateWrapper param = new UpdateWrapper<>()
+//                .eq("dict_type",dictType)
+//                .set("is_default",isDefault);
+//        baseMapper.update(null,param);
+//    }
 
 }
 

@@ -1,6 +1,8 @@
 package com.dy.dto.system;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+import org.springframework.validation.annotation.Validated;
 
 
 @Data
@@ -40,4 +42,8 @@ public class SysDictDataDto {
      */
     private String remark;
 
+    /**
+     * 是否为默认值（0：不是默认；1：默认）
+     */
+    private Boolean isDefault;
 }

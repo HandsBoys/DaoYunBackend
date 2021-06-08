@@ -4,6 +4,8 @@ import com.dy.common.utils.AjaxResult;
 import com.dy.controller.BaseController;
 import com.dy.dto.system.SysConfigDto;
 import com.dy.service.SysConfigService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -42,4 +44,10 @@ public class SysConfigController extends BaseController {
         return toAjax(configService.deleteConfigs(configIds));
     }
 
+    @Operation(summary = "查询configKey是否已经存在",description = "configKey存在：false，不存在：true")
+    @GetMapping("/query-config-key")
+    @PreAuthorize("hasAuthority('system:config:add') or hasAuthority('system:config:edit') or hasAuthority('*:*:*')")
+    public boolean queryConfigKeyUnique(String configKey){
+        return configService.queryConfigKeyUnique(configKey);
+    }
 }

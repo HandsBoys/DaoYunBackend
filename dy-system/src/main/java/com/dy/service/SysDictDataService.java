@@ -23,4 +23,11 @@ public interface SysDictDataService extends IService<SysDictData> {
     String checkValue(SysDictDataDto dictDataDto);
 
     List<SysDictDataDto> listDictDataByType(String dictType);
+
+    /**
+     * 查询dictValue是否唯一
+     * @param dictValue
+     * @return true:dictValue唯一;false:dictValue已经存在，不唯一
+     */
+    boolean queryDictValue(String dictTydpe,int dictValue);
 }

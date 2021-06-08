@@ -16,14 +16,15 @@
             <result property="lastUpdateBy" column="last_update_by" jdbcType="BIGINT"/>
             <result property="lastUpdateTime" column="last_update_time" jdbcType="TIMESTAMP"/>
             <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="isDefault" column="is_default" jdbcType="BOOLEAN"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         select
-        id,dict_sort,dict_label,
-        dict_value,dict_type,status,
-        create_by,create_time,last_update_by,
-        last_update_time,remark
+            id,dict_sort,dict_label,
+            dict_value,dict_type,status,
+            create_by,create_time,last_update_by,
+            last_update_time,remark,is_default
         from sys_dict_data
     </sql>
     <delete id="deleteDictDataByIds">

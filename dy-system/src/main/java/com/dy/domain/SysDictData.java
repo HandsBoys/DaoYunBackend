@@ -81,6 +81,12 @@ public class SysDictData implements Serializable {
     @TableField(value = "remark")
     private String remark;
 
+    /**
+     * 是否为默认值（0：不是默认；1：默认）
+     */
+    @TableField(value = "is_default")
+    private Boolean isDefault;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

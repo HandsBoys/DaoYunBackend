@@ -56,7 +56,6 @@ implements SysConfigService{
     public int addSysConfig(SysConfigDto configDto) {
         SysConfig config = new SysConfig();
         BeanUtils.copyProperties(configDto,config);
-        System.out.println(config);
         config.setCreateTime(new Date());
         config.setCreateBy(SecurityUtils.getLoginUser().getUser().getId());
         return baseMapper.insert(config);
@@ -65,6 +64,16 @@ implements SysConfigService{
     @Override
     public int deleteConfigs(Long[] configIds) {
         return baseMapper.deleteConfigsById(configIds);
+    }
+
+    @Override
+    public boolean queryConfigKeyUnique(String configKey) {
+        QueryWrapper param = new QueryWrapper<>()
+                .eq("config_key",configKey);
+        if(baseMapper.selectCount(param) > 0){
+            return false;
+        }
+        return true;
     }
 }
 
