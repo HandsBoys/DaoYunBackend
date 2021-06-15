@@ -8,6 +8,7 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
             <result property="deptName" column="dept_name" jdbcType="VARCHAR"/>
+            <result property="deptLevel" column="dept_level" jdbcType="CHAR"/>
             <result property="orderNum" column="order_num" jdbcType="INTEGER"/>
             <result property="status" column="status" jdbcType="BOOLEAN"/>
             <result property="delFlag" column="del_flag" jdbcType="BOOLEAN"/>
@@ -19,8 +20,8 @@
 
     <sql id="Base_Column_List">
         id,parent_id,dept_name,
-        order_num,status,del_flag,
-        create_by,create_time,update_by,
-        update_time
+        dept_level,order_num,status,
+        del_flag,create_by,create_time,
+        update_by,update_time
     </sql>
 </mapper>

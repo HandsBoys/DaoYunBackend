@@ -34,6 +34,12 @@ public class SysCourse implements Serializable {
     private String term;
 
     /**
+     * 班课所属单位（学校、学院）
+     */
+    @TableField(value = "dept")
+    private String dept;
+
+    /**
      * 课程教师
      */
     @TableField(value = "teacher_id")
@@ -50,6 +56,12 @@ public class SysCourse implements Serializable {
      */
     @TableField(value = "enable_join")
     private Boolean enableJoin;
+
+    /**
+     * 班课是否结束（0：未结束，1：结束）
+     */
+    @TableField(value = "finish")
+    private Boolean finish;
 
     /**
      * 创建者

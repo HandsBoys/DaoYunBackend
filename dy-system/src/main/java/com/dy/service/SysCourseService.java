@@ -29,4 +29,9 @@ public interface SysCourseService extends IService<SysCourse> {
 
     List<CourseDto> listCreatedCourse();
 
+    CourseDto getCourseById(Long id);
+
+    boolean setCourseEnableJoin(Long id, Boolean enableJoin);
+
+    boolean setCourseFinish(Long id, Boolean finish);
 }

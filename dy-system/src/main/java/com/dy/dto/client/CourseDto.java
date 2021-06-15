@@ -1,5 +1,6 @@
 package com.dy.dto.client;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 /**
@@ -23,6 +24,11 @@ public class CourseDto {
     private String term;
 
     /**
+     * 班课所属单位（学校、学院）
+     */
+    private String dept;
+
+    /**
      * 课程教师id
      */
     private Long teacherId;
@@ -35,6 +41,11 @@ public class CourseDto {
      * 能否加入（0：可以加入，1：禁止加入）
      */
     private Boolean enableJoin;
+
+    /**
+     * 班课是否结束（0：未结束，1：结束）
+     */
+    private Boolean finish;
 
     private ClassDto classDto;
 

@@ -8,9 +8,11 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="courseName" column="course_name" jdbcType="VARCHAR"/>
             <result property="term" column="term" jdbcType="VARCHAR"/>
+            <result property="dept" column="dept" jdbcType="VARCHAR"/>
             <result property="teacherId" column="teacher_id" jdbcType="BIGINT"/>
             <result property="classId" column="class_id" jdbcType="BIGINT"/>
             <result property="enableJoin" column="enable_join" jdbcType="BOOLEAN"/>
+            <result property="finish" column="finish" jdbcType="BOOLEAN"/>
             <result property="createBy" column="create_by" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="lastUpdateBy" column="last_update_by" jdbcType="BIGINT"/>
@@ -19,9 +21,9 @@
 
     <sql id="Base_Column_List">
         id,course_name,term,
-        teacher_id,class_id,enable_join,
-        create_by,create_time,last_update_by,
-        last_update_time
+        dept,teacher_id,class_id,
+        enable_join,finish,create_by,
+        create_time,last_update_by,last_update_time
     </sql>
     <delete id="deleteCourseByIds" parameterType="Long">
         delete from sys_course where id in
@@ -32,6 +34,4 @@
     <select id="listCreatedCourse" resultType="com.dy.domain.SysCourse">
         select <include refid="Base_Column_List"/> from sys_course where teacher_id = #{teacherId}
     </select>
-
-
 </mapper>
