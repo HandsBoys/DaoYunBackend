@@ -107,6 +107,7 @@ implements SysUserService{
         QueryWrapper param = new QueryWrapper();
         param.isNotNull("id");
         List<SysUser> userList = baseMapper.selectList(param);
+        System.out.println(userList);
         List<SysUserDto> userDtoList = new ArrayList<>();
         for(SysUser user:userList){
             SysUserDto userDto = new SysUserDto();
@@ -144,7 +145,6 @@ implements SysUserService{
         BeanUtils.copyProperties(userDto,user);
         user.setCreateBy(SecurityUtils.getLoginUser().getUser().getId());
         user.setCreateTime(new Date());
-        user.setStatus(true);
         return baseMapper.insert(user);
     }
 

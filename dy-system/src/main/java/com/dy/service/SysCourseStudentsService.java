@@ -13,7 +13,9 @@ public interface SysCourseStudentsService extends IService<SysCourseStudents> {
 
     int joinCourse(Long courseId);
 
-    int quitCourse(Long id);
+    int quitCourse(Long courseId, Long studentId);
 
     List<CourseDto> listJoinedCourse();
+
+    SysCourseStudents getRecord(Long courseId, Long studentId);
 }

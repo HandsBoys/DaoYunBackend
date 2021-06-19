@@ -41,9 +41,10 @@ implements SysCourseStudentsService {
     }
 
     @Override
-    public int quitCourse(Long id) {
+    public int quitCourse(Long courseId, Long studentId) {
         QueryWrapper param = new QueryWrapper<>()
-                .eq("id",id);
+                .eq("course_id",courseId)
+                .eq("student_id",studentId);
         return baseMapper.delete(param);
     }
 
@@ -62,6 +63,14 @@ implements SysCourseStudentsService {
             ret.add(courseDto);
         }
         return ret;
+    }
+
+    @Override
+    public SysCourseStudents getRecord(Long courseId, Long studentId) {
+        QueryWrapper param = new QueryWrapper<>()
+                .eq("course_id",courseId)
+                .eq("student_id",studentId);
+        return baseMapper.selectOne(param);
     }
 }
 

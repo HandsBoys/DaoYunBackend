@@ -100,12 +100,18 @@ implements SysCourseService{
 
     @Override
     public CourseDto getCourseById(Long id) {
-        QueryWrapper<SysCourse> param = new QueryWrapper<SysCourse>()
-                .eq("id",id);
-        SysCourse course = baseMapper.selectOne(param);
-        CourseDto courseDto = new CourseDto();
-        copyCourseToCourseDto(course,courseDto);
-        return courseDto;
+        try{
+            QueryWrapper<SysCourse> param = new QueryWrapper<SysCourse>()
+                    .eq("id",id);
+            SysCourse course = baseMapper.selectOne(param);
+            CourseDto courseDto = new CourseDto();
+            copyCourseToCourseDto(course,courseDto);
+            return courseDto;
+        }catch (Exception e){
+            System.out.println(e);
+            return null;
+        }
+
     }
 
     @Override

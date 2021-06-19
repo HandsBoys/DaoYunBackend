@@ -1,6 +1,7 @@
 package com.dy.controller.client;
 
 import com.dy.common.utils.AjaxResult;
+import com.dy.common.utils.SecurityUtils;
 import com.dy.controller.BaseController;
 import com.dy.dto.client.CourseDto;
 import com.dy.service.SysCourseService;
@@ -46,15 +47,22 @@ public class CourseController extends BaseController {
     @PutMapping("/join-course")
     @PreAuthorize("hasAuthority('system:course:join') or hasAuthority('*:*:*')")
     public AjaxResult joinCourse(Long courseId){
+        if(courseService.getCourseById(courseId) == null){
+            return AjaxResult.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "班课不存在",null);
+        }
+        if(courseStudentsService.getRecord(courseId, SecurityUtils.getLoginUser().getUser().getId())!=null){
+            return AjaxResult.error(HttpStatus.NOT_IMPLEMENTED.value(), "已经加入班课",null);
+        }
         return toAjax(courseStudentsService.joinCourse(courseId));
     }
 
     @Operation(summary = "退出班课")
-    @Parameter(name="学生班课表的记录id",required = true)
+    @Parameter(name="courseId",required = true,description = "班课id")
+    @Parameter(name="studentId",required = true,description = "要退出课程的学生id")
     @DeleteMapping("/quit-course")
     @PreAuthorize("hasAuthority('system:course:quit') or hasAuthority('*:*:*')")
-    public AjaxResult quitCourse(Long id){
-        return toAjax(courseStudentsService.quitCourse(id));
+    public AjaxResult quitCourse(Long courseId,Long studentId){
+        return toAjax(courseStudentsService.quitCourse(courseId,studentId));
     }
 
     @Operation(summary = "根据账户获取我创建的班课")
