@@ -35,16 +35,16 @@ public class SysUser implements Serializable {
     private String nickName;
 
     /**
-     * 头像
-     */
-    @TableField(value = "avatar")
-    private String avatar;
-
-    /**
      * 邮箱
      */
     @TableField(value = "email")
     private String email;
+
+    /**
+     * 手机号码
+     */
+    @TableField(value = "phone")
+    private String phone;
 
     /**
      * 密码
@@ -53,10 +53,16 @@ public class SysUser implements Serializable {
     private String password;
 
     /**
-     * 手机号码
+     * 头像
      */
-    @TableField(value = "phone")
-    private String phone;
+    @TableField(value = "avatar")
+    private String avatar;
+
+    /**
+     * 学/工号
+     */
+    @TableField(value = "identity_number")
+    private String identityNumber;
 
     /**
      * 性别（0男 1女 2未知）
@@ -69,18 +75,6 @@ public class SysUser implements Serializable {
      */
     @TableField(value = "status")
     private Boolean status;
-
-    /**
-     * 最后登录IP
-     */
-    @TableField(value = "login_ip")
-    private String loginIp;
-
-    /**
-     * 最后登录时间
-     */
-    @TableField(value = "login_date")
-    private Date loginDate;
 
     /**
      * 创建者
@@ -120,7 +114,6 @@ public class SysUser implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
-
 
     public SysUser(String phone, String password) {
         this.password = password;

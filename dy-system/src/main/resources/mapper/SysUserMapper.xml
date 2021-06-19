@@ -8,14 +8,13 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="userName" column="user_name" jdbcType="VARCHAR"/>
             <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
-            <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
             <result property="email" column="email" jdbcType="VARCHAR"/>
-            <result property="password" column="password" jdbcType="VARCHAR"/>
             <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+            <result property="identityNumber" column="identity_number" jdbcType="VARCHAR"/>
             <result property="sex" column="sex" jdbcType="INTEGER"/>
             <result property="status" column="status" jdbcType="BOOLEAN"/>
-            <result property="loginIp" column="login_ip" jdbcType="VARCHAR"/>
-            <result property="loginDate" column="login_date" jdbcType="TIMESTAMP"/>
             <result property="createBy" column="create_by" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="lastUpdateBy" column="last_update_by" jdbcType="BIGINT"/>
@@ -26,12 +25,13 @@
 
     <sql id="Base_Column_List">
         id,user_name,nick_name,
-        avatar,email,password,
-        phone,sex,status,
-        login_ip,login_date,create_by,
-        create_time,last_update_by,last_update_time,
-        del_flag,remark
+        email,phone,password,
+        avatar,identity_number,sex,
+        status,create_by,create_time,
+        last_update_by,last_update_time,del_flag,
+        remark
     </sql>
+
     <delete id="deleteUserByIds" parameterType="Long">
         delete from sys_user where id in
         <foreach collection="array" item="id" open="(" separator="," close=")">

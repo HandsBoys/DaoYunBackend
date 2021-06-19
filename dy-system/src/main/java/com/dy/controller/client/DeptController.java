@@ -2,7 +2,6 @@ package com.dy.controller.client;
 
 import com.dy.common.utils.AjaxResult;
 import com.dy.controller.BaseController;
-import com.dy.domain.SysUser;
 import com.dy.dto.client.DeptDto;
 import com.dy.service.SysDeptService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +22,7 @@ public class DeptController extends BaseController {
     @Autowired
     private SysDeptService deptService;
 
-    @Operation(summary = "获取部门树结构表")
+    @Operation(summary = "获取机构树结构表")
     @GetMapping
     @PreAuthorize("hasAuthority('system:dept:list') or hasAuthority('*:*:*')")
     public AjaxResult<List> listDeptAll(){
@@ -42,7 +41,7 @@ public class DeptController extends BaseController {
         return ret;
     }
 
-    @Operation(summary = "新增部门")
+    @Operation(summary = "新增机构")
     @PutMapping
     @PreAuthorize("hasAuthority('system:dept:add') or hasAuthority('*:*:*')")
     public AjaxResult addDept(@Validated @RequestBody DeptDto dept){

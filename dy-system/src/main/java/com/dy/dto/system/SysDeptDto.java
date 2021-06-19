@@ -1,14 +1,12 @@
-package com.dy.dto.client;
+package com.dy.dto.system;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
-public class DeptDto {
+public class SysDeptDto {
     /**
      * 部门id
      */
@@ -35,8 +33,17 @@ public class DeptDto {
     private Integer orderNum;
 
     /**
+     * 部门状态（0正常 1停用）
+     */
+    private Boolean status;
+
+    /**
+     * 删除标志（0代表存在 1代表删除）
+     */
+    private Boolean delFlag;
+
+    /**
      * 下级dept
      */
-    private List<DeptDto> children = new ArrayList<>();
-
+    private List<SysDeptDto> children = new ArrayList<>();
 }

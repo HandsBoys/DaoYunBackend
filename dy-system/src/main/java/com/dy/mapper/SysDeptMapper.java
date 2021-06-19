@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SysDeptMapper extends BaseMapper<SysDept> {
 
+    int deleteDeptsById(Long[] deptIds);
 }
 
 

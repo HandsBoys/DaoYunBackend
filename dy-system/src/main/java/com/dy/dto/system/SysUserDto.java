@@ -1,5 +1,6 @@
 package com.dy.dto.system;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
@@ -24,20 +25,24 @@ public class SysUserDto {
     private String nickName;
 
     /**
-     * 头像
-     */
-    private String avatar;
-
-    /**
      * 邮箱
      */
     private String email;
-
 
     /**
      * 手机号码
      */
     private String phone;
+
+    /**
+     * 头像
+     */
+    private String avatar;
+
+    /**
+     * 学/工号
+     */
+    private String identityNumber;
 
     /**
      * 性别（0男 1女 2未知）
@@ -48,6 +53,11 @@ public class SysUserDto {
      * 帐号状态（0正常 1停用）
      */
     private Boolean status;
+
+    /**
+     * 删除标志（0代表存在 1代表删除）
+     */
+    private String delFlag;
 
     /**
      * 备注
