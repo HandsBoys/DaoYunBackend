@@ -66,11 +66,7 @@ implements SysDeptService{
     @Override
     public List<SysDeptDto> listSysDeptDtoAll() {
         QueryWrapper<SysDept> param = new QueryWrapper<SysDept>()
-                .eq("del_flag",0)
-                .eq("status",0)
-                .and(i -> i.eq("dept_level","U")
-                        .or()
-                        .eq("dept_level","C"))
+                .isNotNull("id")
                 ;
         List<SysDept> deptList = baseMapper.selectList(param);
         List<SysDeptDto> ret = new ArrayList<>();
@@ -128,12 +124,33 @@ implements SysDeptService{
     }
 
     @Override
-    public int editDept(SysDeptDto dept) {
+    public boolean editDept(SysDeptDto dept) {
         SysDept sysDept = new SysDept();
         BeanUtils.copyProperties(dept,sysDept);
         sysDept.setUpdateBy(SecurityUtils.getLoginUser().getUser().getId());
         sysDept.setUpdateTime(new Date());
-        return baseMapper.insert(sysDept);
+        return super.updateById(sysDept);
+    }
+
+    @Override
+    public List<SysDeptDto> getChildSysDeptDto(Long deptId) {
+        try{
+            QueryWrapper param = new QueryWrapper<>()
+                    .eq("parent_id",deptId);
+            List<SysDept> list = baseMapper.selectList(param);
+            List<SysDeptDto> ret = new ArrayList<SysDeptDto>();
+            for(SysDept dept : list){
+                SysDeptDto deptDto = new SysDeptDto();
+                BeanUtils.copyProperties(dept,deptDto);
+                ret.add(deptDto);
+            }
+            return ret;
+        }
+        catch (Exception e){
+            System.out.println(e);
+            return null;
+        }
+
     }
 
     private void recursionFn(List<DeptDto> list, DeptDto dept){
@@ -161,6 +178,22 @@ implements SysDeptService{
 
     private boolean hasChild(List<SysDeptDto> list, SysDeptDto d) {
         return getChildren(list,d).size() > 0?true:false;
+    }
+
+    /**
+     * 查询当前机构是否存在下级机构
+     * @param deptId:当前机构id
+     * @return true:存在下级机构;false:不存在下级机构
+     */
+    @Override
+    public boolean hasChild(Long deptId){
+        QueryWrapper param = new QueryWrapper<>()
+                .eq("parent_id",deptId);
+        if(baseMapper.selectCount(param) > 0){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     private List<DeptDto> getChildren(List<DeptDto> list, DeptDto dept) {

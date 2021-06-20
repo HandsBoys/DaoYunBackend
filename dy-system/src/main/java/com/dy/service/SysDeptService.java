@@ -30,5 +30,19 @@ public interface SysDeptService extends IService<SysDept> {
 
     int deleteDeptsById(Long[] deptIds);
 
-    int editDept(SysDeptDto dept);
+    boolean editDept(SysDeptDto dept);
+
+    /**
+     * 获取当前机构的下级机构
+     * @param deptId:当前机构的id
+     * @return 下级机构列表 List<SysDeptDot>
+     */
+    List<SysDeptDto> getChildSysDeptDto(Long deptId);
+
+    /**
+     * 查询当前机构是否存在下级机构
+     * @param deptId:当前机构id
+     * @return true:存在下级机构;false:不存在下级机构
+     */
+    public boolean hasChild(Long deptId);
 }

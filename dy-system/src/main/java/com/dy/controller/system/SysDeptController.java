@@ -31,6 +31,11 @@ public class SysDeptController extends BaseController {
     @DeleteMapping("/{deptIds}")
     @PreAuthorize("hasAuthority('system:dept:remove') or hasAuthority('*:*:*')")
     public AjaxResult deleteDepts(@PathVariable Long[] deptIds){
+        for(Long deptId:deptIds){
+            if(deptService.hasChild(deptId)){
+                return AjaxResult.error(HttpStatus.NOT_ACCEPTABLE.value(), "id:"+deptId+"的机构存在下级机构,无法删除.");
+            }
+        }
         return toAjax(deptService.deleteDeptsById(deptIds));
     }
 
@@ -38,7 +43,12 @@ public class SysDeptController extends BaseController {
     @PostMapping
     @PreAuthorize("hasAuthority('system:dept:edit') or hasAuthority('*:*:*')")
     public AjaxResult editDept(@Validated @RequestBody SysDeptDto dept){
-        return toAjax(deptService.editDept(dept));
+        if(deptService.editDept(dept)){
+            return AjaxResult.success("修改成功");
+        }
+        else {
+            return AjaxResult.error("修改失败");
+        }
     }
 
     @Operation(summary = "获取所有机构信息")

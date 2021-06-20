@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * 角色信息
  */
-@Tag(name = "角色管理")
+@Tag(name = "sys-role-controller", description = "角色管理")
 @RestController
 @RequestMapping("system/role")
 public class SysRoleController extends BaseController {
