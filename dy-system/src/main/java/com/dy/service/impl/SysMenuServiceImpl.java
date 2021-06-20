@@ -9,6 +9,7 @@ import com.dy.manager.service.SysRoleMenuManager;
 import com.dy.manager.service.SysUserRoleManager;
 import com.dy.service.SysMenuService;
 import com.dy.mapper.SysMenuMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,9 +43,11 @@ implements SysMenuService{
         Long userId = SecurityUtils.getLoginUser().getUser().getId();
         if(userRoleManager.isAdmin(userId)){
             QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<SysMenu>()
-                    .eq("menu_type", "M")
-                    .or()
-                    .eq("menu_type", "C");
+                    .eq("status",0)
+                    .eq("visible",1)
+                    .and(i->i.eq("menu_type", "M")
+                            .or()
+                            .eq("menu_type", "C"));
             menuList = baseMapper.selectList(queryWrapper);
         }
         else {
@@ -83,7 +86,23 @@ implements SysMenuService{
 
     @Override
     public int insertMenu(SysMenuDto menuDto) {
-        return 0;
+        SysMenu menu = new SysMenu();
+        BeanUtils.copyProperties(menuDto,menu);
+        menu.setCreateBy(SecurityUtils.getLoginUser().getUser().getId());
+        menu.setCreateTime(new Date());
+        if(menu.getIsFrame()==null){
+            menu.setIsFrame(true);
+        }
+        if(menu.getIsCache()==null){
+            menu.setIsCache(false);
+        }
+        if(menu.getVisible()==null){
+            menu.setVisible(true);
+        }
+        if(menu.getStatus()==null){
+            menu.setStatus(false);
+        }
+        return baseMapper.insert(menu);
     }
 
     /**
@@ -131,13 +150,17 @@ implements SysMenuService{
 
 
     /**
-     * TODO:修改菜单项信息
+     * 修改菜单项信息
      *
      * @param menuDto
      */
     @Override
     public int updateMenu(SysMenuDto menuDto) {
-        return 0;
+        SysMenu menu = new SysMenu();
+        BeanUtils.copyProperties(menuDto,menu);
+        menu.setLastUpdateBy(SecurityUtils.getLoginUser().getUser().getId());
+        menu.setLastUpdateTime(new Date());
+        return baseMapper.updateById(menu);
     }
 
     /**
@@ -147,7 +170,7 @@ implements SysMenuService{
      */
     @Override
     public int deleteMenus(Long[] menuIds) {
-        return 0;
+        return baseMapper.deleteMenus(menuIds);
     }
 
     @Override
@@ -159,7 +182,7 @@ implements SysMenuService{
     public List<SysMenu> listAllMenus() {
         List<SysMenu> menuList = null;
         QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<SysMenu>()
-                .eq("status", 0);
+                .isNotNull("id");
         menuList = baseMapper.selectList(queryWrapper);
         return menuList;
     }

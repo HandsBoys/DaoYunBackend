@@ -5,6 +5,7 @@ import com.dy.controller.BaseController;
 import com.dy.domain.SysMenu;
 import com.dy.dto.system.SysMenuDto;
 import com.dy.service.SysMenuService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -22,10 +23,7 @@ public class SysMenuController extends BaseController {
     @Autowired
     private SysMenuService menuService;
 
-    /**
-     * 按照用户的权限获取可访问的菜单项
-     * @return
-     */
+    @Operation(description = "按照用户的权限获取可访问的菜单项")
     @GetMapping
     @PreAuthorize("hasAuthority('system:menu:list') or hasAuthority('*:*:*')")
     public List<SysMenu> listMenus(){
@@ -34,10 +32,7 @@ public class SysMenuController extends BaseController {
         return menuTree;
     }
 
-    /**
-     * 获取所有菜单项
-     * @return
-     */
+    @Operation(description = "获取所有菜单项")
     @GetMapping("/listall")
     @PreAuthorize("hasAuthority('system:menu:list') or hasAuthority('*:*:*')")
     public List<SysMenu> listAllMenus(){
@@ -47,21 +42,19 @@ public class SysMenuController extends BaseController {
     }
 
 
-    //TODO:新增菜单
     @PutMapping
     @PreAuthorize("hasAuthority('system:menu:add') or hasAuthority('*:*:*')")
     public AjaxResult addMenu(@Validated @RequestBody SysMenuDto menuDto){
         return toAjax(menuService.insertMenu(menuDto));
     }
 
-    //TODO:修改菜单
     @PostMapping
     @PreAuthorize("hasAuthority('system:menu:edit') or hasAuthority('*:*:*')")
     public AjaxResult editMenu(@Validated @RequestBody SysMenuDto menuDto){
         return toAjax(menuService.updateMenu(menuDto));
     }
 
-    //TODO:删除菜单
+    @Operation(description = "删除菜单")
     @DeleteMapping("/{menuIds}")
     @PreAuthorize("hasAuthority('system:menu:remove') or hasAuthority('*:*:*')")
     public AjaxResult deleteMenus(@PathVariable Long[] menuIds){

@@ -13,6 +13,8 @@ import java.util.List;
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
     List<SysMenu> getMenuListByUserId(Long userId);
+
+    int deleteMenus(Long[] menuIds);
 }
 
 
