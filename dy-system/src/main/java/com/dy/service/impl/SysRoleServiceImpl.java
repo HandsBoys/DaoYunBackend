@@ -134,6 +134,15 @@ implements SysRoleService{
         return roleDto;
     }
 
+    @Override
+    public List<SysRoleDto> getRolesById(List<Long> roleIds) {
+        List<SysRoleDto> ret = new ArrayList<>();
+        for(Long id:roleIds){
+            ret.add(getRoleById(id));
+        }
+        return ret;
+    }
+
     private boolean isUnique(SysRoleDto roleDto){
         QueryWrapper param = new QueryWrapper<>()
                 .eq("role_name",roleDto.getRoleName())

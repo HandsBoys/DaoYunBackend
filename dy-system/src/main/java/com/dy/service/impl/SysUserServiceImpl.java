@@ -3,16 +3,21 @@ package com.dy.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.dy.common.constant.SysConfigConstants;
 import com.dy.common.utils.SecurityUtils;
+import com.dy.common.utils.StringUtils;
 import com.dy.domain.SysUser;
 import com.dy.domain.SysUserRole;
+import com.dy.dto.system.SysRoleDto;
 import com.dy.dto.system.SysUserDto;
 import com.dy.manager.service.SysUserRoleManager;
+import com.dy.service.SysConfigService;
 import com.dy.service.SysRoleService;
 import com.dy.service.SysUserService;
 import com.dy.mapper.SysUserMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,6 +36,9 @@ implements SysUserService{
 
     @Autowired
     private SysRoleService roleService;
+
+    @Autowired
+    private SysConfigService configService;
 
     @Override
     public SysUser getUserByUserName(String username) {
@@ -59,6 +67,17 @@ implements SysUserService{
     }
 
     @Override
+    public boolean checkPhoneUnique(Long userId, String phone) {
+        QueryWrapper param = new QueryWrapper();
+        param.eq("phone",phone);
+        param.ne("id",userId);
+        if(baseMapper.selectCount(param) > 0){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public boolean checkEmailUnique(String email) {
         if(email != ""){
             QueryWrapper param = new QueryWrapper();
@@ -72,14 +91,23 @@ implements SysUserService{
 
     @Override
     public void updateUser(SysUserDto userDto) {
-        SysUser user = new SysUser();
-        BeanUtils.copyProperties(userDto,user);
-        baseMapper.updateById(user);
-        Long roleId = userDto.getRole().getId();
-        UpdateWrapper<SysUserRole> param = new UpdateWrapper<>();
-        param.set("role_id",roleId);
-        param.eq("user_id",userDto.getId());
-        userRoleManager.update(param);
+        try{
+            Long userId = userDto.getId();
+            SysUser user = new SysUser();
+            BeanUtils.copyProperties(userDto,user);
+            user.setLastUpdateBy(SecurityUtils.getLoginUser().getUser().getId());
+            user.setLastUpdateTime(new Date());
+            baseMapper.updateById(user);
+
+            //删除userDto的所有角色关联
+            userRoleManager.deleteAllByUserId(userId);
+            //更改关联的角色
+            addRoles(userId,userDto.getRoles());
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+
     }
 
     @Override
@@ -107,12 +135,11 @@ implements SysUserService{
         QueryWrapper param = new QueryWrapper();
         param.isNotNull("id");
         List<SysUser> userList = baseMapper.selectList(param);
-        System.out.println(userList);
         List<SysUserDto> userDtoList = new ArrayList<>();
         for(SysUser user:userList){
             SysUserDto userDto = new SysUserDto();
             BeanUtils.copyProperties(user,userDto);
-            userDto.setRole(roleService.getRoleById(userRoleManager.getRoleIdByUserId(user.getId())));
+            userDto.setRoles(roleService.getRolesById(userRoleManager.getRoleIdByUserId(user.getId())));
             userDtoList.add(userDto);
         }
         return userDtoList;
@@ -141,11 +168,29 @@ implements SysUserService{
 
     @Override
     public int addUser(SysUserDto userDto) {
-        SysUser user = new SysUser();
-        BeanUtils.copyProperties(userDto,user);
-        user.setCreateBy(SecurityUtils.getLoginUser().getUser().getId());
-        user.setCreateTime(new Date());
-        return baseMapper.insert(user);
+        try{
+            SysUser user = new SysUser();
+            BeanUtils.copyProperties(userDto,user);
+            // 设置密码
+            if(StringUtils.isEmpty(user.getPassword())){
+                String password = configService.getConfigValueByKey(SysConfigConstants.PASSWORD);
+                if(StringUtils.isEmpty(password)){
+                    password = "123456";
+                }
+                BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+                String encodePassword = encoder.encode(password);
+                user.setPassword(encodePassword);
+            }
+
+            user.setCreateBy(SecurityUtils.getLoginUser().getUser().getId());
+            user.setCreateTime(new Date());
+            baseMapper.insert(user);
+            addRoles(getIdByUserName(userDto.getUserName()), userDto.getRoles());
+            return 1;
+        }catch (Exception e){
+            System.out.println(e);
+            return 0;
+        }
     }
 
     @Override
@@ -154,6 +199,15 @@ implements SysUserService{
                 .eq("id",teacherId)
                 .select("nick_name");
         return baseMapper.selectOne(param).getNickName();
+    }
+
+    private void addRoles(Long userId,List<SysRoleDto> roleList){
+        List<SysUserRole> urs = new ArrayList<>();
+        for(SysRoleDto roleDto:roleList){
+            Long roleId = roleDto.getId();
+            urs.add(new SysUserRole(userId, roleId));
+        }
+        userRoleManager.insertBatch(urs);
     }
 }
 

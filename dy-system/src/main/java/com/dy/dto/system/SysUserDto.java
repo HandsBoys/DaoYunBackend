@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author cxj
  */
@@ -67,6 +69,12 @@ public class SysUserDto {
     /**
      * 角色
      */
-    private SysRoleDto role;
+    private List<SysRoleDto> roles;
 
+    /**
+     * 所属机构
+     */
+    private String university;
+    private String college;
+    private String subject;
 }

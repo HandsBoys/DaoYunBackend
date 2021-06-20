@@ -9,10 +9,7 @@ import com.dy.manager.service.SysUserRoleManager;
 import com.dy.mapper.SysUserRoleMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  *
@@ -56,12 +53,31 @@ implements SysUserRoleManager {
     }
 
     @Override
-    public Long getRoleIdByUserId(Long userId) {
+    public List<Long> getRoleIdByUserId(Long userId) {
         QueryWrapper param = new QueryWrapper<>()
-                .eq("user_id",userId)
-                .select("role_id");
-        SysUserRole userRole = baseMapper.selectOne(param);
-        return userRole.getRoleId();
+                .eq("user_id",userId);
+        List<SysUserRole> list = baseMapper.selectList(param);
+        List<Long> ret = new ArrayList<>();
+        for(SysUserRole userRole:list){
+            ret.add(userRole.getRoleId());
+        }
+        return ret;
+    }
+
+    @Override
+    public int deleteAllByUserId(Long userId) {
+        return baseMapper.deleteAllByUserId(userId);
+    }
+
+    @Override
+    public void insertBatch(List<SysUserRole> list) {
+        try {
+            for (SysUserRole ur : list) {
+                baseMapper.insert(ur);
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
 }
 

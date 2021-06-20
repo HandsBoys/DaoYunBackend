@@ -34,4 +34,9 @@ public class SysUserRole implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+    public SysUserRole(Long userId,Long roleId){
+        this.userId = userId;
+        this.roleId = roleId;
+    }
 }

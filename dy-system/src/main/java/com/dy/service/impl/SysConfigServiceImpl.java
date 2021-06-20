@@ -21,7 +21,6 @@ import java.util.List;
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig>
 implements SysConfigService{
 
-    //TODO
     @Override
     public List<SysConfigDto> listSysConfig() {
         try{
@@ -74,6 +73,13 @@ implements SysConfigService{
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getConfigValueByKey(String configKey) {
+        QueryWrapper<SysConfig> param = new QueryWrapper<SysConfig>()
+                .eq("config_key",configKey);
+        return baseMapper.selectOne(param).getConfigValue();
     }
 }
 

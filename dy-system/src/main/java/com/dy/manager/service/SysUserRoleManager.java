@@ -3,7 +3,7 @@ package com.dy.manager.service;
 import com.dy.domain.SysUserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,5 +16,9 @@ public interface SysUserRoleManager extends IService<SysUserRole> {
 
     int getItemByRoleId(Long roleId);
 
-    Long getRoleIdByUserId(Long userId);
+    List<Long> getRoleIdByUserId(Long userId);
+
+    int deleteAllByUserId(Long userId);
+
+    void insertBatch(List<SysUserRole> list);
 }

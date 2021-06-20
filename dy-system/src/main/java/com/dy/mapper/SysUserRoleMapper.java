@@ -14,6 +14,14 @@ public interface SysUserRoleMapper extends BaseMapper<SysUserRole> {
     List<SysRole> getRolePermissionByUserId(Long userId);
 
     Long isAdmin(Long userId);
+
+    /**
+     * 删除单个用户所关联的所有角色
+     * @param userId
+     * @return
+     */
+    int deleteAllByUserId(Long userId);
+
 }
 
 

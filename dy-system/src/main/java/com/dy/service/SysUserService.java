@@ -21,7 +21,20 @@ public interface SysUserService extends IService<SysUser> {
 
     SysUser getUserByPhone(String phone);
 
+    /**
+     * 检验手机号是否唯一
+     * @param phone
+     * @return
+     */
     boolean checkPhoneUnique(String phone);
+
+    /**
+     * 除去指定用户的手机号，检验手机号是否唯一
+     * @param userId
+     * @param phone
+     * @return
+     */
+    boolean checkPhoneUnique(Long userId,String phone);
 
     boolean checkEmailUnique(String email);
 

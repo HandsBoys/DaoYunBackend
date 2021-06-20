@@ -24,6 +24,17 @@ public interface SysRoleService extends IService<SysRole> {
 
     public int insertRoleMenu(SysRoleDto roleDto);
 
+    /**
+     * 根据单个角色id获取角色信息
+     * @param id
+     * @return
+     */
     public SysRoleDto getRoleById(Long id);
 
+    /**
+     * 根据多个角色id获取角色信息
+     * @param roleIds
+     * @return
+     */
+    List<SysRoleDto> getRolesById(List<Long> roleIds);
 }

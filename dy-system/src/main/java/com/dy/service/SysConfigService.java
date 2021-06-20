@@ -25,4 +25,11 @@ public interface SysConfigService extends IService<SysConfig> {
     int deleteConfigs(Long[] configIds);
 
     boolean queryConfigKeyUnique(String configKey);
+
+    /**
+     * 根据config_key获取config_value
+     * @param configKey
+     * @return
+     */
+    String getConfigValueByKey(String configKey);
 }
