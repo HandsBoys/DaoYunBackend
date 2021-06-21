@@ -45,4 +45,11 @@ public interface SysDeptService extends IService<SysDept> {
      * @return true:存在下级机构;false:不存在下级机构
      */
     public boolean hasChild(Long deptId);
+
+    /**
+     * 获取某机构的下级所有机构
+     * @param parentId 该机构id
+     * @return 获取某机构的下级所有机构
+     */
+    public List<SysDeptDto> getNextDept(Long parentId);
 }

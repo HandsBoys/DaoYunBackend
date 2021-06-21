@@ -2,6 +2,7 @@ package com.dy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.dy.common.constant.SysConfigConstants;
 import com.dy.common.utils.SecurityUtils;
 import com.dy.domain.SysDept;
 import com.dy.domain.SysMenu;
@@ -194,6 +195,16 @@ implements SysDeptService{
         }else {
             return false;
         }
+    }
+
+    @Override
+    public List<SysDeptDto> getNextDept(Long parentId) {
+        QueryWrapper param = new QueryWrapper<>()
+                .eq("dept_level", SysConfigConstants.COLLEGE)
+                .eq("parent_id",parentId)
+                .eq("status",0)
+                .eq("del_falg",0);
+        return baseMapper.selectList(param);
     }
 
     private List<DeptDto> getChildren(List<DeptDto> list, DeptDto dept) {

@@ -1,15 +1,16 @@
 package com.dy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dy.common.constant.SysConfigConstants;
 import com.dy.common.utils.SecurityUtils;
 import com.dy.common.utils.StringUtils;
 import com.dy.domain.SysUser;
+import com.dy.domain.SysUserDept;
 import com.dy.domain.SysUserRole;
 import com.dy.dto.system.SysRoleDto;
-import com.dy.dto.system.SysUserDto;
+import com.dy.dto.system.user.SysUserDto;
+import com.dy.manager.service.SysUserDeptManager;
 import com.dy.manager.service.SysUserRoleManager;
 import com.dy.service.SysConfigService;
 import com.dy.service.SysRoleService;
@@ -39,6 +40,9 @@ implements SysUserService{
 
     @Autowired
     private SysConfigService configService;
+
+    @Autowired
+    private SysUserDeptManager userDeptManager;
 
     @Override
     public SysUser getUserByUserName(String username) {
@@ -103,6 +107,11 @@ implements SysUserService{
             userRoleManager.deleteAllByUserId(userId);
             //更改关联的角色
             addRoles(userId,userDto.getRoles());
+
+            // 删除用户关联的所有机构
+            userDeptManager.deleteAllByUserId(userId);
+            //更改关联的机构
+            addUserDepts(userId,userDto);
         }
         catch (Exception e){
             System.out.println(e);
@@ -127,7 +136,18 @@ implements SysUserService{
      */
     @Override
     public int deleteUserByIds(Long[] userIds) {
-        return baseMapper.deleteUserByIds(userIds);
+        try{
+            //删除用户角色关联和用户机构关联
+            for(Long userId:userIds){
+                userRoleManager.deleteAllByUserId(userId);
+                userDeptManager.deleteAllByUserId(userId);
+            }
+            return baseMapper.deleteUserByIds(userIds);
+        }
+        catch (Exception e){
+            System.out.println(e);
+            return 0;
+        }
     }
 
     @Override
@@ -139,10 +159,27 @@ implements SysUserService{
         for(SysUser user:userList){
             SysUserDto userDto = new SysUserDto();
             BeanUtils.copyProperties(user,userDto);
+
+            // 获取关联的角色
             userDto.setRoles(roleService.getRolesById(userRoleManager.getRoleIdByUserId(user.getId())));
+            // 获取关联的机构
+            userDto = setDepts(user.getId(),userDto);
+
             userDtoList.add(userDto);
         }
         return userDtoList;
+    }
+
+    /**
+     * 设置用户的学校，学院和专业
+     * @param userId
+     * @param userDto
+     */
+    private SysUserDto setDepts(Long userId, SysUserDto userDto) {
+        userDto.setUniversity(userDeptManager.getDeptByUserId(userId,SysConfigConstants.UNIVERSITY));
+        userDto.setCollege(userDeptManager.getDeptByUserId(userId,SysConfigConstants.COLLEGE));
+        userDto.setSubject(userDeptManager.getDeptByUserId(userId, SysConfigConstants.SUBJECT));
+        return userDto;
     }
 
     @Override
@@ -185,7 +222,15 @@ implements SysUserService{
             user.setCreateBy(SecurityUtils.getLoginUser().getUser().getId());
             user.setCreateTime(new Date());
             baseMapper.insert(user);
-            addRoles(getIdByUserName(userDto.getUserName()), userDto.getRoles());
+
+            Long userId = getIdByUserName(userDto.getUserName());
+            // 用户关联角色
+            addRoles(userId, userDto.getRoles());
+
+            // 用户关联机构
+            addUserDepts(userId,userDto);
+
+
             return 1;
         }catch (Exception e){
             System.out.println(e);
@@ -208,6 +253,23 @@ implements SysUserService{
             urs.add(new SysUserRole(userId, roleId));
         }
         userRoleManager.insertBatch(urs);
+    }
+
+    private void addUserDepts(Long userId,SysUserDto userDto){
+        if(userDto.getUniversity() != null){
+            addUserDept(userId,userDto.getUniversity().getId());
+        }
+        if(userDto.getCollege() != null){
+            addUserDept(userId,userDto.getCollege().getId());
+        }
+        if(userDto.getSubject() != null){
+            addUserDept(userId,userDto.getSubject().getId());
+        }
+    }
+
+    private void addUserDept(Long userId, Long deptId){
+        SysUserDept ud = new SysUserDept(userId,deptId);
+        userDeptManager.insertOne(ud);
     }
 }
 

@@ -1,7 +1,8 @@
-package com.dy.dto.system;
+package com.dy.dto.system.user;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.dy.dto.system.SysRoleDto;
 import lombok.Data;
 
 import java.util.List;
@@ -74,7 +75,7 @@ public class SysUserDto {
     /**
      * 所属机构
      */
-    private String university;
-    private String college;
-    private String subject;
+    private UserDeptDto university;
+    private UserDeptDto college;
+    private UserDeptDto subject;
 }

@@ -2,7 +2,7 @@ package com.dy.service;
 
 import com.dy.domain.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.dy.dto.system.SysUserDto;
+import com.dy.dto.system.user.SysUserDto;
 
 import java.util.List;
 

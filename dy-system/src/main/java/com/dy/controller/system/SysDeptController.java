@@ -54,7 +54,7 @@ public class SysDeptController extends BaseController {
     @Operation(summary = "获取所有机构信息")
     @GetMapping
     @PreAuthorize("hasAuthority('system:dept:list') or hasAuthority('*:*:*')")
-    public AjaxResult<DeptDto> listDept(){
+    public AjaxResult<SysDeptDto> listDept(){
         List<SysDeptDto> deptDtos = deptService.listSysDeptDtoAll();
         List<SysDeptDto> deptTree = deptService.buildSysDeptTree(deptDtos);
         if(deptTree != null){
@@ -62,6 +62,19 @@ public class SysDeptController extends BaseController {
         }
         else {
             return AjaxResult.error(HttpStatus.NO_CONTENT.value(), "获取失败",deptTree);
+        }
+    }
+
+    @Operation(description = "获取下级机构")
+    @GetMapping("/next-dept")
+    @PreAuthorize("hasAuthority('system:dept:query') or hasAuthority('*:*:*')")
+    public AjaxResult<SysDeptDto> getNextDepts(Long parentId){
+        List<SysDeptDto> ret = deptService.getNextDept(parentId);
+        if(ret != null){
+            return AjaxResult.success("获取成功",ret);
+        }
+        else {
+            return AjaxResult.error(HttpStatus.NO_CONTENT.value(),"获取失败",null);
         }
     }
 

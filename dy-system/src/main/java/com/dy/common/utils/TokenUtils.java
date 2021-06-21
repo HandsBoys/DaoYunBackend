@@ -22,7 +22,9 @@ public class TokenUtils {
     @Value("${jwt.tokenHeader}")
     private String header;
 
-    // 令牌秘钥
+    /**
+     * 令牌秘钥
+      */
     @Value("${jwt.secret}")
     private String secret;
 
@@ -35,6 +37,10 @@ public class TokenUtils {
 
     @Value("${jwt.expiration}")
     private Integer expirationTime;
+    private static final int hoursADay = 24;
+    private static final int minutesAHour = 60;
+    private static final int secondsAMinute = 60;
+    private static final int millisecond = 1000;
 
     /**
      * 根据用户名生成token
@@ -69,7 +75,7 @@ public class TokenUtils {
      * @return
      */
     private Date generateExpiration() {
-        return new Date(System.currentTimeMillis() + expirationTime * 1000 * 60);
+        return new Date(System.currentTimeMillis() + expirationTime * millisecond * secondsAMinute * minutesAHour * hoursADay);
     }
 
     /**

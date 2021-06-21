@@ -34,4 +34,9 @@ public class SysUserDept implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+    public SysUserDept(Long userId,Long deptId){
+        this.userId = userId;
+        this.deptId = deptId;
+    }
 }
