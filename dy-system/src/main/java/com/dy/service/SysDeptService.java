@@ -4,6 +4,7 @@ import com.dy.domain.SysDept;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dy.dto.client.DeptDto;
 import com.dy.dto.system.SysDeptDto;
+import com.dy.dto.system.user.UserDeptDto;
 
 import java.util.List;
 
@@ -51,5 +52,5 @@ public interface SysDeptService extends IService<SysDept> {
      * @param parentId 该机构id
      * @return 获取某机构的下级所有机构
      */
-    public List<SysDeptDto> getNextDept(Long parentId);
+    public List<UserDeptDto> getNextDept(Long parentId);
 }

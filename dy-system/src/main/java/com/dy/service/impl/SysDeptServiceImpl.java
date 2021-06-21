@@ -8,6 +8,7 @@ import com.dy.domain.SysDept;
 import com.dy.domain.SysMenu;
 import com.dy.dto.client.DeptDto;
 import com.dy.dto.system.SysDeptDto;
+import com.dy.dto.system.user.UserDeptDto;
 import com.dy.service.SysDeptService;
 import com.dy.mapper.SysDeptMapper;
 import org.springframework.beans.BeanUtils;
@@ -198,13 +199,19 @@ implements SysDeptService{
     }
 
     @Override
-    public List<SysDeptDto> getNextDept(Long parentId) {
+    public List<UserDeptDto> getNextDept(Long parentId) {
         QueryWrapper param = new QueryWrapper<>()
-                .eq("dept_level", SysConfigConstants.COLLEGE)
                 .eq("parent_id",parentId)
                 .eq("status",0)
-                .eq("del_falg",0);
-        return baseMapper.selectList(param);
+                .eq("del_flag",0);
+        List<SysDept> deptList = baseMapper.selectList(param);
+        List<UserDeptDto> ret = new ArrayList<>();
+        for(SysDept dept:deptList){
+            UserDeptDto deptDto = new UserDeptDto();
+            BeanUtils.copyProperties(dept, deptDto);
+            ret.add(deptDto);
+        }
+        return ret;
     }
 
     private List<DeptDto> getChildren(List<DeptDto> list, DeptDto dept) {

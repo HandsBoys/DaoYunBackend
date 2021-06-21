@@ -4,6 +4,7 @@ import com.dy.common.utils.AjaxResult;
 import com.dy.controller.BaseController;
 import com.dy.dto.client.DeptDto;
 import com.dy.dto.system.SysDeptDto;
+import com.dy.dto.system.user.UserDeptDto;
 import com.dy.service.SysDeptService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,11 +66,11 @@ public class SysDeptController extends BaseController {
         }
     }
 
-    @Operation(description = "获取下级机构")
+    @Operation(summary = "获取下级机构")
     @GetMapping("/next-dept")
     @PreAuthorize("hasAuthority('system:dept:query') or hasAuthority('*:*:*')")
-    public AjaxResult<SysDeptDto> getNextDepts(Long parentId){
-        List<SysDeptDto> ret = deptService.getNextDept(parentId);
+    public AjaxResult<UserDeptDto> getNextDepts(Long parentId){
+        List<UserDeptDto> ret = deptService.getNextDept(parentId);
         if(ret != null){
             return AjaxResult.success("获取成功",ret);
         }
