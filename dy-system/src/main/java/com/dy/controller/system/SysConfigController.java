@@ -7,6 +7,7 @@ import com.dy.service.SysConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +22,12 @@ public class SysConfigController extends BaseController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('system:config:list') or hasAuthority('*:*:*')")
-    public List<SysConfigDto> list(){
+    public AjaxResult<List<SysConfigDto>> list(){
         List<SysConfigDto> list = configService.listSysConfig();
-        return list;
+        if(list != null){
+            return AjaxResult.success("成功",list);
+        }
+        return AjaxResult.error(HttpStatus.NO_CONTENT.value(), "失败", null);
     }
 
     @PostMapping

@@ -8,7 +8,6 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="courseName" column="course_name" jdbcType="VARCHAR"/>
             <result property="term" column="term" jdbcType="VARCHAR"/>
-            <result property="dept" column="dept" jdbcType="VARCHAR"/>
             <result property="teacherId" column="teacher_id" jdbcType="BIGINT"/>
             <result property="classId" column="class_id" jdbcType="BIGINT"/>
             <result property="enableJoin" column="enable_join" jdbcType="BOOLEAN"/>
@@ -21,17 +20,28 @@
 
     <sql id="Base_Column_List">
         id,course_name,term,
-        dept,teacher_id,class_id,
+        teacher_id,class_id,
         enable_join,finish,create_by,
         create_time,last_update_by,last_update_time
     </sql>
     <delete id="deleteCourseByIds" parameterType="Long">
-        delete from sys_course where id in
+        delete
+        from sys_course
+        where id in
         <foreach collection="array" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
     <select id="listCreatedCourse" resultType="com.dy.domain.SysCourse">
         select <include refid="Base_Column_List"/> from sys_course where teacher_id = #{teacherId}
+    </select>
+    <select id="listCourseAll" resultType="com.dy.domain.SysCourse">
+        select <include refid="Base_Column_List"/> from sys_course
+    </select>
+    <select id="getClassId" resultType="java.lang.Long">
+        select class_id from sys_course where id = #{userId}
+    </select>
+    <select id="getLastId" resultType="java.lang.Long">
+        select id from sys_course order by id DESC limit 1
     </select>
 </mapper>

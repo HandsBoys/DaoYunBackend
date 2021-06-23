@@ -8,12 +8,13 @@ import java.io.Serializable;
 import lombok.Data;
 
 /**
- * 班级学生表
- * @TableName sys_course_students
+ * 班课机构关联表
+
+ * @TableName sys_course_dept
  */
-@TableName(value ="sys_course_students")
+@TableName(value ="sys_course_dept")
 @Data
-public class SysCourseStudents implements Serializable {
+public class SysCourseDept implements Serializable {
     /**
      * 主键
      */
@@ -27,25 +28,19 @@ public class SysCourseStudents implements Serializable {
     private Long courseId;
 
     /**
-     * 学生id
+     * 机构id
      */
-    @TableField(value = "student_id")
-    private Long studentId;
-
-    /**
-     * 分数
-     */
-    @TableField(value = "score")
-    private Long score;
+    @TableField(value = "dept_id")
+    private Long deptId;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
-    public SysCourseStudents(Long courseId, Long studentId){
+    public SysCourseDept(Long courseId, Long deptId) {
         this.courseId = courseId;
-        this.studentId = studentId;
-        this.score = 0L;
+        this.deptId = deptId;
     }
 
-    public SysCourseStudents(){}
+    public SysCourseDept() {
+    }
 }

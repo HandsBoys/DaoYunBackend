@@ -7,6 +7,7 @@ import com.dy.dto.system.user.SysUserDto;
 import com.dy.service.SysUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,12 @@ public class SysUserController extends BaseController {
     @Operation(description = "获取所有用户列表")
     @PreAuthorize("hasAuthority('system:user:list') or hasAuthority('*:*:*')")
     @GetMapping
-    public List<SysUserDto> listUserAll(){
+    public AjaxResult<List<SysUserDto>> listUserAll(){
         List<SysUserDto> list = userService.listUserAll();
-        return list;
+        if(list != null){
+            return AjaxResult.success("success", list);
+        }
+        return AjaxResult.error(HttpStatus.NO_CONTENT.value(), "error", null);
     }
 
 
@@ -39,18 +43,15 @@ public class SysUserController extends BaseController {
         if(userDto.getPhone() == null){
             return AjaxResult.error("修改用户'" + userDto.getUserName() + "'失败，手机号码不能为空");
         }
-//        else if(userDto.getEmail() == null){
-//            return AjaxResult.error("修改用户'" + userDto.getUserName() + "'失败，邮箱不能为空");
-//        }
         else if(userDto.getPhone() != null && GlobalConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(userDto.getId(),
                 userDto.getPhone()))){
             return AjaxResult.error("修改用户'" + userDto.getUserName() + "'失败，手机号码已使用");
         }
-//        else if (userDto.getEmail() != null && !userService.checkEmailUnique(userDto.getEmail())){
-//            return AjaxResult.error("修改用户'" + userDto.getUserName() + "'失败，邮箱已经存在");
-//        }
+        else if(userDto.getUserName() != null && GlobalConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(userDto.getId(),
+                userDto.getUserName()))){
+            return AjaxResult.error("用户名已使用");
+        }
         //更新用户信息
-        System.out.println(userDto);
         userService.updateUser(userDto);
         return AjaxResult.success("修改用户'" + userDto.getUserName() + "'成功");
     }
@@ -73,9 +74,6 @@ public class SysUserController extends BaseController {
         }
         else if(!userService.checkPhoneUnique(userDto.getPhone())){
             return  AjaxResult.error("手机号已使用");
-        }
-        else if(!userService.checkEmailUnique(userDto.getEmail())){
-            return AjaxResult.error("邮箱已使用");
         }
         return toAjax(userService.addUser(userDto));
     }

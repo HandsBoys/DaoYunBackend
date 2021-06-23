@@ -79,7 +79,7 @@ public class CourseController extends BaseController {
     @GetMapping("/joined-course")
     @PreAuthorize("hasAuthority('system:course:list') or hasAuthority('*:*:*')")
     public AjaxResult listJoinedCourse(){
-        List<CourseDto> list = courseStudentsService.listJoinedCourse();
+        List<CourseDto> list = courseService.listJoinedCourse();
         AjaxResult<List> ret = new AjaxResult<>();
         ret.setData(list);
         if(list != null){

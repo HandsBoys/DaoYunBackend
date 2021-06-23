@@ -3,6 +3,8 @@ package com.dy.dto.client;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author cxj
  */
@@ -24,11 +26,6 @@ public class CourseDto {
     private String term;
 
     /**
-     * 班课所属单位（学校、学院）
-     */
-    private String dept;
-
-    /**
      * 课程教师id
      */
     private Long teacherId;
@@ -48,5 +45,15 @@ public class CourseDto {
     private Boolean finish;
 
     private ClassDto classDto;
+
+    /**
+     * 班课所属单位（学校、学院）
+     */
+    private String dept;
+
+    /**
+     * 机构组
+     */
+    private List<Long> deptIds;
 
 }

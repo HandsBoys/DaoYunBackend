@@ -15,6 +15,19 @@
         id,course_id,student_id,
         score
     </sql>
+
+    <sql id="SysStudentDto">
+        select distinct
+            cs.id, cs.course_id,cs.student_id,cs.score,
+            u.user_name,u.nick_name,u.email,u.phone,u.identity_number
+        from sys_course_students cs
+        left join sys_user u on cs.student_id = u.id
+    </sql>
+    <update id="updateScore">
+        update sys_course_students
+        set score=#{score}
+        where course_id = #{courseId} and student_id = #{studentId}
+    </update>
     <select id="getCoursesByStudentId" resultType="com.dy.domain.SysCourse">
         select distinct
             c.id,c.course_name,c.term,
@@ -24,5 +37,9 @@
         from sys_course as c
         left join sys_course_students as cs on cs.course_id = c.id
         where cs.student_id = #{studentId}
+    </select>
+
+    <select id="getStudents" resultType="com.dy.dto.system.student.SysStudentDto">
+        <include refid="SysStudentDto"/> where cs.course_id = #{courseId}
     </select>
 </mapper>

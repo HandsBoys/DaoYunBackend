@@ -7,6 +7,7 @@ import com.dy.dto.system.SysDictDataDto;
 import com.dy.service.SysDictDataService;
 import com.dy.service.SysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,14 +29,22 @@ public class SysDictionaryDataController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('system:dict:list') or hasAuthority('*:*:*')")
-    public List<SysDictDataDto> listDictDataAll(){
-        return dictDataService.listDictDataAll();
+    public AjaxResult<List<SysDictDataDto>> listDictDataAll(){
+        List<SysDictDataDto> ret = dictDataService.listDictDataAll();
+        if(ret != null){
+            return AjaxResult.success("成功",ret);
+        }
+        return AjaxResult.error(HttpStatus.NO_CONTENT.value(), "失败", null);
     }
 
     @GetMapping
     @PreAuthorize("hasAuthority('system:dict:query') or hasAuthority('*:*:*')")
-    public List<SysDictDataDto> listDictDataByType(String dictType){
-        return dictDataService.listDictDataByType(dictType);
+    public AjaxResult<List<SysDictDataDto>> listDictDataByType(String dictType){
+        List<SysDictDataDto> ret = dictDataService.listDictDataByType(dictType);
+        if(ret != null){
+            return AjaxResult.success("成功",ret);
+        }
+        return AjaxResult.error(HttpStatus.NO_CONTENT.value(), "失败", null);
     }
 
     @PutMapping

@@ -9,6 +9,7 @@ import com.dy.service.SysDictTypeService;
 import com.dy.service.SysUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +31,12 @@ public class SysDictionaryTypeController extends BaseController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('system:dict:list') or hasAuthority('*:*:*')")
-    public List<SysDictTypeDto> list(){
+    public AjaxResult<List<SysDictTypeDto>> list(){
         List<SysDictTypeDto> list = dictTypeService.listAllDictTypes();
-        return list;
+        if(list != null){
+            return  AjaxResult.success("success",list);
+        }
+        return AjaxResult.error(HttpStatus.NO_CONTENT.value(), "error" ,null);
     }
 
 

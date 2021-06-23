@@ -7,6 +7,7 @@ import com.dy.dto.system.SysMenuDto;
 import com.dy.service.SysMenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,19 +27,25 @@ public class SysMenuController extends BaseController {
     @Operation(description = "按照用户的权限获取可访问的菜单项")
     @GetMapping
     @PreAuthorize("hasAuthority('system:menu:list') or hasAuthority('*:*:*')")
-    public List<SysMenu> listMenus(){
+    public AjaxResult<List<SysMenu>> listMenus(){
         List<SysMenu> menus = menuService.listMenus();
         List<SysMenu> menuTree = menuService.buildMenuTree(menus);
-        return menuTree;
+        if(menuTree != null){
+            return AjaxResult.success("success", menuTree);
+        }
+        return AjaxResult.error(HttpStatus.NO_CONTENT.value(), "error" , null);
     }
 
     @Operation(description = "获取所有菜单项")
     @GetMapping("/listall")
     @PreAuthorize("hasAuthority('system:menu:list') or hasAuthority('*:*:*')")
-    public List<SysMenu> listAllMenus(){
+    public AjaxResult<List<SysMenu>> listAllMenus(){
         List<SysMenu> menus = menuService.listAllMenus();
         List<SysMenu> menuTree = menuService.buildMenuTree(menus);
-        return menuTree;
+        if(menuTree != null){
+            return AjaxResult.success("success", menuTree);
+        }
+        return AjaxResult.error(HttpStatus.NO_CONTENT.value(), "error" , null);
     }
 
 

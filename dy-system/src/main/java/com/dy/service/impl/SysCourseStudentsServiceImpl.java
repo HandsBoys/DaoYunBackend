@@ -6,8 +6,12 @@ import com.dy.common.utils.SecurityUtils;
 import com.dy.domain.SysCourse;
 import com.dy.domain.SysCourseStudents;
 import com.dy.dto.client.CourseDto;
+import com.dy.dto.system.student.SysStudentDto;
 import com.dy.mapper.SysClassMapper;
+import com.dy.mapper.SysCourseDeptMapper;
 import com.dy.mapper.SysCourseStudentsMapper;
+import com.dy.service.SysCourseDeptService;
+import com.dy.service.SysCourseService;
 import com.dy.service.SysCourseStudentsService;
 import com.dy.service.SysUserService;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +35,15 @@ implements SysCourseStudentsService {
     @Autowired
     private SysUserService userService;
 
+    @Autowired
+    private SysCourseDeptMapper courseDeptMapper;
+
+    @Autowired
+    private SysCourseDeptService courseDeptService;
+
+    @Autowired
+    private SysCourseService courseService;
+
     @Override
     public int joinCourse(Long courseId) {
         SysCourseStudents courseStudents = new SysCourseStudents();
@@ -48,22 +61,6 @@ implements SysCourseStudentsService {
         return baseMapper.delete(param);
     }
 
-    @Override
-    public List<CourseDto> listJoinedCourse() {
-        Long studentId = SecurityUtils.getLoginUser().getUser().getId();
-        List<SysCourse> list = baseMapper.getCoursesByStudentId(studentId);
-        System.out.println(list);
-        List<CourseDto> ret = new ArrayList<>();
-        for(SysCourse c:list){
-            CourseDto courseDto = new CourseDto();
-            BeanUtils.copyProperties(c,courseDto);
-            // 设置教师名字
-            courseDto.setTeacherName(userService.getNickNameById(courseDto.getTeacherId()));
-            courseDto.setClassDto(classMapper.getClassById(c.getClassId()));
-            ret.add(courseDto);
-        }
-        return ret;
-    }
 
     @Override
     public SysCourseStudents getRecord(Long courseId, Long studentId) {
@@ -71,6 +68,27 @@ implements SysCourseStudentsService {
                 .eq("course_id",courseId)
                 .eq("student_id",studentId);
         return baseMapper.selectOne(param);
+    }
+
+    @Override
+    public List<SysStudentDto> getStudents(Long courseId) {
+        return baseMapper.getStudents(courseId);
+    }
+
+    @Override
+    public int addStudent(Long courseId, Long studentId) {
+        try{
+            baseMapper.insert(new SysCourseStudents(courseId,studentId));
+            return 1;
+        }catch (Exception e){
+            System.out.println(e);
+            return 0;
+        }
+    }
+
+    @Override
+    public int updateScore(Long courseId, Long studentId, Long score) {
+        return baseMapper.updateScore(courseId, studentId, score);
     }
 }
 

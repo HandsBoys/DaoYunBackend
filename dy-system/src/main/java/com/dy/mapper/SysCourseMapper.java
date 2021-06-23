@@ -17,6 +17,20 @@ public interface SysCourseMapper extends BaseMapper<SysCourse> {
 
     List<SysCourse> listCreatedCourse(Long teacherId);
 
+    List<SysCourse> listCourseAll();
+
+    /**
+     * 获取指定课程的班级id
+     * @param courseId
+     * @return 班级id
+     */
+    Long getClassId(Long courseId);
+
+    /**
+     * 获取新增记录的id
+     * @return 最后一条记录的id
+     */
+    Long getLastId();
 }
 
 

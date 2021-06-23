@@ -129,6 +129,17 @@ implements SysUserService{
         return true;
     }
 
+    @Override
+    public boolean checkUserNameUnique(Long userId, String username) {
+        QueryWrapper param = new QueryWrapper();
+        param.eq("user_name",username);
+        param.ne("id", userId);
+        if(baseMapper.selectCount(param) > 0){
+            return false;
+        }
+        return true;
+    }
+
     /**
      * 删除用户
      *
@@ -246,6 +257,13 @@ implements SysUserService{
         return baseMapper.selectOne(param).getNickName();
     }
 
+    @Override
+    public SysUser getUserInfo(Long id) {
+        QueryWrapper param = new QueryWrapper<>()
+                .eq("id", id);
+        return baseMapper.selectOne(param);
+    }
+
     private void addRoles(Long userId,List<SysRoleDto> roleList){
         List<SysUserRole> urs = new ArrayList<>();
         for(SysRoleDto roleDto:roleList){
@@ -256,13 +274,13 @@ implements SysUserService{
     }
 
     private void addUserDepts(Long userId,SysUserDto userDto){
-        if(userDto.getUniversity() != null){
+        if(userDto.getUniversity() != null && userDto.getUniversity().getId() != null){
             addUserDept(userId,userDto.getUniversity().getId());
         }
-        if(userDto.getCollege() != null){
+        if(userDto.getCollege() != null && userDto.getCollege().getId() != null){
             addUserDept(userId,userDto.getCollege().getId());
         }
-        if(userDto.getSubject() != null){
+        if(userDto.getSubject() != null && userDto.getSubject().getId() != null){
             addUserDept(userId,userDto.getSubject().getId());
         }
     }

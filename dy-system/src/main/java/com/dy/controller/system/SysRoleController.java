@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +29,12 @@ public class SysRoleController extends BaseController {
     @Operation
     @GetMapping
     @PreAuthorize("hasAuthority('system:role:list') or hasAuthority('*:*:*')")
-    public List<SysRoleDto> listRolesAll(){
+    public AjaxResult<List<SysRoleDto>> listRolesAll(){
         List<SysRoleDto> list = roleService.listRolesAll();
-        return list;
+        if(list != null){
+            return  AjaxResult.success("success", list);
+        }
+        return AjaxResult.error(HttpStatus.NO_CONTENT.value(), "error", null);
     }
 
     @Operation(summary = "修改角色信息")

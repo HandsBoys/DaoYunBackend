@@ -43,6 +43,14 @@ public interface SysUserService extends IService<SysUser> {
     boolean checkUserNameUnique(String username);
 
     /**
+     * 除去指定用户，校验用户名是否唯一
+     * @param userId
+     * @param username
+     * @return
+     */
+    boolean checkUserNameUnique(Long userId, String username);
+
+    /**
      * 删除用户
      * @param userIds
      */
@@ -74,4 +82,11 @@ public interface SysUserService extends IService<SysUser> {
     int addUser(SysUserDto userDto);
 
     String getNickNameById(Long teacherId);
+
+    /**
+     * 根据用户id获取用户信息
+     * @param id
+     * @return 用户信息对象
+     */
+    SysUser getUserInfo(Long id);
 }
