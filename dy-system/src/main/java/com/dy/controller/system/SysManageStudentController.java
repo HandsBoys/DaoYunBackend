@@ -3,6 +3,7 @@ package com.dy.controller.system;
 import com.dy.common.utils.AjaxResult;
 import com.dy.controller.BaseController;
 import com.dy.dto.system.student.SysStudentDto;
+import com.dy.service.SysCourseService;
 import com.dy.service.SysCourseStudentsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,12 +18,15 @@ import java.util.List;
 /**
  * @author cxj
  */
-@Tag(name = "Sys-Manage-Student-Controller", description = "管理班课中的学生")
+@Tag(name = "sys-manage-student-controller", description = "管理班课中的学生")
 @RestController
 @RequestMapping("system/course/student")
 public class SysManageStudentController extends BaseController {
     @Autowired
     private SysCourseStudentsService courseStudentsService;
+
+    @Autowired
+    private SysCourseService courseService;
 
     @Operation(summary = "获取某班课中的所有学生信息")
     @GetMapping
@@ -39,14 +43,20 @@ public class SysManageStudentController extends BaseController {
     @PutMapping
     @PreAuthorize("hasAuthority('system:course:edit') or hasAuthority('*:*:*')")
     public AjaxResult addStudent(Long courseId, Long studentId){
+        if(!courseService.enableJoinCourse(courseId)){
+            return AjaxResult.error("该班课禁止学生加入");
+        }
+        if(courseStudentsService.checkStudentIsInCourse(courseId, studentId)){
+            return AjaxResult.error( "学生已经加入班课");
+        }
         return toAjax(courseStudentsService.addStudent(courseId,studentId));
     }
 
     @Operation(summary = "将学生退出班课")
-    @DeleteMapping
+    @DeleteMapping("/{courseId}/{studentIds}")
     @PreAuthorize("hasAuthority('system:course:edit') or hasAuthority('*:*:*')")
-    public AjaxResult removeStudent(Long courseId, Long studentId){
-        return toAjax(courseStudentsService.quitCourse(courseId,studentId));
+    public AjaxResult removeStudents(@PathVariable Long courseId, @PathVariable Long[] studentIds){
+        return toAjax(courseStudentsService.removeStudents(courseId,studentIds));
     }
 
     @Operation(summary = "修改学生成绩分数")

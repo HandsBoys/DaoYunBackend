@@ -3,6 +3,7 @@ package com.dy.mapper;
 import com.dy.domain.SysCourse;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dy.dto.client.CourseDto;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,11 +27,7 @@ public interface SysCourseMapper extends BaseMapper<SysCourse> {
      */
     Long getClassId(Long courseId);
 
-    /**
-     * 获取新增记录的id
-     * @return 最后一条记录的id
-     */
-    Long getLastId();
+    boolean enableJoinCourse(@Param("courseId") Long courseId);
 }
 
 

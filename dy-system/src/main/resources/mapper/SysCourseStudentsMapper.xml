@@ -28,6 +28,12 @@
         set score=#{score}
         where course_id = #{courseId} and student_id = #{studentId}
     </update>
+    <delete id="removeStudents">
+        delete from sys_course_students where course_id = #{courseId} and student_id in
+        <foreach collection="studentIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
     <select id="getCoursesByStudentId" resultType="com.dy.domain.SysCourse">
         select distinct
             c.id,c.course_name,c.term,
@@ -41,5 +47,11 @@
 
     <select id="getStudents" resultType="com.dy.dto.system.student.SysStudentDto">
         <include refid="SysStudentDto"/> where cs.course_id = #{courseId}
+    </select>
+    <select id="getStudentIds" resultType="java.lang.Long">
+        select distinct student_id from sys_course_students where course_id = #{courseId}
+    </select>
+    <select id="getScore" resultType="java.lang.Long">
+        select distinct score from sys_course_students where course_id = #{courseId} and student_id = #{studentId}
     </select>
 </mapper>

@@ -60,6 +60,11 @@ public class LoginUser implements UserDetails {
      */
     private SysUser user;
 
+    /**
+     * 用户角色信息
+     */
+    private List<String> roles;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorityList =

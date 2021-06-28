@@ -4,12 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dy.common.exception.CustomException;
 import com.dy.common.utils.SecurityUtils;
+import com.dy.dto.client.ClientRoleDto;
 import com.dy.domain.SysRole;
 import com.dy.domain.SysRoleMenu;
 import com.dy.dto.system.SysRoleDto;
 import com.dy.manager.service.SysRoleMenuManager;
 import com.dy.mapper.SysRoleMenuMapper;
-import com.dy.mapper.SysUserMapper;
 import com.dy.service.SysRoleService;
 import com.dy.mapper.SysRoleMapper;
 import com.dy.manager.service.SysUserRoleManager;
@@ -32,8 +32,6 @@ implements SysRoleService{
     @Autowired
     private SysUserRoleManager userRoleManager;
 
-    @Autowired
-    private SysUserMapper userMapper;
 
     @Autowired
     private SysRoleMenuMapper roleMenuMapper;
@@ -41,7 +39,6 @@ implements SysRoleService{
     @Autowired
     private SysRoleMenuManager roleMenuManager;
 
-//TODO
     @Override
     public List<SysRoleDto> listRolesAll() {
         try {
@@ -141,6 +138,30 @@ implements SysRoleService{
             ret.add(getRoleById(id));
         }
         return ret;
+    }
+
+    @Override
+    public List<ClientRoleDto> listTeacherAndStudentRoles() {
+        try {
+            List<ClientRoleDto> ret = new ArrayList<ClientRoleDto>();
+            QueryWrapper param = new QueryWrapper<>()
+                    .isNotNull("id")
+                    .and(i->i.eq("role_key","ROLE_teacher")
+                            .or()
+                            .eq("role_key","ROLE_student"));
+            List<SysRole> roleList = baseMapper.selectList(param);
+            for(SysRole role : roleList){
+                Long[] menus = roleMenuManager.getMenuIdsByRoleId(role.getId());
+                ClientRoleDto roleDto = new ClientRoleDto();
+                BeanUtils.copyProperties(role,roleDto);
+                ret.add(roleDto);
+            }
+            return ret;
+        }
+        catch (Exception e){
+            System.out.println(e);
+            return null;
+        }
     }
 
     private boolean isUnique(SysRoleDto roleDto){

@@ -31,7 +31,7 @@ public class SysRoleController extends BaseController {
     @PreAuthorize("hasAuthority('system:role:list') or hasAuthority('*:*:*')")
     public AjaxResult<List<SysRoleDto>> listRolesAll(){
         List<SysRoleDto> list = roleService.listRolesAll();
-        if(list != null){
+        if(list != null && list.size() != 0){
             return  AjaxResult.success("success", list);
         }
         return AjaxResult.error(HttpStatus.NO_CONTENT.value(), "error", null);

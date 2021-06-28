@@ -41,11 +41,10 @@ public class SysCourseStudents implements Serializable {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
-    public SysCourseStudents(Long courseId, Long studentId){
+    public SysCourseStudents(Long courseId, Long studentId) {
         this.courseId = courseId;
         this.studentId = studentId;
         this.score = 0L;
     }
-
     public SysCourseStudents(){}
 }

@@ -76,6 +76,11 @@ implements SysCourseStudentsService {
     }
 
     @Override
+    public int removeStudents(Long courseId, Long[] studentIds) {
+        return baseMapper.removeStudents(courseId, studentIds);
+    }
+
+    @Override
     public int addStudent(Long courseId, Long studentId) {
         try{
             baseMapper.insert(new SysCourseStudents(courseId,studentId));
@@ -90,6 +95,40 @@ implements SysCourseStudentsService {
     public int updateScore(Long courseId, Long studentId, Long score) {
         return baseMapper.updateScore(courseId, studentId, score);
     }
+
+    @Override
+    public List<Long> getStudentIds(Long courseId) {
+        return baseMapper.getStudentIds(courseId);
+    }
+
+    @Override
+    public boolean checkStudentIsInCourse(Long courseId, Long studentId) {
+        QueryWrapper param = new QueryWrapper<>()
+                .eq("course_id",courseId)
+                .eq("student_id",studentId);
+        if(baseMapper.selectOne(param) != null){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int addScore(Long courseId, Long studentId, Long score) {
+        Long currentScore = baseMapper.getScore(courseId,studentId);
+        return baseMapper.updateScore(courseId, studentId, currentScore + score);
+    }
+
+    @Override
+    public int reduceScore(Long courseId, Long studentId, Long score) {
+        Long currentScore = baseMapper.getScore(courseId, studentId);
+        return baseMapper.updateScore(courseId, studentId, currentScore - score);
+    }
+
+    @Override
+    public Long getScore(Long courseId, Long studentId) {
+        return baseMapper.getScore(courseId, studentId);
+    }
+
 }
 
 

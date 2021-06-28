@@ -58,4 +58,48 @@ public interface SysCourseStudentsService extends IService<SysCourseStudents> {
      * @return
      */
     int updateScore(Long courseId, Long studentId, Long score);
+
+    /**
+     * 将学生批量退出班课
+     * @param courseId
+     * @param studentIds
+     * @return
+     */
+    int removeStudents(Long courseId, Long[] studentIds);
+
+    List<Long> getStudentIds(Long courseId);
+
+    /**
+     * 判断学生是否加入班课
+     * @param courseId
+     * @param studentId
+     * @return true:学生已经加入班课;false:学生未加入班课
+     */
+    boolean checkStudentIsInCourse(Long courseId, Long studentId);
+
+    /**
+     * 给学生加分
+     * @param courseId 课程id
+     * @param studentId 学生id
+     * @param score 增加的分数
+     * @return 是否成功
+     */
+    int addScore(Long courseId, Long studentId, Long score);
+
+    /**
+     * 给学生减分
+     * @param courseId 课程id
+     * @param studentId 学生id
+     * @param score 分数
+     * @return 是否成功
+     */
+    int reduceScore(Long courseId, Long studentId, Long score);
+
+    /**
+     * 获取学生的分数
+     * @param courseId 课程id
+     * @param studentId 学生id
+     * @return 学生分数
+     */
+    Long getScore(Long courseId, Long studentId);
 }

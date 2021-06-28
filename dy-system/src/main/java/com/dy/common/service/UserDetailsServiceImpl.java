@@ -2,6 +2,7 @@ package com.dy.common.service;
 
 import com.dy.domain.SysUser;
 import com.dy.dto.login.LoginUser;
+import com.dy.service.SysRoleService;
 import com.dy.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,6 +29,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUser user = userService.getUserByUserName(username);
+        if(user == null){
+            user = userService.getUserByPhone(username);
+        }
         // TODO:对用户的异常情况进行处理
         return createLoginUser(user);
     }
@@ -35,6 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserDetails createLoginUser(SysUser user){
         LoginUser loginUser = new LoginUser();
         loginUser.setUser(user);
+        loginUser.setRoles(userService.getRoleKeys(user.getId()));
         Set<String> permissions = permissionService.getMenuPermission(user);
         loginUser.setPermissions(permissions);
         return loginUser;

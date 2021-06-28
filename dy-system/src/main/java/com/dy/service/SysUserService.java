@@ -2,6 +2,7 @@ package com.dy.service;
 
 import com.dy.domain.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.dy.dto.client.ClientUserDto;
 import com.dy.dto.system.user.SysUserDto;
 
 import java.util.List;
@@ -39,6 +40,8 @@ public interface SysUserService extends IService<SysUser> {
     boolean checkEmailUnique(String email);
 
     void updateUser(SysUserDto userDto);
+
+    int updateUser(ClientUserDto userDto);
 
     boolean checkUserNameUnique(String username);
 
@@ -89,4 +92,11 @@ public interface SysUserService extends IService<SysUser> {
      * @return 用户信息对象
      */
     SysUser getUserInfo(Long id);
+
+    /**
+     * 获取用户的角色列表
+     * @param userId
+     * @return
+     */
+    List<String> getRoleKeys(Long userId);
 }

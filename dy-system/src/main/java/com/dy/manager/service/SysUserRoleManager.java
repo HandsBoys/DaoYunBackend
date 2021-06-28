@@ -21,4 +21,6 @@ public interface SysUserRoleManager extends IService<SysUserRole> {
     int deleteAllByUserId(Long userId);
 
     void insertBatch(List<SysUserRole> list);
+
+    void deleteTeacherAndStudentByUserId(Long userId);
 }

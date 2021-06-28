@@ -8,6 +8,7 @@ import com.dy.common.utils.StringUtils;
 import com.dy.domain.SysUser;
 import com.dy.domain.SysUserDept;
 import com.dy.domain.SysUserRole;
+import com.dy.dto.client.ClientUserDto;
 import com.dy.dto.system.SysRoleDto;
 import com.dy.dto.system.user.SysUserDto;
 import com.dy.manager.service.SysUserDeptManager;
@@ -117,6 +118,36 @@ implements SysUserService{
             System.out.println(e);
         }
 
+    }
+
+    @Override
+    public int updateUser(ClientUserDto userDto){
+        Long userId = userDto.getId();
+        SysUser user = new SysUser();
+        BeanUtils.copyProperties(userDto,user);
+        user.setLastUpdateBy(SecurityUtils.getLoginUser().getUser().getId());
+        user.setLastUpdateTime(new Date());
+        user.setStatus(false);
+        user.setDelFlag("0");
+        try{
+            if(baseMapper.updateById(user) == 0){
+                return 0;
+            }
+        }catch (Exception e){
+            System.out.println(e);
+            return 0;
+        }
+
+        try {
+            //删除userDto的除管理员外的角色关联
+            userRoleManager.deleteTeacherAndStudentByUserId(userId);
+            //更改关联的角色
+            addRoles(userId,userDto.getRoles());
+        }catch (Exception e){
+            System.out.println(e);
+            return 0;
+        }
+        return 1;
     }
 
     @Override
@@ -264,6 +295,11 @@ implements SysUserService{
         return baseMapper.selectOne(param);
     }
 
+    @Override
+    public List<String> getRoleKeys(Long userId) {
+        return baseMapper.getRoleKeys(userId);
+    }
+
     private void addRoles(Long userId,List<SysRoleDto> roleList){
         List<SysUserRole> urs = new ArrayList<>();
         for(SysRoleDto roleDto:roleList){
@@ -271,6 +307,18 @@ implements SysUserService{
             urs.add(new SysUserRole(userId, roleId));
         }
         userRoleManager.insertBatch(urs);
+    }
+
+    private void addRoles(Long userId,Long[] roleList) throws Exception{
+        List<SysUserRole> urs = new ArrayList<>();
+        for(Long roleId:roleList){
+            urs.add(new SysUserRole(userId, roleId));
+        }
+        try {
+            userRoleManager.insertBatch(urs);
+        }catch (Exception e){
+            throw new Exception("新建角色关联失败",e);
+        }
     }
 
     private void addUserDepts(Long userId,SysUserDto userDto){

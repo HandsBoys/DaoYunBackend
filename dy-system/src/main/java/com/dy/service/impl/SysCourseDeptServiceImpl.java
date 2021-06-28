@@ -23,8 +23,8 @@ implements SysCourseDeptService{
 
     @Override
     public String getDeptName(Long courseId) {
-        String ret = null;
-        String temp = null;
+        String ret = "";
+        String temp = "";
         temp = courseDeptMapper.getdeptNameByCourseId(courseId, SysConfigConstants.UNIVERSITY);
         if(StringUtils.isNotEmpty(temp)){ ret += temp; }
         temp = courseDeptMapper.getdeptNameByCourseId(courseId, SysConfigConstants.COLLEGE);

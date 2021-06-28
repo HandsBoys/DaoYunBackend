@@ -21,11 +21,6 @@ implements SysClassService{
     }
 
     @Override
-    public Long getLastId() {
-        return baseMapper.getLastId();
-    }
-
-    @Override
     public SysClass getClassInfo(Long classId) {
         QueryWrapper param = new QueryWrapper<>()
                 .eq("id",classId);

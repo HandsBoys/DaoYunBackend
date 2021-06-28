@@ -1,9 +1,5 @@
 package com.dy.common.utils;
 
-import com.dy.common.constant.GlobalConstants;
-import com.dy.common.constant.UserConstants;
-import com.dy.common.redis.RedisCacheUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;

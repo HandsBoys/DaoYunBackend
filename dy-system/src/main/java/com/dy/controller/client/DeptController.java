@@ -5,6 +5,7 @@ import com.dy.controller.BaseController;
 import com.dy.dto.client.DeptDto;
 import com.dy.service.SysDeptService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +17,7 @@ import java.util.List;
 /**
  * @author cxj
  */
+@Tag(name = "client-dept-controller",description = "移动端机构接口")
 @RestController
 @RequestMapping("/client/dept")
 public class DeptController extends BaseController {
@@ -29,7 +31,7 @@ public class DeptController extends BaseController {
         AjaxResult<List> ret = new AjaxResult<>();
         List<DeptDto> deptDtos = deptService.listDeptAll();
         List<DeptDto> deptTree = deptService.buildDeptTree(deptDtos);
-        if(deptTree != null){
+        if(deptTree != null && deptTree.size() != 0){
             ret.setCode(HttpStatus.OK.value());
             ret.setMsg("获取成功！");
         }
@@ -45,6 +47,7 @@ public class DeptController extends BaseController {
     @PutMapping
     @PreAuthorize("hasAuthority('system:dept:add') or hasAuthority('*:*:*')")
     public AjaxResult addDept(@Validated @RequestBody DeptDto dept){
+        dept.setChildren(null);
         return toAjax(deptService.addDept(dept));
     }
 }

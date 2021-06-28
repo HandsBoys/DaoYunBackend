@@ -9,6 +9,7 @@ import com.dy.service.SysCourseStudentsService;
 import com.google.code.kaptcha.impl.FishEyeGimpy;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +21,7 @@ import java.util.List;
 /**
  * @author cxj
  */
+@Tag(name = "client-course-controller",description = "移动端班课接口")
 @RestController
 @RequestMapping("/client/course")
 public class CourseController extends BaseController {
@@ -47,6 +49,9 @@ public class CourseController extends BaseController {
     @PutMapping("/join-course")
     @PreAuthorize("hasAuthority('system:course:join') or hasAuthority('*:*:*')")
     public AjaxResult joinCourse(Long courseId){
+        if(!courseService.enableJoinCourse(courseId)){
+            return AjaxResult.error("该班课禁止学生加入");
+        }
         if(courseService.getCourseById(courseId) == null){
             return AjaxResult.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "班课不存在",null);
         }
@@ -68,11 +73,14 @@ public class CourseController extends BaseController {
     @Operation(summary = "根据账户获取我创建的班课")
     @GetMapping("/created-course")
     @PreAuthorize("hasAuthority('system:course:list') or hasAuthority('*:*:*')")
-    public AjaxResult listCreatedCourse(){
+    public AjaxResult<List<CourseDto>> listCreatedCourse(){
         List<CourseDto> list = courseService.listCreatedCourse();
-        AjaxResult<List> ret = new AjaxResult<>();
-        ret.setData(list);
-        return ret;
+        if(list != null && list.size() != 0){
+            return AjaxResult.success("success",list);
+        }
+        else {
+            return AjaxResult.error(HttpStatus.NO_CONTENT.value(),"该账户没有创建的班课");
+        }
     }
 
     @Operation(summary = "根据账户获取我加入的班课")
@@ -82,12 +90,12 @@ public class CourseController extends BaseController {
         List<CourseDto> list = courseService.listJoinedCourse();
         AjaxResult<List> ret = new AjaxResult<>();
         ret.setData(list);
-        if(list != null){
+        if(list != null && list.size() != 0){
             ret.setMsg("班课获取成功！");
             ret.setCode(HttpStatus.OK.value());
         }
         else {
-            ret.setMsg("班课获取失败！");
+            ret.setMsg("该账户未加入任何班课");
             ret.setCode(HttpStatus.NO_CONTENT.value());
         }
         return ret;
@@ -105,7 +113,7 @@ public class CourseController extends BaseController {
             ret.setCode(HttpStatus.OK.value());
         }
         else {
-            ret.setMsg("班课获取失败！");
+            ret.setMsg("班课不存在");
             ret.setCode(HttpStatus.NO_CONTENT.value());
         }
         return ret;

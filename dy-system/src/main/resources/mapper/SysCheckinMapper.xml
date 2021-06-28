@@ -21,8 +21,31 @@
         teacher_id,lng,lat,
         start_time,end_time,is_finish
     </sql>
-    <select id="getActiveCheckin" resultType="com.dy.domain.SysCheckin">
-        <include refid="Base_Column_List"/>
-        where course_id = #{courseId}
+    <sql id="Checkin_Task_Dto">
+        id,type,course_id,lng,lat,start_time,end_time,is_finish
+    </sql>
+    <update id="setFinish">
+        update sys_checkin set is_finish = 1 where id = #{id}
+    </update>
+    <update id="setEndTime">
+        update sys_checkin set end_time = #{endTime} where id = #{id}
+    </update>
+    <select id="getActiveCheckin" resultType="com.dy.dto.client.CheckinTaskDto">
+        select distinct <include refid="Checkin_Task_Dto"/>
+        from sys_checkin  where course_id = #{courseId} and is_finish = 0
     </select>
+    <select id="isActive" resultType="java.lang.Boolean">
+        select id from sys_checkin where id = #{id} and is_finish = 0
+    </select>
+    <select id="getAllCheckinTask" resultType="com.dy.dto.client.CheckinTaskDto">
+        select distinct <include refid="Checkin_Task_Dto"/>
+        from sys_checkin  where course_id = #{courseId}
+    </select>
+    <select id="getStudentCheckinRecordsOfCourse" resultType="com.dy.dto.client.CheckinStudentTaskDto">
+        select distinct t.id,t.type,t.course_id,t.start_time,r.is_finish
+        from sys_checkin t
+        left join sys_checkin_student r on t.id = r.checkin_id where t.course_id = #{courseId}
+    </select>
+
+
 </mapper>

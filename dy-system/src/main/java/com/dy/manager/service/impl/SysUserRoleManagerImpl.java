@@ -79,6 +79,11 @@ implements SysUserRoleManager {
             System.out.println(e);
         }
     }
+
+    @Override
+    public void deleteTeacherAndStudentByUserId(Long userId) {
+        baseMapper.deleteTeacherAndStudentByUserId(userId);
+    }
 }
 
 

@@ -94,8 +94,6 @@ public class SysCourseServiceImpl extends ServiceImpl<SysCourseMapper, SysCourse
         for(SysCourse c:list){
             CourseDto courseDto = new CourseDto();
             copySysCourseToCourseDto(c,courseDto);
-
-
             ret.add(courseDto);
         }
         return ret;
@@ -117,25 +115,55 @@ public class SysCourseServiceImpl extends ServiceImpl<SysCourseMapper, SysCourse
     @Override
     public int insertCourse(SysCourseDto courseDto) {
         SysCourse course = new SysCourse();
-        BeanUtils.copyProperties(courseDto, course);
-        // 设置默认的教师
-        Long userId = SecurityUtils.getLoginUser().getUser().getId();
-        course.setTeacherId(userId);
-        course.setCreateBy(userId);
-        course.setCreateTime(new Date());
-
-        // 新增班级信息
-        if (courseDto.getClassDto() != null) {
-            SysClass sysClass = new SysClass();
-            BeanUtils.copyProperties(courseDto.getClassDto(), sysClass);
-            classService.insertClass(sysClass);
+        try{
+            BeanUtils.copyProperties(courseDto, course);
+            // 设置默认的教师
+            Long userId = SecurityUtils.getLoginUser().getUser().getId();
+            course.setTeacherId(userId);
+            course.setCreateBy(userId);
+            course.setCreateTime(new Date());
+        }catch (Exception e){
+            System.out.println(e);
+            return 0;
         }
-        // 设置课程与班级关联
-        course.setClassId(classService.getLastId());
-        // 设置课程与机构关联
-        setDeptIds(courseDto);
-
-        return baseMapper.insert(course);
+        SysClass sysClass = new SysClass();
+        try {
+            // 新增班级信息
+            if (courseDto.getClassDto() != null) {
+                BeanUtils.copyProperties(courseDto.getClassDto(), sysClass);
+                classService.insertClass(sysClass);
+            }
+        }catch (Exception e){
+            System.out.println(e);
+            System.out.println("创建班级失败！");
+        }
+        Long sysClassId = sysClass.getId();
+        try {
+            // 设置课程与班级关联
+            course.setClassId(sysClassId);
+        }catch (Exception e){
+            System.out.println(e);
+            classMapper.deleteById(sysClassId);
+        }
+        try{
+            // 新建班课
+            baseMapper.insert(course);
+        }catch (Exception e){
+            System.out.println(e);
+            return 0;
+        }
+        Long courseId = course.getId();
+        try{
+            // 设置课程与机构关联
+            setDeptIds(courseId, courseDto);
+        }catch (Exception e){
+            baseMapper.deleteById(courseId);
+            classMapper.deleteById(sysClassId);
+            System.out.println(e);
+            System.out.println("班课设置机构关联失败");
+            return 0;
+        }
+        return 1;
     }
 
     @Override
@@ -148,30 +176,51 @@ public class SysCourseServiceImpl extends ServiceImpl<SysCourseMapper, SysCourse
         //设创建者和时间
         sysClass.setCreateBy(SecurityUtils.getLoginUser().getUser().getId());
         sysClass.setCreateTime(new Date());
-        if (classService.insertClass(sysClass) > 0) {
+        try {
+            classService.insertClass(sysClass);
+        }catch (Exception e){
+            System.out.println(e);
+            System.out.println("班级新增失败");
+            return 0;
+        }
+        Long classId = sysClass.getId();
+        SysCourse sysCourse = new SysCourse();
+        try{
             // 设置课程
-            Long ClassId = classService.getLastId();
-            SysCourse sysCourse = new SysCourse();
             BeanUtils.copyProperties(course, sysCourse);
-            sysCourse.setClassId(ClassId);
+            sysCourse.setClassId(classId);
             sysCourse.setEnableJoin(false);
             sysCourse.setTeacherId(SecurityUtils.getLoginUser().getUser().getId());
             // 设创建者和时间
             sysCourse.setCreateBy(SecurityUtils.getLoginUser().getUser().getId());
             sysCourse.setCreateTime(new Date());
             // 设置状态
-            sysCourse.setEnableJoin(false);
+            sysCourse.setEnableJoin(true);
             sysCourse.setFinish(false);
             // 新增班课
             baseMapper.insert(sysCourse);
+        }catch (Exception e) {
+            classMapper.deleteById(classId);
+            System.out.println(e);
+            System.out.println("课程新增失败");
+            return 0;
+        }
+        Long courseId = sysCourse.getId();
+        try{
             // 设置班课和机构关联
-            Long courseId = baseMapper.getLastId();
             for(Long id:course.getDeptIds()){
                 courseDeptMapper.insert(new SysCourseDept(courseId, id));
             }
-
+        }catch (Exception e){
+            classMapper.deleteById(classId);
+            for(Long id:course.getDeptIds()){
+                baseMapper.deleteById(courseId);
+            }
+            System.out.println(e);
+            System.out.println("新建班课,关联机构失败");
+            return  0;
         }
-        return 0;
+        return 1;
     }
 
     @Override
@@ -187,6 +236,12 @@ public class SysCourseServiceImpl extends ServiceImpl<SysCourseMapper, SysCourse
             BeanUtils.copyProperties(courseDto.getClassDto(), sysClass);
             classService.updateById(sysClass);
         }
+
+        // 删除班课与机构的关联
+        courseDeptMapper.deleteByCourseId(courseDto.getId());
+        // 新增班课机构关联
+        Long courseId = courseDto.getId();
+        setDeptIds(courseId, courseDto);
 
         return baseMapper.updateById(course);
     }
@@ -209,14 +264,20 @@ public class SysCourseServiceImpl extends ServiceImpl<SysCourseMapper, SysCourse
 
     @Override
     public int deleteCoursesByIds(Long[] courseIds) {
-        int ret = baseMapper.deleteCourseByIds(courseIds);
-        // 删除班级
-        for (Long courseId : courseIds) {
-            classService.deleteById(baseMapper.getClassId(courseId));
+        try{
+            // 删除班级
+            for (Long courseId : courseIds) {
+                classService.deleteById(baseMapper.getClassId(courseId));
+            }
+            baseMapper.deleteCourseByIds(courseIds);
+            // 删除机构关联
+            courseDeptMapper.deleteByCourseIds(courseIds);
+            return 1;
+        }catch (Exception e){
+            System.out.println(e);
+            return  0;
         }
-        // 删除机构关联
-        courseDeptMapper.deleteByCourseId(courseIds);
-        return ret;
+
     }
 
     @Override
@@ -282,8 +343,7 @@ public class SysCourseServiceImpl extends ServiceImpl<SysCourseMapper, SysCourse
     }
 
     // 设置班课与机构关联
-    private void setDeptIds(SysCourseDto courseDto) {
-        Long courseId = courseDto.getId();
+    private void setDeptIds(Long courseId, SysCourseDto courseDto) {
         if(courseDto.getUniversityId() != null){
             courseDeptMapper.insert(new SysCourseDept(courseId, courseDto.getUniversityId()));
         }
@@ -306,6 +366,11 @@ public class SysCourseServiceImpl extends ServiceImpl<SysCourseMapper, SysCourse
         courseDto.setCollegeId(getDeptId(courseDto.getId(), SysConfigConstants.COLLEGE));
         courseDto.setSubjectId(getDeptId(courseDto.getId(), SysConfigConstants.SUBJECT));
         return courseDto;
+    }
+
+    @Override
+    public boolean enableJoinCourse(Long courseId) {
+        return baseMapper.enableJoinCourse(courseId);
     }
 }
 

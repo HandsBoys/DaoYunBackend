@@ -50,4 +50,6 @@ public interface SysCourseService extends IService<SysCourse> {
     boolean setCourseFinish(Long id, Boolean finish);
 
     List<SysCourseDto> listCourses();
+
+    boolean enableJoinCourse(Long courseId);
 }

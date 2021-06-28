@@ -11,10 +11,34 @@
             <result property="lng" column="lng" jdbcType="DOUBLE"/>
             <result property="lat" column="lat" jdbcType="DOUBLE"/>
             <result property="checkinTime" column="checkin_time" jdbcType="TIMESTAMP"/>
+            <result property="isFinish" column="is_finish" jdbcType="BOOLEAN"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,checkin_id,student_id,
-        lng,lat,checkin_time
+        lng,lat,checkin_time,
+        is_finish
     </sql>
+    <insert id="insertRecord" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into sys_checkin_student (id, checkin_id, student_id, lng, lat, checkin_time, is_finish)
+        values (#{id},#{checkinId},#{studentId},#{lng},#{lat},#{checkinTime},#{isFinish})
+    </insert>
+    <insert id="initRecords">
+        insert into sys_checkin_student(id,checkin_id, student_id, lng, lat, checkin_time, is_finish) values
+        <foreach collection="studentIds" item="studentId" separator="," >
+            (0,#{checkinId},#{studentId},null,null,null,0)
+        </foreach>
+    </insert>
+    <update id="setFinishCheckin">
+        update sys_checkin_student set is_finish = 1
+        where checkin_id = #{checkinId} and student_id =  #{studentId}
+    </update>
+    <update id="setUnfinishCheckin">
+        update sys_checkin_student set is_finish = 0
+        where checkin_id = #{checkinId} and student_id = #{studentId}
+    </update>
+    <select id="getInfo" resultType="com.dy.domain.SysCheckinStudent">
+        select distinct <include refid="Base_Column_List"/> from sys_checkin_student where checkin_id = #{checkinId}
+    </select>
+
 </mapper>

@@ -41,7 +41,7 @@
     <select id="getClassId" resultType="java.lang.Long">
         select class_id from sys_course where id = #{userId}
     </select>
-    <select id="getLastId" resultType="java.lang.Long">
-        select id from sys_course order by id DESC limit 1
+    <select id="enableJoinCourse" resultType="java.lang.Boolean">
+        select distinct enable_join from sys_course where id = #{courseId}
     </select>
 </mapper>

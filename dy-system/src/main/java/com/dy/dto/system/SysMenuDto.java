@@ -45,7 +45,7 @@ public class SysMenuDto {
     /**
      * 菜单状态（0显示 1隐藏）
      */
-    private String visible;
+    private Boolean visible;
 
     /**
      * 菜单状态（0正常 1停用）

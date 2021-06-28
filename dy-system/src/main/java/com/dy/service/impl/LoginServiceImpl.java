@@ -58,6 +58,10 @@ public class LoginServiceImpl implements LoginService {
             return AjaxResult.error(msg);
         }
 
+        if(userService.getUserByUserName(username) == null && userService.getUserByPhone(username) == null) {
+            return AjaxResult.error("用户不存在");
+        }
+
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         if (userDetails == null || !passwordEncoder.matches(password,userDetails.getPassword())){
             return AjaxResult.error("用户名或密码不正确");

@@ -1,5 +1,6 @@
 package com.dy.service;
 
+import com.dy.dto.client.ClientRoleDto;
 import com.dy.domain.SysRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dy.dto.system.SysRoleDto;
@@ -37,4 +38,6 @@ public interface SysRoleService extends IService<SysRole> {
      * @return
      */
     List<SysRoleDto> getRolesById(List<Long> roleIds);
+
+    List<ClientRoleDto> listTeacherAndStudentRoles();
 }

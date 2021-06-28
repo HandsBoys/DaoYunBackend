@@ -9,7 +9,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * 签到信息表
+ * 签到记录表
  * @TableName sys_checkin_student
  */
 @TableName(value ="sys_checkin_student")
@@ -50,6 +50,12 @@ public class SysCheckinStudent implements Serializable {
      */
     @TableField(value = "checkin_time")
     private Date checkinTime;
+
+    /**
+     * 是否签到（0：未签到；1：已签到）
+     */
+    @TableField(value = "is_finish")
+    private Boolean isFinish;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

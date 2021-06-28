@@ -26,7 +26,7 @@ public class SysCheckin implements Serializable {
      * 签到类型
      */
     @TableField(value = "type")
-    private Boolean type;
+    private Integer type;
 
     /**
      * 发起签到的班课id

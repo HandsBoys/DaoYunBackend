@@ -96,9 +96,6 @@ implements SysMenuService{
         if(menu.getIsCache()==null){
             menu.setIsCache(false);
         }
-        if(menu.getVisible()==null){
-            menu.setVisible(true);
-        }
         if(menu.getStatus()==null){
             menu.setStatus(false);
         }

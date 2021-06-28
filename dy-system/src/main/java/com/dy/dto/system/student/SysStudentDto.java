@@ -58,4 +58,5 @@ public class SysStudentDto {
     /**
      * 学/工号
      */
-    private String identityNumber;}
+    private String identityNumber;
+}

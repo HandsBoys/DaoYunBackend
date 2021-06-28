@@ -21,9 +21,6 @@
         create_by,create_time,last_update_by,
         last_update_time,del_flag,order_num
     </sql>
-    <select id="getLastId" resultType="java.lang.Long">
-        select id from sys_class order by id DESC limit 1
-    </select>
     <select id="getClassById" resultType="com.dy.dto.client.ClassDto">
         select distinct
             id,class_name
