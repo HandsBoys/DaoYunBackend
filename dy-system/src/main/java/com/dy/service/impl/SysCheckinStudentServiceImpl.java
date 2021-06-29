@@ -49,7 +49,8 @@ implements SysCheckinStudentService{
 
     @Override
     public List<CheckinStudentTaskDto> getStudentCheckinRecordsOfCourse(Long courseId) {
-        return checkinMapper.getStudentCheckinRecordsOfCourse(courseId);
+        Long studentId = SecurityUtils.getLoginUser().getUser().getId();
+        return checkinMapper.getStudentCheckinRecordsOfCourse(courseId,studentId);
     }
 
     @Override

@@ -61,7 +61,7 @@ public interface SysUserService extends IService<SysUser> {
 
     List<SysUserDto> listUserAll();
 
-    int insertUser(SysUser user);
+    Long insertUser(SysUser user);
 
     /**
      * 根据用户名获取用户id
@@ -99,4 +99,6 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     List<String> getRoleKeys(Long userId);
+
+    int editPassword(String newPassword);
 }

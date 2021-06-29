@@ -44,7 +44,8 @@
     <select id="getStudentCheckinRecordsOfCourse" resultType="com.dy.dto.client.CheckinStudentTaskDto">
         select distinct t.id,t.type,t.course_id,t.start_time,r.is_finish
         from sys_checkin t
-        left join sys_checkin_student r on t.id = r.checkin_id where t.course_id = #{courseId}
+        left join sys_checkin_student r on t.id = r.checkin_id
+        where t.course_id = #{courseId} and r.student_id = #{studentId}
     </select>
 
 

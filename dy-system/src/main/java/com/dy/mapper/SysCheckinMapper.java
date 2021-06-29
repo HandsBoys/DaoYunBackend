@@ -41,7 +41,8 @@ public interface SysCheckinMapper extends BaseMapper<SysCheckin> {
      */
     List<CheckinTaskDto> getAllCheckinTask(Long courseId);
 
-    List<CheckinStudentTaskDto> getStudentCheckinRecordsOfCourse(@Param("courseId") Long courseId);
+    List<CheckinStudentTaskDto> getStudentCheckinRecordsOfCourse(@Param("courseId") Long courseId,
+                                                                 @Param("studentId") Long studentId);
 }
 
 

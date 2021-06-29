@@ -1,11 +1,13 @@
 package com.dy.service.impl;
 
 import com.dy.common.constant.GlobalConstants;
+import com.dy.common.constant.UserConstants;
 import com.dy.common.redis.RedisCacheUtils;
 import com.dy.common.utils.CaptchaUtils;
 import com.dy.common.utils.StringUtils;
 import com.dy.domain.SysUser;
 import com.dy.dto.login.LoginBody;
+import com.dy.manager.service.SysUserRoleManager;
 import com.dy.service.SignupService;
 import com.dy.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ public class SignupServiceImpl implements SignupService {
     SysUserService userService;
     @Autowired
     RedisCacheUtils redisCacheUtils;
+    @Autowired
+    SysUserRoleManager userRoleManager;
 
     @Override
     public boolean signUp(LoginBody loginBody) {
@@ -38,7 +42,9 @@ public class SignupServiceImpl implements SignupService {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
             String encodePassword = encoder.encode(password);
             SysUser user = new SysUser(phone,encodePassword);
-            userService.insertUser(user);
+            Long userId = userService.insertUser(user);
+            // 设置新用户默认角色
+            userRoleManager.insertDefaultRole(userId, UserConstants.DEFAULT_ROLE);
             return true;
         }
     }

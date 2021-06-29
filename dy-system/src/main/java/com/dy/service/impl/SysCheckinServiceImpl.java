@@ -80,14 +80,6 @@ implements SysCheckinService{
         }catch (Exception e){
             System.out.println(e);
         }
-
-//        try{
-//            if(checkin.getType() == CheckinConstants.LIMIT_TIME){
-//                timing(checkinId, endTime);
-//            }
-//        }catch (Exception e){
-//            System.out.println(e);
-//        }
         return checkinId;
     }
 

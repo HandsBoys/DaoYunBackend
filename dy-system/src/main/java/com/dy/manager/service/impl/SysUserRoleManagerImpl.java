@@ -84,6 +84,11 @@ implements SysUserRoleManager {
     public void deleteTeacherAndStudentByUserId(Long userId) {
         baseMapper.deleteTeacherAndStudentByUserId(userId);
     }
+
+    @Override
+    public void insertDefaultRole(Long userId, Long defaultRole) {
+        baseMapper.insert(new SysUserRole(userId,defaultRole));
+    }
 }
 
 

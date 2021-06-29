@@ -8,11 +8,13 @@ import com.dy.dto.client.ClientUserDto;
 import com.dy.service.SysRoleService;
 import com.dy.service.SysUserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import sun.util.resources.cldr.bas.CurrencyNames_bas;
 
 import java.util.List;
 
@@ -52,6 +54,12 @@ public class UserInfoController extends BaseController {
             return  AjaxResult.success("success", list);
         }
         return AjaxResult.error(HttpStatus.NO_CONTENT.value(), "error", null);
+    }
+
+    @Operation(description = "修改密码")
+    @PostMapping("/password")
+    public AjaxResult editPassword(@RequestParam String newPassword){
+        return toAjax(userService.editPassword(newPassword));
     }
 
 }

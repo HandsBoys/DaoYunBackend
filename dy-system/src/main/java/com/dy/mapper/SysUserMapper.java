@@ -22,6 +22,8 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
     String getNickname(@Param("id") Long id);
 
     String getIdentityNumber(@Param("id") Long id);
+
+    int editPassword(@Param("userId") Long userId, @Param("password") String password);
 }
 
 

@@ -125,6 +125,7 @@ implements SysUserService{
         Long userId = userDto.getId();
         SysUser user = new SysUser();
         BeanUtils.copyProperties(userDto,user);
+        user.setId(SecurityUtils.getLoginUser().getUser().getId());
         user.setLastUpdateBy(SecurityUtils.getLoginUser().getUser().getId());
         user.setLastUpdateTime(new Date());
         user.setStatus(false);
@@ -225,8 +226,9 @@ implements SysUserService{
     }
 
     @Override
-    public int insertUser(SysUser user) {
-        return baseMapper.insert(user);
+    public Long insertUser(SysUser user) {
+        baseMapper.insert(user);
+        return user.getId();
     }
 
     /**
@@ -298,6 +300,19 @@ implements SysUserService{
     @Override
     public List<String> getRoleKeys(Long userId) {
         return baseMapper.getRoleKeys(userId);
+    }
+
+    @Override
+    public int editPassword(String newPassword) {
+        try{
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+            String encodePassword = encoder.encode(newPassword);
+            Long userId = SecurityUtils.getLoginUser().getUser().getId();
+            baseMapper.editPassword(userId,encodePassword);
+            return 1;
+        }catch (Exception e){
+            return 0;
+        }
     }
 
     private void addRoles(Long userId,List<SysRoleDto> roleList){

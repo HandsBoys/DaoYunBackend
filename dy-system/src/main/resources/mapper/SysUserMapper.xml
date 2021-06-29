@@ -31,6 +31,9 @@
         last_update_by,last_update_time,del_flag,
         remark
     </sql>
+    <update id="editPassword">
+        update sys_user set password = #{password} where id = #{userId}
+    </update>
 
     <delete id="deleteUserByIds" parameterType="Long">
         delete from sys_user where id in
